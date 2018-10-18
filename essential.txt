@@ -1,0 +1,144 @@
+Booting Process:
+================
+In RHEL 7, booting process is taking care by systemd instead of init scripts. RHEL 6 supports init scripts convention.
+
+1.BIOS or UNIFIED EXTENSIBLE FIRMWARE INTERFACE(UEFI)
+=====================================================
+BASIC INPUT OUTPUT SYSTEM
+It controls the firmware interfaces as well as low peripheral devices.
+It conducts the POWER ON SELF TEST(POST) to check the hardware availability status. After successful POST completion,
+BIOS loads MASTER BOOT RECORD(MBR). On post failure, depends upon the hardware it will halt the boot process.
+
+2.MBR: or GUID PARTITION TABLE
+================================
+Master boot record placed in the first sector of boot hard drive. BIOS loads the MBR into ROM.
+MBR contains 512 bytes of machine code instructions called boot loader(GRUB2) along with partition table and magic  number.
+simply MBR loads the GRUB2.
+MBR will have four primary partitions, or one extended partition to create 16 logical partitions
+GPT will have 128 primary paritions, dont have to create extended parition
+
+446 bytes------bootstrap code
+64 bytes-------partition table
+2 bytes--------magic number(used to check valid mbr)
+
+3.GRUB2(GRAND UNIFIED BOOTLOADER 2)
+====================================
+GRUB2 starts the kernel(the first program) and the initrd(init ram disk). Simply it loads the kernel and mounts the initramfs the first root file system.
+
+4.KERNEL:
+=========
+It is the first program, and loads all the kernel modules and drives from initrd.img to load the linux first process called systemd.
+
+5.SYSTEMD:
+==========
+IT is the first process started in the linux and reads the configuration file of /etc/systemd/system/default.target to run the run level and starts
+the everything in the /usr/lib/systemd/system/basic.target
+
+6. RUNLEVEL:
+============
+
+0--------poweroff.target
+1--------rescue.target ; single user mode, does not allow n/w interfaces or allow non-root logins	
+2--------multi-user target; multi user mode with no n/w interfaces
+3--------multi-user target; minimal mode without graphical
+4--------multi-user target; not defined
+5--------graphical target; run level 3 + X11
+6--------reboot.target
+
+
+Default Umask:
+==============
+located in /etc/profile
+
+For files:
+if UID -gt 199 umask is 002(ordinary users)
+else
+umask is 022(system users)
+
+Hence for root users,
+files permission will be 644 rw r r
+folders perm will be 755 rwx rx rx
+
+Hence for users above 199
+files permission will be 664 rw rw r
+folders permission will be 775 rwx rwx rx
+
+For individuals, we can edit the same in ~/.bash_profile or ~/.bashrc
+
+Diff between bashrc and bash_profile,
+
+If you are login to your redhat machine, bash_profile will be executed.
+If you already logged in to your machine, bashrc will be executed.
+Hence it is wise to add the env in bash_profile.
+
+Common networking:
+==================
+
+APPLICATION(SSH/HTTPS)----->Transport(TCP/UDP)-------->Networking(IP)---------->Link(Ethernet,MAC)
+
+SS command to replace netstat.
+
+Network interface commands:
+===========================
+nmcli con show
+nmcli device
+nmcli dev status 
+ifup
+ifdown
+
+Archiving files and dir using TAR:
+==================================
+
+usage:
+
+tar cf/xf/tf xyz.tar <files> <dir> <files>
+
+cf---to create tar
+xf---to extract tar
+tf---to list the tar file
+p----to preserve permissions
+
+compressed archived file:
+
+gzip ------z
+bzip2------j
+xf---------J
+
+tar cvzf xyz.tar.gz <files>
+tar cvjf xyz.tar.bz2 <files>
+tar cvJf xyz.tar.xz <files>
+
+tar xvzf to untar the gzip files
+tar xvjf to untar the bzip files
+tar xvJf to untar the xz files
+
+To uncompress, use gunzip(gz), bunzip2(bz2), unxz(xz)
+
+File transfer using scp,rsync,sftp:
+===================================
+scp -r sakthi@192.168.0.19:/tmp/ /tmp (copy files from remote user sakthi and paste it in the local foldertmp)
+
+scp -r /tmp sakthi@192.168.019:/tmp/ (copy the local files to remote)
+
+rsync -avzPp <source> sakthi@destination
+
+Using sftp,
+go to file location,
+for example you want to copy f2 file from tmp to sakthi@192.xxx.xx.xx
+
+cd /tmp
+
+sftp sakthi@192.xx.xx.xx
+>put tmp(to place the tmp files in remote)
+>get tmp(to copy the remote tmp files to local)
+
+ 
+
+
+
+
+
+
+
+
+
