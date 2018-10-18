@@ -127,7 +127,8 @@ go to file location,
 for example you want to copy f2 file from tmp to sakthi@192.xxx.xx.xx
 
 cd /tmp
-
+SFTP:
+=====
 sftp sakthi@192.xx.xx.xx
 >put tmp(to place the tmp files in remote)
 >get tmp(to copy the remote tmp files to local)
