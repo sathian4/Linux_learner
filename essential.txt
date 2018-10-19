@@ -59,6 +59,10 @@ Hence for root users,
 files permission will be 644 rw r r
 folders perm will be 755 rwx rx rx
 
+1-stickybit
+4-SGID
+2-SUID
+
 Hence for users above 199
 files permission will be 664 rw rw r
 folders permission will be 775 rwx rwx rx
