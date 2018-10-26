@@ -82,6 +82,24 @@ APPLICATION(SSH/HTTPS)----->Transport(TCP/UDP)-------->Networking(IP)---------->
 
 SS command to replace netstat.
 
+Default port numbers:
+=====================
+
+FTP 	--21
+SSH 	--22
+TELNET	--23
+SMTP	--25
+DNS	--53
+DHCP	--67(H),68(C)
+HTTP	--80
+POP3	--110(post office protocol)
+IMAP	--143
+NTP	--123
+LDAP	--389 LDAP(S)--636
+HTTPS	--443
+MYSQL	--3306
+
+
 Network interface commands:
 ===========================
 nmcli con show
@@ -126,18 +144,155 @@ scp -r /tmp sakthi@192.168.019:/tmp/ (copy the local files to remote)
 
 rsync -avzPp <source> sakthi@destination
 
+SFTP:
+=====
 Using sftp,
 go to file location,
 for example you want to copy f2 file from tmp to sakthi@192.xxx.xx.xx
 
 cd /tmp
-SFTP:
-=====
+
 sftp sakthi@192.xx.xx.xx
 >put tmp(to place the tmp files in remote)
 >get tmp(to copy the remote tmp files to local)
 
- 
+Regular expressions:
+=====================
+^------->used to match the first string of the search pattern
+$------->used to match the last string of the search pattern
+
+grep -e 'dog' -e 'cat' <file.txt> ---->used to check for either dog or cat or both
+
+grep '^Aug *8 14:[345].*open' <file.txt> used to check the pattern starting with Aug for 8 with 14with 3,4,5 intermediate some strings indicates the dot after wildcards with open.
+example:
+========
+[sakthi@centoshost scripts]$ grep -e '^root.*kworker' save-the-file 
+root         5     2  0 17:06 ?        00:00:00 [kworker/0:0H]
+
+Screen command usage:
+======================
+Use ctrl+a for command mode.
+Use ctrl+a S for splitting horizontally
+
+    To split vertically: ctrla then |.
+    To split horizontally: ctrla then S (uppercase 's').
+    To unsplit: ctrla then Q (uppercase 'q').
+    To switch from one to the other: ctrla then tab
+ctrl +a c to open terminal in new window
+to detach: ctrl+a d
+
+crontab:
+========
+
+crontab -l ---------->to list the crons (as root user use crontab -lu sakthi to list the sakthi's cron)
+crontab -r ---------->to remove the entire cron
+crontab -e ---------->to edit the cronjob
+
+total 5 fields that includes, mins hrs day(0-31) month week * * * * *
+
+*/7 -------------->every 7 mins cron will executed
+7 2,13-15,19 12 Jan * ----> to execute cron on every year Jan 12th wih every seven mins from mrng 2:07am, 13:07,14:07,15:07 & 19:07.
+
+Linux process priority:
+=======================
+
+Nice levels range from -20 to +19. -20 is highest priority consequently 19 will be lower.
+
+from value 0 to 19 unprivileged user will set the nice value
+only root user has access to set negative value
+
+renice -n -20 <pid>
+
+Access control list(ACL):
+==========================
+It is a fine grained permissions.
+-rwxrw----+ ----------->+ at EOF indicates the acl permission granted on the files
+getfacl <foldr>/<file> to get the default acl permissions
+to set particular user to access the folder or file,
+setfacl -m u:ssn:g:ssngrp:rwx <folder>/<file>
+to remove acl,
+setfacl -x u:ssn <folder>/<file>
+
+IPv4 & subnetting:
+==================
+Ip address contains 4 octets means 4 * 8=32 bit address.
+
+Class A,B,C,D,E.. Of these we are using only class a,b & c. D is for military purpose and E is for R&D.
+
+CLASS A IP address from 1-126     subnet mask /8  255.0.0.0 broadcast N.255.255.255 Gateway:N.255.255.1
+CLASS B IP address from 128-191s  subnet mask /16 
+Class C IP address from 192-223    subnet mask /24
+
+Private IP address range:
+==========================
+A - 10.0.0.0-		10.255.255.255
+B -172.16.0.0-		172.31.255.255
+C-192.168.0.0.-		192.168.255.255
+
+
+Security enhanced Linux (SELINUX)
+=================================
+SELINUX is Mandatory access control (MAC) which implemented by US national security. It is a layer upon Discretionary access control(DAC).
+
+First of all DAC will be checked, after the MAC will filter the usage.
+
+#sestatus ---to see the selinux status
+
+/etc/selinux/config ;modes -- enforcing,permissive & disabled.
+In enforcing policy will enforce the unauthorized user, in permissive policy can be violated, but data will be logged. 
+
+Booleans:
+=========
+selinux has a policy which has some security policies, we can tweak the policy settings using booleans.
+
+semanage boolean -l --------> to list all booleans
+getsebool ftp_anon_write ---> to list exact boolean ans for ftp anonymous write permission.
+setsebool ftp_anon_write on ->to turn on the write perm.
+To make permanent, setsebool -P ftp_anon_write on
+
+Changing selinux context of file:
+=================================
+chcon & restorecon & semanage
+
+chcon -t httpd_sys_content_t /virtual to change context label using chcon.( but it is not advisable) it is not persisitent
+
+semanage fcontext used to display and modify the context.
+
+semanage fcontext -a -t httpd_sys_content_t '/virtual(/.*)?'
+
+Restorecon -RFv /virtual to force modify the context in the directory
+
+To revert the any fault changes, use
+restorecon -v /virtual
+
+Selinux syntax:
+===============
+user,roles,process&file
+system user object---system_u
+others	          ---unconfineduser_u
+
+
+TCP wrappers:
+/etc/hosts.allow
+/etc/hosts.deny
+used to block the particular network address or host 
+pattern:
+ALL : 	192.168.0.104 or ALL : 192.168.0 (to block all network ip from this network)
+sshd,vsftpd : 192.168.0.104
+
+Logging:
+=========
+/var/log/messages ----------->service related logs
+/var/log/secure ------------->user authentication logs
+/var/log/cron	------------->cron executed logs
+/var/log/boot.log------------>boot time logs
+/var/log/maillog------------->mail related logs
+
+
+
+
+
+
 
 
 
