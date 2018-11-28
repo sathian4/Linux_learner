@@ -162,6 +162,7 @@ Regular expressions:
 $------->used to match the last string of the search pattern
 
 grep -e 'dog' -e 'cat' <file.txt> ---->used to check for either dog or cat or both
+grep -iE "dog|cat" file.txt
 
 grep '^Aug *8 14:[345].*open' <file.txt> used to check the pattern starting with Aug for 8 with 14with 3,4,5 intermediate some strings indicates the dot after wildcards with open.
 example:
@@ -255,6 +256,9 @@ Changing selinux context of file:
 chcon & restorecon & semanage
 
 chcon -t httpd_sys_content_t /virtual to change context label using chcon.( but it is not advisable) it is not persisitent
+after that 
+use restorecon -vR /virtual to apply the changes in fcontext
+
 
 semanage fcontext used to display and modify the context.
 
@@ -287,6 +291,41 @@ Logging:
 /var/log/cron	------------->cron executed logs
 /var/log/boot.log------------>boot time logs
 /var/log/maillog------------->mail related logs
+
+Links:
+======
+hardlink
+========
+it will create link between two files with different inodes for same file in difference locations. if one link deleted, we will able to use another link.
+ln <existing_available_file> <link to be created location>
+
+soft link:
+==========
+it is a special file type begins with l. The inode will be available in source only, in link file inode if just forwarding to source. If source deleted means data will be in loss.
+ln -s <existing_available_file> <link to be created location>
+
+Apache basic configuration with htaccess: apache 2.4
+
+<VirtualHost *:80> ##multi ip
+DocumentRoot /home/sakthi/apache 
+ServerName ssnlocal.com #domain name registered in hosts entry
+CustomLog /var/log/httpd/ssnlocal.log Combined
+ErrorLog /var/log/httpd/ssnlocalerr.log
+<Directory "/home/sakthi/apache">
+AllowOverride All ##Process the .htaccess file
+AuthType Basic
+AuthName "Authentication Required" #pop up screen message
+AuthUserFile /home/sakthi/apache/.htpasswd
+Require valid-user #require the user who exists in .htaccess
+#Require all granted ##TO allow all user, .htaccess wont work in this mode
+#<IfModule dir_module>  #to tell the directory index file
+#    DirectoryIndex index.html
+#</IfModule>
+</Directory>
+</VirtualHost>
+
+
+
 
 
 
