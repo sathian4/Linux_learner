@@ -1,0 +1,24 @@
+SQL is a standard language for storing, manipulating and retrieving data in databases.
+
+rows=record
+field=column
+
+*Select distinct <field name> from <table>; to return only different values.
+mysql> select count(distinct Id) from tbl_datamove_conf;
++--------------------+
+| count(distinct Id) |
++--------------------+
+|                 41 |
++--------------------+
+*select count(distinct <field>) from <table>;
+
+*select count(distinct <filed>) as totalvalue from <table>;
+mysql> select count(*) as totalvalue from tbl_datamove_conf; (alias)
++------------+
+| totalvalue |
++------------+
+|         41 |
++------------+
+1 row in set (0.00 sec)
+
+
