@@ -1,0 +1,137 @@
+[lamatri@CHNUNICADB2 ~]$ campaignstatus 1
+
+Table Transfer Status
+~~~~~~~~~~~~~~~~~~~~
+
+NAME                                                    STATUS           LASTRUNSTARTDATE         LASTRUNENDDATE           FLOWCHARTMODIFIEDON      TIMEDIFF   
+------------------------------------------------------- ---------------- ------------------------ ------------------------ ------------------------ -----------
+BM_RI_Data_transfer                                     Run Succeeded    May 28, 2019 1:26:51 AM  May 28, 2019 1:31:58 AM  Apr 24, 2019 1:55:22 PM            5
+CBS_TABLE_TRANSFER                                      Run Succeeded    May 28, 2019 1:26:56 AM  May 28, 2019 1:28:56 AM  Mar 6, 2019 4:12:00 PM             2
+RETAIL_TABLE_TRANSFER                                   Run Succeeded    May 28, 2019 1:27:00 AM  May 28, 2019 1:37:20 AM  Feb 12, 2019 3:15:05 PM           10
+
+  3 record(s) selected.
+
+[lamatri@CHNUNICADB2 ~]$ campaignstatus 2
+
+BM-RI & Macro
+~~~~~~~~~~~~
+
+NAME                                                    STATUS           LASTRUNSTARTDATE         LASTRUNENDDATE           FLOWCHARTMODIFIEDON      TIMEDIFF   
+------------------------------------------------------- ---------------- ------------------------ ------------------------ ------------------------ -----------
+BM_PPL_FC                                               Run Succeeded    May 28, 2019 1:41:38 AM  May 28, 2019 2:01:58 AM  May 10, 2019 6:00:38 PM           20
+BM_SERIOUSNESS_SCORE_FC                                 Run Succeeded    May 28, 2019 1:41:43 AM  May 28, 2019 1:48:39 AM  May 10, 2019 5:58:15 PM            6
+BM_RRT_FC                                               Run Succeeded    May 28, 2019 1:43:44 AM  May 28, 2019 1:51:36 AM  May 23, 2019 3:05:00 PM            7
+BM_GT40_BUDGET_FC                                       Run Succeeded    May 28, 2019 1:49:27 AM  May 28, 2019 1:56:47 AM  May 17, 2019 12:36:28 PM           7
+BM_GT40_FC                                              Run Succeeded    May 28, 2019 1:52:42 AM  May 28, 2019 2:03:32 AM  May 17, 2019 12:17:29 PM          10
+BM_LT15_FC                                              Run Succeeded    May 28, 2019 2:02:19 AM  May 28, 2019 2:08:34 AM  Apr 29, 2019 10:41:49 AM           6
+BM_LT40_FC                                              Run Succeeded    May 28, 2019 2:08:46 AM  May 28, 2019 2:13:41 AM  Apr 12, 2019 2:27:37 PM            4
+BM_PPL_MACRO                                            Run Succeeded    May 28, 2019 2:21:56 AM  May 28, 2019 2:22:26 AM  May 14, 2019 5:45:59 PM            0
+BM_GT40_BUDGET_MACRO                                    Run Succeeded    May 28, 2019 2:23:18 AM  May 28, 2019 2:27:02 AM  May 17, 2019 8:00:23 AM            3
+BM_GT40_MACRO                                           Run Succeeded    May 28, 2019 2:28:04 AM  May 28, 2019 2:41:07 AM  May 14, 2019 12:32:12 PM          13
+BM_LT15_MACRO                                           Run Succeeded    May 28, 2019 2:41:39 AM  May 28, 2019 2:52:27 AM  Apr 10, 2019 5:36:27 PM           10
+BM_LT40_MACRO                                           Run Succeeded    May 28, 2019 2:53:37 AM  May 28, 2019 2:58:17 AM  Apr 10, 2019 2:54:24 PM            4
+BM_RRT_MACRO                                            Run Succeeded    May 28, 2019 2:59:26 AM  May 28, 2019 3:28:12 AM  May 13, 2019 4:33:34 PM           28
+
+  13 record(s) selected.
+
+[lamatri@CHNUNICADB2 ~]$ campaignstatus 3
+
+CBSRI & Retail &Macro
+~~~~~~~~~~~
+
+NAME                                                    STATUS           LASTRUNSTARTDATE         LASTRUNENDDATE           FLOWCHARTMODIFIEDON      TIMEDIFF   
+------------------------------------------------------- ---------------- ------------------------ ------------------------ ------------------------ -----------
+CBS_PPL_FC                                              Run Succeeded    May 28, 2019 1:41:49 AM  May 28, 2019 1:53:12 AM  Apr 22, 2019 3:04:52 PM           11
+CBS_LT15_FC                                             Run Succeeded    May 28, 2019 1:41:55 AM  May 28, 2019 1:43:00 AM  Apr 22, 2019 6:33:38 PM            1
+RETAIL_RENEWAL_LT27_FC                                  Run Succeeded    May 28, 2019 1:42:01 AM  May 28, 2019 1:49:16 AM  Apr 24, 2019 3:49:03 PM            7
+RETAIL_RENEWAL_GT27_FC                                  Run Succeeded    May 28, 2019 1:42:06 AM  May 28, 2019 1:48:41 AM  Apr 20, 2019 12:02:12 PM           6
+RETAIL_PPL_FC                                           Run Succeeded    May 28, 2019 1:42:11 AM  May 28, 2019 1:43:47 AM  Jan 18, 2019 11:46:41 AM           1
+RETAIL_INBOUND_FC                                       Run Succeeded    May 28, 2019 1:42:16 AM  May 28, 2019 1:42:56 AM  Apr 20, 2019 11:51:32 AM           0
+RETAIL_RM_FC                                            Run Succeeded    May 28, 2019 1:42:22 AM  May 28, 2019 1:43:32 AM  Apr 20, 2019 12:37:28 PM           1
+CBS_SHF_FC                                              Run Succeeded    May 28, 2019 1:42:27 AM  May 28, 2019 1:45:12 AM  Nov 17, 2018 12:11:07 PM           2
+RETAIL_BM_SERVICE_CALLING_FC                            Run Succeeded    May 28, 2019 1:43:32 AM  May 28, 2019 1:44:47 AM  Apr 24, 2019 5:51:40 PM            1
+RCP_FC                                                  Run Succeeded    May 28, 2019 1:43:49 AM  May 28, 2019 1:44:49 AM  Apr 20, 2019 11:39:45 AM           1
+CBS_RETAIL_LT27_FC                                      Run Succeeded    May 28, 2019 1:43:55 AM  May 28, 2019 1:50:45 AM  Apr 19, 2019 5:59:50 PM            6
+RCP_CBS_FC                                              Run Succeeded    May 28, 2019 1:44:00 AM  May 28, 2019 1:45:10 AM  May 21, 2019 3:48:41 PM            1
+CBS_LT40_FC                                             Run Succeeded    May 28, 2019 1:44:07 AM  May 28, 2019 1:53:12 AM  May 27, 2019 1:58:06 PM            9
+RETAIL_CBS_SERVICE_CALLING_FC                           Run Succeeded    May 28, 2019 1:45:12 AM  May 28, 2019 1:46:22 AM  Apr 24, 2019 5:57:49 PM            1
+CBS_RRT_FC                                              Run Succeeded    May 28, 2019 1:53:48 AM  May 28, 2019 1:57:59 AM  Apr 22, 2019 3:09:30 PM            4
+CBS_R1_RRT_FC                                           Run Succeeded    May 28, 2019 1:59:03 AM  May 28, 2019 2:02:43 AM  Apr 22, 2019 3:06:39 PM            3
+RETAIL_TAGGED_FC                                        Run Succeeded    May 28, 2019 2:02:08 AM  May 28, 2019 2:03:17 AM  Jan 18, 2019 10:42:31 AM           1
+RETAIL_GT3DAYS_FC                                       Run Succeeded    May 28, 2019 2:02:13 AM  May 28, 2019 2:03:39 AM  May 8, 2019 6:01:10 PM             1
+CBS_GT40_FC                                             Run Succeeded    May 28, 2019 2:03:26 AM  May 28, 2019 2:13:37 AM  Apr 22, 2019 3:10:51 PM           10
+CBS_LT40_BUDGET_FC                                      Run Succeeded    May 28, 2019 2:14:10 AM  May 28, 2019 2:18:15 AM  Apr 22, 2019 3:13:39 PM            4
+BM_SHF_FC                                               Run Succeeded    May 28, 2019 2:19:24 AM  May 28, 2019 2:21:54 AM  Apr 20, 2019 10:12:43 AM           2
+CBS_PPL_MACRO                                           Run Succeeded    May 28, 2019 2:31:27 AM  May 28, 2019 2:31:52 AM  May 14, 2019 2:23:26 PM            0
+CBS_RRT_MACRO                                           Run Succeeded    May 28, 2019 2:32:32 AM  May 28, 2019 2:37:43 AM  Apr 22, 2019 3:09:59 PM            5
+CBS_LT15_MACRO                                          Run Succeeded    May 28, 2019 2:37:56 AM  May 28, 2019 2:38:31 AM  Apr 22, 2019 3:12:25 PM            0
+CBS_LT40_BUDGET_MACRO                                   Run Succeeded    May 28, 2019 2:39:00 AM  May 28, 2019 2:40:16 AM  Apr 22, 2019 3:14:22 PM            1
+CBS_LT40_MACRO                                          Run Succeeded    May 28, 2019 2:41:24 AM  May 28, 2019 2:49:29 AM  Apr 22, 2019 3:15:49 PM            8
+CBS_GT40_MACRO                                          Run Succeeded    May 28, 2019 2:50:03 AM  May 28, 2019 2:58:20 AM  Apr 22, 2019 3:11:18 PM            8
+RETAIL_RENEWAL_LT27_MACRO                               Run Succeeded    May 28, 2019 2:59:30 AM  May 28, 2019 3:05:52 AM  Apr 24, 2019 5:13:03 AM            6
+RETAIL_RENEWAL_GT27_MACRO                               Run Succeeded    May 28, 2019 3:06:54 AM  May 28, 2019 3:08:39 AM  Apr 20, 2019 12:05:26 PM           1
+RCP_MACRO                                               Run Succeeded    May 28, 2019 3:09:13 AM  May 28, 2019 3:10:03 AM  May 3, 2019 4:32:37 PM             0
+RETAIL_TAGGED_MACRO                                     Run Succeeded    May 28, 2019 3:10:38 AM  May 28, 2019 3:10:58 AM  Dec 10, 2018 5:31:25 PM            0
+RETAIL_PPL_MACRO                                        Run Succeeded    May 28, 2019 3:11:58 AM  May 28, 2019 3:12:48 AM  May 3, 2019 4:37:52 PM             0
+RETAIL_INBOUND_MACRO                                    Run Succeeded    May 28, 2019 3:13:05 AM  May 28, 2019 3:13:25 AM  May 3, 2019 4:33:48 PM             0
+RETAIL_RM_MACRO                                         Run Succeeded    May 28, 2019 3:14:25 AM  May 28, 2019 3:15:30 AM  Apr 20, 2019 12:41:34 PM           1
+CBS_RETAIL_LT27_MACRO                                   Run Succeeded    May 28, 2019 3:17:06 AM  May 28, 2019 3:17:32 AM  Apr 20, 2019 11:17:44 AM           0
+BM_SHF_MACRO                                            Run Succeeded    May 28, 2019 3:18:32 AM  May 28, 2019 3:18:57 AM  May 9, 2019 3:49:27 PM             0
+RETAIL_GT3DAYS_MACRO                                    Run Succeeded    May 28, 2019 3:19:57 AM  May 28, 2019 3:25:05 AM  May 3, 2019 4:34:58 PM             5
+CBS_SHF_MACRO                                           Run Succeeded    May 28, 2019 3:26:24 AM  May 28, 2019 3:26:39 AM  Dec 12, 2018 11:48:53 AM           0
+RETAIL_SERVICE_CALLING_MACRO                            Run Succeeded    May 28, 2019 3:27:44 AM  May 28, 2019 3:29:09 AM  Apr 24, 2019 5:59:45 PM            1
+
+  39 record(s) selected.
+
+[lamatri@CHNUNICADB2 ~]$ 
+[lamatri@CHNUNICADB2 ~]$ campaignstatus 4
+
+BM & CBS NRI
+~~~~~~~~~~-
+
+NAME                                                    STATUS           LASTRUNSTARTDATE         LASTRUNENDDATE           FLOWCHARTMODIFIEDON      TIMEDIFF   
+------------------------------------------------------- ---------------- ------------------------ ------------------------ ------------------------ -----------
+BM_SEA_RRT_FC                                           Run Succeeded    May 28, 2019 2:15:25 AM  May 28, 2019 2:17:15 AM  Apr 4, 2019 11:35:46 AM            1
+BM_DUBAI_RRT_FC                                         Run Succeeded    May 28, 2019 2:15:30 AM  May 28, 2019 2:17:25 AM  Apr 30, 2019 2:16:57 PM            1
+BM_DUBAI_GT40_FC                                        Run Succeeded    May 28, 2019 2:15:35 AM  May 28, 2019 2:21:50 AM  Apr 17, 2019 12:46:49 PM           6
+BM_SEA_GT40_FC                                          Run Succeeded    May 28, 2019 2:17:58 AM  May 28, 2019 2:19:39 AM  Apr 4, 2019 11:39:12 AM            1
+BM_SEA_LT40_FC                                          Run Succeeded    May 28, 2019 2:18:03 AM  May 28, 2019 2:19:53 AM  Apr 4, 2019 11:44:21 AM            1
+BM_DUBAI_LT40_FC                                        Run Succeeded    May 28, 2019 2:18:08 AM  May 28, 2019 2:20:33 AM  Apr 25, 2019 4:01:53 PM            2
+CBS_DUBAI_GT40_FC                                       Run Succeeded    May 28, 2019 2:19:14 AM  May 28, 2019 2:25:19 AM  May 8, 2019 6:23:33 PM             6
+CBS_DUBAI_RRT_FC                                        Run Succeeded    May 28, 2019 2:19:19 AM  May 28, 2019 2:21:35 AM  Mar 5, 2019 3:25:06 PM             2
+CBS_DUBAI_LT40_FC                                       Run Succeeded    May 28, 2019 2:19:29 AM  May 28, 2019 2:24:05 AM  May 8, 2019 10:31:01 AM            4
+CBS_SEA_RRT_FC                                          Run Succeeded    May 28, 2019 2:22:02 AM  May 28, 2019 2:24:07 AM  Mar 5, 2019 3:55:27 PM             2
+CBS_SEA_LT40_FC                                         Run Succeeded    May 28, 2019 2:24:23 AM  May 28, 2019 2:26:48 AM  Nov 14, 2018 10:06:47 AM           2
+CBS_SEA_GT40_FC                                         Run Succeeded    May 28, 2019 2:26:48 AM  May 28, 2019 2:32:04 AM  Dec 18, 2018 11:13:14 AM           5
+BM_DUBAI_RRT_MACRO                                      Run Succeeded    May 28, 2019 3:17:11 AM  May 28, 2019 3:17:56 AM  Apr 29, 2019 2:35:42 PM            0
+BM_DUBAI_LT40_MACRO                                     Run Succeeded    May 28, 2019 3:18:37 AM  May 28, 2019 3:19:17 AM  Apr 23, 2019 12:43:28 PM           0
+BM_DUBAI_GT40_MACRO                                     Run Succeeded    May 28, 2019 3:20:02 AM  May 28, 2019 3:21:32 AM  Apr 23, 2019 1:30:01 PM            1
+BM_SEA_RRT_MACRO                                        Run Succeeded    May 28, 2019 3:22:27 AM  May 28, 2019 3:22:42 AM  Nov 2, 2018 10:17:17 PM            0
+BM_SEA_LT40_MACRO                                       Run Succeeded    May 28, 2019 3:23:32 AM  May 28, 2019 3:23:57 AM  Apr 23, 2019 12:41:27 PM           0
+BM_SEA_GT40_MACRO                                       Run Succeeded    May 28, 2019 3:24:36 AM  May 28, 2019 3:25:01 AM  Nov 2, 2018 10:20:33 PM            0
+CBS_DUBAI_RRT_MACRO                                     Run Succeeded    May 28, 2019 3:26:19 AM  May 28, 2019 3:27:05 AM  Apr 4, 2019 6:24:53 AM             0
+CBS_DUBAI_LT40_MACRO                                    Run Succeeded    May 28, 2019 3:27:49 AM  May 28, 2019 3:28:29 AM  Dec 1, 2018 3:18:28 PM             0
+CBS_DUBAI_GT40_MACRO                                    Run Succeeded    May 28, 2019 3:28:53 AM  May 28, 2019 3:30:58 AM  May 8, 2019 4:44:14 PM             2
+CBS_SEA_RRT_MACRO                                       Run Succeeded    May 28, 2019 3:32:31 AM  May 28, 2019 3:32:57 AM  Mar 5, 2019 3:57:20 PM             0
+CBS_SEA_LT40_MACRO                                      Run Succeeded    May 28, 2019 3:33:51 AM  May 28, 2019 3:34:22 AM  Apr 4, 2019 6:36:27 AM             0
+CBS_SEA_GT40_MACRO                                      Run Succeeded    May 28, 2019 3:35:08 AM  May 28, 2019 3:35:30 AM  Apr 4, 2019 7:09:25 AM             0
+
+  24 record(s) selected.
+
+[lamatri@CHNUNICADB2 ~]$ 
+[lamatri@CHNUNICADB2 ~]$ campaignstatus 5
+
+Other campaigns
+~~~~~~~~~~~~~~-
+
+NAME                                                    STATUS           LASTRUNSTARTDATE         LASTRUNENDDATE           FLOWCHARTMODIFIEDON      TIMEDIFF   
+------------------------------------------------------- ---------------- ------------------------ ------------------------ ------------------------ -----------
+COMBO_FC                                                Run Succeeded    May 28, 2019 2:14:15 AM  May 28, 2019 2:26:50 AM  Apr 26, 2019 6:03:09 PM           12
+CHURN_TABLE_TRANSFER                                    Run Succeeded    May 28, 2019 3:36:49 AM  May 28, 2019 3:40:39 AM  Jan 14, 2019 4:05:48 PM            3
+170DAYS_UNICA                                           Run Succeeded    May 28, 2019 3:41:26 AM  May 28, 2019 3:49:38 AM  May 24, 2019 3:48:14 PM            8
+CCP                                                     Run Succeeded    May 28, 2019 4:08:40 AM  May 28, 2019 4:15:23 AM  May 3, 2019 4:17:33 PM             6
+Photography                                             Run Succeeded    May 28, 2019 4:16:50 AM  May 28, 2019 4:19:55 AM  May 27, 2019 12:36:55 PM           3
+ELITE_TOLLFREE_FC                                       Run Succeeded    May 28, 2019 4:22:57 AM  May 28, 2019 4:33:32 AM  Apr 30, 2019 2:23:24 PM           10
+ELITE_DB                                                Run Succeeded    May 28, 2019 4:23:02 AM  May 28, 2019 4:25:42 AM  May 27, 2019 3:30:52 PM            2
+ELITE_PROFILE_UPDATION                                  Run Succeeded    May 28, 2019 4:26:30 AM  May 28, 2019 4:27:30 AM  Jan 25, 2019 5:40:25 PM            1
+
