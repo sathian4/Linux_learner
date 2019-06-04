@@ -1,0 +1,21 @@
+############################################################
+Exams are 130mins that is 2.10mins
+60questions
+all are multiple choices
+Marks will be 100-1000, whereas pass mark will be 720
+certificaton valid for 2 years
+###############################################################
+
+Regions:
+========
+N.Virginia is where the new services are take place & also it not recommended to take production over there since it is not stable amongst.
+
+Region is a physical location which consists two or more availability zones.
+Region-availability zones
+Simple a region consists for two availability zones, availability zones means datacenter.
+
+Edgelocations: Edgelocations are endpoints  for AWS which used for caching content. which is basically cloud front, the Content delivery network for AWS.
+edgelocation--cachingcontent--cloudfront
+
+
+
