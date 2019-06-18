@@ -1,0 +1,11 @@
+object Endpoint "alexrnd1" {
+host = "192.168.20.212"
+}
+
+
+object Zone "alexrnd1" {
+endpoints = [ "alexrnd1" ]
+
+
+parent = "master" //establish zone hierarchy
+}

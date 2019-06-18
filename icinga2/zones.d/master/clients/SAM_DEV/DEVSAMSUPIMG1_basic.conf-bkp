@@ -1,0 +1,11 @@
+object Endpoint "DEVSAMSUPIMG1" {
+host = "192.168.40.110"
+}
+
+
+object Zone "DEVSAMSUPIMG1" {
+endpoints = [ "DEVSAMSUPIMG1" ]
+
+
+parent = "master" //establish zone hierarchy
+}

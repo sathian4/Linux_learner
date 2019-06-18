@@ -1,0 +1,11 @@
+object Endpoint "tldap1.matrimonycorp.com" {
+host = "192.168.20.80"
+}
+
+
+object Zone "tldap1.matrimonycorp.com" {
+endpoints = [ "tldap1.matrimonycorp.com" ]
+
+
+parent = "master" //establish zone hierarchy
+}

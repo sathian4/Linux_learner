@@ -1,0 +1,11 @@
+object Endpoint "DEVBMSHORTLISTME" {
+host = "192.168.20.155"
+}
+
+
+object Zone "DEVBMSHORTLISTME" {
+endpoints = [ "DEVBMSHORTLISTME" ]
+
+
+parent = "master" //establish zone hierarchy
+}

@@ -1,0 +1,11 @@
+object Endpoint "ADRDEVNEWSPX4" {
+host = "192.168.65.185"
+}
+
+
+object Zone "ADRDEVNEWSPX4" {
+endpoints = [ "ADRDEVNEWSPX4" ]
+
+
+parent = "master" //establish zone hierarchy
+}

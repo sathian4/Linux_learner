@@ -1,0 +1,11 @@
+object Endpoint "STGSAMIMG1" {
+host = "192.168.41.103"
+}
+
+
+object Zone "STGSAMIMG1" {
+endpoints = [ "STGSAMIMG1" ]
+
+
+parent = "master" //establish zone hierarchy
+}

@@ -1,0 +1,13 @@
+object Host "STGSAMMCREDIS" {
+check_command = "hostalive"
+address = "192.168.41.112"
+zone = "master" //optional trick: sync the required host object to the client, but enforce the "master" zone to execute the check
+
+
+check_interval = 1m
+retry_interval = 15s
+max_check_attempts = 3
+
+
+vars.endpoint = "STGSAMMCREDIS"
+}

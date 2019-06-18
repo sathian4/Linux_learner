@@ -1,0 +1,11 @@
+object Endpoint "STGSAMSOLR1" {
+host = "192.168.41.117"
+}
+
+
+object Zone "STGSAMSOLR1" {
+endpoints = [ "STGSAMSOLR1" ]
+
+
+parent = "master" //establish zone hierarchy
+}
