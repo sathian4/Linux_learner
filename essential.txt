@@ -324,6 +324,9 @@ Require valid-user #require the user who exists in .htaccess
 </Directory>
 </VirtualHost>
 
+How to find SSD/HDD
+====================
+If its a ordinary drive, the path cat /sys/block/sd[a-z]/queue/rotational has the value of 1. If its SSD then it will be 0
 
 
 
