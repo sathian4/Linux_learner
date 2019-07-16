@@ -324,6 +324,7 @@ Require valid-user #require the user who exists in .htaccess
 </Directory>
 </VirtualHost>
 
+<<<<<<< HEAD
 Use foremost application to recover the files, if you deleted.
 
 Remove Duplicate packets using sysctl:
@@ -410,6 +411,11 @@ where is second field is PID of file
 Hence it will be underlying in /proc/11021/fd/255.
 
 Use foremost tool to recover the files
+=======
+How to find SSD/HDD
+====================
+If its a ordinary drive, the path cat /sys/block/sd[a-z]/queue/rotational has the value of 1. If its SSD then it will be 0
+>>>>>>> a8807f0d4c7192539496f4fad03cef3951aacd33
 
 
 
