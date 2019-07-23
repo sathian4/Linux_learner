@@ -324,9 +324,98 @@ Require valid-user #require the user who exists in .htaccess
 </Directory>
 </VirtualHost>
 
+<<<<<<< HEAD
+Use foremost application to recover the files, if you deleted.
+
+Remove Duplicate packets using sysctl:
+======================================
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=14.2 ms
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=55 time=14.4 ms (DUP!)
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=56 time=10.1 ms
+
+This is due to host system acts as a router, becoz net.ipv4.ip_forward is enabled in sysctl.
+use sysctl -w net.ipv4.ip_forward=0 for temporary purpose
+for permanent, add an entry net.ipv4.ip_forward=0 in /etc/sysctl.conf
+and use sysctl -p /etc/sysctl.conf to apply the changes  effectively.
+
+Grub default:
+============
+UEFI:
+=====
+default grub location: /boot/efi/EFI/centos/grub.cfg
+default grub env:/boot/efi/EFI/centos/grubenv
+symlink:/etc/grub2.cfg
+
+BIOS:
+=====
+default grub location: /boot/grub2/grub
+defaul grub env:/boot/grub2/grubenv
+symlink:/etc/grub2.cfg
+
+To change the default boot value,
+awk -F\' '$1=="menuentry "{print $2}' /etc/grub2.cfg 
+you can find the menu entries below
+CentOS Linux (3.10.0-957.21.3.el7.x86_64) 7 (Core)  -----entry 0
+CentOS Linux (3.10.0-862.el7.x86_64) 7 (Core) -------entry 1
+CentOS Linux (0-rescue-0b8d9d8173a34f1a97b8bd0afbbe1192) 7 (Core) --------entry 2
+
+grub2-set-default {ur entries}
+
+After that your grubenv should have changed as per your entry.
+
+To rebuild the /boot/efi/EFI/centos/grub.cfg or /etc/grub2.cfg
+
+Use grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+
+Single User Mode:
+================
+
+To change any unwanted settings or using single user mode,
+During the Grub interval,
+press `e`, and enter in the grub option,
+find the line "linux16"
+
+in that replace `rw init=/sysroot/bin/sh` instead of ro 
+press ctrl + X
+chroot /sysroot
+use your commands,
+after that for labelling kernel,
+use touch /.autorelabel
+reboot -f
+
+FSCK error codes:
+=================
+unmount the disk using fdisk or lsblk
+use fsck with option -a(to fix error automatically) or use -f to check forcefully or -A to check all disk in fstab.
+
+
+
+0 	No errors
+1 	Filesystem errors corrected
+2 	System should be rebooted
+4 	Filesystem errors left uncorrected
+8 	Operational error
+16 	Usage or syntax error
+32 	Checking canceled by user request
+128 	Shared-library error
+
+Recover accidentally removed files using lsof:
+===============================================
+
+use lsof | grep deleted file
+sh        11021               sakthi  255r      REG              253,0        10 24379410 /tmp/filetodelete.txt (deleted)
+
+where is second field is PID of file
+4th field is file descriptor
+
+Hence it will be underlying in /proc/11021/fd/255.
+
+Use foremost tool to recover the files
+=======
 How to find SSD/HDD
 ====================
 If its a ordinary drive, the path cat /sys/block/sd[a-z]/queue/rotational has the value of 1. If its SSD then it will be 0
+>>>>>>> a8807f0d4c7192539496f4fad03cef3951aacd33
 
 
 
