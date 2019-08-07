@@ -417,6 +417,14 @@ How to find SSD/HDD
 If its a ordinary drive, the path cat /sys/block/sd[a-z]/queue/rotational has the value of 1. If its SSD then it will be 0
 >>>>>>> a8807f0d4c7192539496f4fad03cef3951aacd33
 
+RPC in NFS:
+============
+RPC is a protocol that allows calls to be made across a network. The goal was to simplify building client-server applications across the network. NFS is built on RPC.
+
+Exportfs command is used to export changes in the /etc/exports file. exports -r is used to export all entries in exports file.
+
+DNS concepts:
+=============
 
 
 
