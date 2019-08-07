@@ -45,6 +45,19 @@ the everything in the /usr/lib/systemd/system/basic.target
 5--------graphical target; run level 3 + X11
 6--------reboot.target
 
+Command History:
+================
+use !26 or !ls to use previously used commands.
+
+CLI command navigation:
+========================
+ctrl + a jump to the beginning of command line
+ctrl + e jump to end of command line
+ctrl + u clear to beginning of cmd line
+ctrl + r to search history
+
+
+
 
 Default Umask:
 ==============
@@ -417,12 +430,58 @@ How to find SSD/HDD
 If its a ordinary drive, the path cat /sys/block/sd[a-z]/queue/rotational has the value of 1. If its SSD then it will be 0
 >>>>>>> a8807f0d4c7192539496f4fad03cef3951aacd33
 
+Disk partitioning and LVM:
+==========================
+lsblk
+sdb               8:16   0 20.4G  0 disk 
+
+fdisk /dev/sdb
+Command (m for help): n
+Partition type:
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended
+Select (default p): 
+Using default response p
+Partition number (1-4, default 1): 
+First sector (2048-42814559, default 2048): 
+Using default value 2048
+Last sector, +sectors or +size{K,M,G} (2048-42814559, default 42814559): 
+Using default value 42814559
+Partition 1 of type Linux and of size 20.4 GiB is set
+
+Command (m for help): t
+Selected partition 1
+Hex code (type L to list all codes): 8e
+Changed type of partition 'Linux' to 'Linux LVM'
+
+Command (m for help): w
+The partition table has been altered!
+
+partprobe
+
+[root@centos7 ~]# blkid
+/dev/sda1: UUID="04c76f6c-f061-42ff-ab61-b1066a932572" TYPE="xfs" 
+
+[root@centos7 ~]# mkfs.xfs /dev/sdb1 
 
 
+pvcreate /dev/sdb1
+vgcreate -s 16M vg_new /dev/sdb
+lvcreate -L 5G -n newlv vg_new
+lvdisplay
+LV Path                /dev/vg_new/newlv
 
+mkfs.ext4 /dev/vg_new/newlv
 
-
-
+Linux file types:
+=================
+-	-- regular file
+d	-- directory
+b	-- block device ( hard disk)
+l	-- link files
+s	-- socket
+p	-- named pipe
+c	-- special or device file
 
 
 
