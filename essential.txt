@@ -56,7 +56,26 @@ ctrl + e jump to end of command line
 ctrl + u clear to beginning of cmd line
 ctrl + r to search history
 
+how to find os and kernel version:
+==================================
+/etc/os_release
+/etc/issue
+hostnamectl
+/proc/version
+lsb_release -a
 
+How to find system info:
+========================
+dmidecode -t1
+dmidecode -s system-manufacturer
+dmidecode -t system
+
+
+getent:
+=======
+used to get entries for 
+
+hosts,passwd,services,shadow etc
 
 
 Default Umask:
@@ -478,9 +497,10 @@ partprobe
 
 pvcreate /dev/sdb1
 vgcreate -s 16M vg_new /dev/sdb
-lvcreate -L 5G -n newlv vg_new
+lvcreate -L 5G -n newlv(newname) vg_new(vgname)
 lvdisplay
 LV Path                /dev/vg_new/newlv
+lvextend -L +size /lvpath /pvdisk
 
 mkfs.ext4 /dev/vg_new/newlv
 
