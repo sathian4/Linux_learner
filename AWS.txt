@@ -19,3 +19,5 @@ edgelocation--cachingcontent--cloudfront
 
 
 
+
+VPC(superblock)-->subnet(2)-->IGW-->attache IGW with VPC-->route table creattion--->associate subnet with IGW 	sroute table
