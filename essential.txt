@@ -483,12 +483,5 @@ s	-- socket
 p	-- named pipe
 c	-- special or device file
 
-
-
-
-
-
-
-
-
-
+How to check RAM type and speed.
+dmidecode --type 17
