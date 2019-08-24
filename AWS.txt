@@ -121,3 +121,5 @@ Virtual servers, virtual storage , virtual networks & also bare metal servers(wh
 
 
 
+
+VPC(superblock)-->subnet(2)-->IGW-->attache IGW with VPC-->route table creattion--->associate subnet with IGW 	sroute table

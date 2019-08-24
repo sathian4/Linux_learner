@@ -56,7 +56,26 @@ ctrl + e jump to end of command line
 ctrl + u clear to beginning of cmd line
 ctrl + r to search history
 
+how to find os and kernel version:
+==================================
+/etc/os_release
+/etc/issue
+hostnamectl
+/proc/version
+lsb_release -a
 
+How to find system info:
+========================
+dmidecode -t1
+dmidecode -s system-manufacturer
+dmidecode -t system
+
+
+getent:
+=======
+used to get entries for 
+
+hosts,passwd,services,shadow etc
 
 
 Default Umask:
@@ -430,10 +449,21 @@ How to find SSD/HDD
 If its a ordinary drive, the path cat /sys/block/sd[a-z]/queue/rotational has the value of 1. If its SSD then it will be 0
 >>>>>>> a8807f0d4c7192539496f4fad03cef3951aacd33
 
+<<<<<<< HEAD
+RPC in NFS:
+============
+RPC is a protocol that allows calls to be made across a network. The goal was to simplify building client-server applications across the network. NFS is built on RPC.
+
+Exportfs command is used to export changes in the /etc/exports file. exports -r is used to export all entries in exports file.
+
+DNS concepts:
+=============
+=======
 Disk partitioning and LVM:
 ==========================
 lsblk
 sdb               8:16   0 20.4G  0 disk 
+>>>>>>> cab0569199afd1b9af537282660c26e4da5f0b68
 
 fdisk /dev/sdb
 Command (m for help): n
@@ -467,9 +497,10 @@ partprobe
 
 pvcreate /dev/sdb1
 vgcreate -s 16M vg_new /dev/sdb
-lvcreate -L 5G -n newlv vg_new
+lvcreate -L 5G -n newlv(newname) vg_new(vgname)
 lvdisplay
 LV Path                /dev/vg_new/newlv
+lvextend -L +size /lvpath /pvdisk
 
 mkfs.ext4 /dev/vg_new/newlv
 
