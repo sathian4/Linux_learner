@@ -12,6 +12,28 @@ the word cloud computing was invented by ramnath chellappa
 CAPEX == capital expenditure(fully owned by us)
 OPEX  == Operational expenditure(services alone owned)
 
+Currently AWS has 22 Geographical regions.
+Region comprises of availability zones
+Availability zones is a logical division of a region.
+
+Region==>Availability zones===>physical infra	
+Amazon's Hypervisor is Xen.
+Hypervisor is a software used to create virtual infra.
+Microsoft uses Hyper-V hyperviosor. 
+
+VPC(virtual private cloud).
+Amazon's default network is 172.31.0.0/16. This notation is known as classless inter domain routing.(CIDR)
+Amazon reserved IP's(5)
+10.0.0.0: Network address.
+10.0.0.1: Reserved by AWS for the VPC router.
+10.0.0.2: Reserved by AWS. The IP address of the DNS server is always the base of the VPC network range plus two; however, we also reserve the base of each subnet range plus two. For VPCs with multiple CIDR blocks, the IP address of the DNS server is located in the primary CIDR. For more information, see Amazon DNS Server.
+10.0.0.3: Reserved by AWS for future use.
+10.0.0.255: Network broadcast address. We do not support broadcast in a VPC, therefore we reserve this address.
+
+Amazon EBS(Elastic block store)
+Jump server is also known as bastion host.
+
+
 
 ############################################################
 Exams are 130mins that is 2.10mins
@@ -20,6 +42,10 @@ all are multiple choices
 Marks will be 100-1000, whereas pass mark will be 720
 certificaton valid for 2 years
 ###############################################################
+Free tier:
+750 hrs/month of t2micro (1vcpu + 1gb ram) linux server or windows server.
+30GB EBS(primary and secondary HD)
+1GB snapshot (backup)
 
 Amazon account support type:
 			Basic 		Developers		Business	Enterprise
