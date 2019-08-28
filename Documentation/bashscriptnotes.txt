@@ -1,0 +1,141 @@
+##Bash scripting Notes###
+
+Shell script consists of
+
+1.Shell keywords --if,else,do,done
+2.shell commands
+3.Linux bin commands---w, who
+4.Text processing utilities --->grep,sed,cut
+5.Functions-->to store the repetitive tasks
+6.control flow --> statements and loops
+
+
+1. /etc/profile - The systemwide initialization file, executed for login shells.
+2. /etc/bash.bashrc - The systemwide per-interactive-shell startup file. This is a non-standard file which may not
+exist on your distribution. Even if it exists, it will not be sourced unless it is done explicitly in another start-up
+file.
+3. /etc/bash.logout - The systemwide login shell cleanup file, executed when a login shell exits.
+4. $HOME/.bash_profile - The personal initialization file, executed for login shells.
+5. $HOME/.bashrc - The individual per-interactive-shell startup file.
+6. $HOME/.bash_logout - The individual login shell cleanup file, executed when a login shell exits.
+7. $HOME/.inputrc - Individual readline initialization file.
+
+Shebang:
+========
+#!/bin/bash
+to indicate an interpreter for execution under UNIX / Linux operating systems. If you do not specify an interpreter line, the default is usually the /bin/sh.
+
+Multiple Line Comment
+======================
+use << to to comment the multiple lines
+example:
+========
+<<COMMENT1
+Master LDAP server : dir1.nixcraft.net.in
+Add user to master and it will get sync to backup server too
+Profile and active directory hooks are below
+COMMENT1
+
+Script debug:
+=============
+bash -xv script-name
+bash -n script-name
+
+Pro tip:
+========
+
+echo -e "Today is \c";date --->to print the date output inside the character(\c).
+\n --->new line
+
+Variables:
+==========
+system varibles: PATH, HOME, etc
+User defined: To define the script location to detect the script.
+
+path=/home/sakthi
+export the globally in /etc/environment
+for changes alone in any user $HOME/.bashrc
+
+To see all the variables, use
+#env
+
+$# number of arguments
+$@ to list all the arguments supplied in script
+$$ current script process id
+$RANDOM returns random number every time
+
+basename -s jpg -a *
+s is used to ignore the suffix strings mentioned
+
+Bash arithmetic:
+================
+let "a= 3+4" ; echo $a
++, -, \*, / 	addition, subtraction, multiply, divide
+var++ 	Increase the variable var by 1
+var-- 	Decrease the variable var by 1
+% 	Modulus (Return the remainder after division)
+
+To print decimal numbers,
+use bash built in printf
+
+let a=3/4 ; printf "%0.2f" $a
+
+
+
+
+
+
+
+printf:
+======
+printf "$VARIABLE_NAME\n"
+printf "String %s" $VARIABLE_NAME
+printf "Signed Decimal Number %d" $VARIABLE_NAME
+printf "Floating Point Number %f" $VARIABLE_NAME
+printf "string %s" 
+
+Stream Editor:
+==============
+
+1.Display line multiple times
+=============================
+sed '2p' file.txt ----------> It will display the 2line 2times.
+
+sed -n '2p' file.txt--------->It will display only the 2line
+
+2.Display last line:
+====================
+use $ to display last line.
+use p to print the line
+
+-n--------->it is the option to display only particular thing
+
+sed -n '$p' file.txt -------------->to display only last line
+
+3.Display range of files.
+=========================
+
+sed -n '2,4p' file.txt ----------->to display only 2nd,3rd,4th line
+
+
+4. How to skip particular line:
+===============================
+use ! before p to skip the print of the line
+
+sed -n '2!p' file.txt -------------->to display all lines except 2nd line
+
+5. Context addressing.
+========================
+Display particular word presented line.
+
+sed -n '/ssn/p' file.txt---------------> to display the line which contains only ssn
+
+sed -n '/[Ss]n/p' file.txt-------------> to display the line which contain only ssn with ignoring case.
+
+
+
+
+
+
+
+

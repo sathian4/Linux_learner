@@ -1,0 +1,518 @@
+Booting Process:
+================
+In RHEL 7, booting process is taking care by systemd instead of init scripts. RHEL 6 supports init scripts convention.
+
+1.BIOS or UNIFIED EXTENSIBLE FIRMWARE INTERFACE(UEFI)
+=====================================================
+BASIC INPUT OUTPUT SYSTEM
+It controls the firmware interfaces as well as low peripheral devices.
+It conducts the POWER ON SELF TEST(POST) to check the hardware availability status. After successful POST completion,
+BIOS loads MASTER BOOT RECORD(MBR). On post failure, depends upon the hardware it will halt the boot process.
+
+2.MBR: or GUID PARTITION TABLE
+================================
+Master boot record placed in the first sector of boot hard drive. BIOS loads the MBR into ROM.
+MBR contains 512 bytes of machine code instructions called boot loader(GRUB2) along with partition table and magic  number.
+simply MBR loads the GRUB2.
+MBR will have four primary partitions, or one extended partition to create 16 logical partitions
+GPT will have 128 primary paritions, dont have to create extended parition
+
+446 bytes------bootstrap code
+64 bytes-------partition table
+2 bytes--------magic number(used to check valid mbr)
+
+3.GRUB2(GRAND UNIFIED BOOTLOADER 2)
+====================================
+GRUB2 starts the kernel(the first program) and the initrd(init ram disk). Simply it loads the kernel and mounts the initramfs the first root file system.
+
+4.KERNEL:
+=========
+It is the first program, and loads all the kernel modules and drives from initrd.img to load the linux first process called systemd.
+
+5.SYSTEMD:
+==========
+IT is the first process started in the linux and reads the configuration file of /etc/systemd/system/default.target to run the run level and starts
+the everything in the /usr/lib/systemd/system/basic.target
+
+6. RUNLEVEL:
+============
+
+0--------poweroff.target
+1--------rescue.target ; single user mode, does not allow n/w interfaces or allow non-root logins	
+2--------multi-user target; multi user mode with no n/w interfaces
+3--------multi-user target; minimal mode without graphical
+4--------multi-user target; not defined
+5--------graphical target; run level 3 + X11
+6--------reboot.target
+
+Command History:
+================
+use !26 or !ls to use previously used commands.
+
+CLI command navigation:
+========================
+ctrl + a jump to the beginning of command line
+ctrl + e jump to end of command line
+ctrl + u clear to beginning of cmd line
+ctrl + r to search history
+
+how to find os and kernel version:
+==================================
+/etc/os_release
+/etc/issue
+hostnamectl
+/proc/version
+lsb_release -a
+
+How to find system info:
+========================
+dmidecode -t1
+dmidecode -s system-manufacturer
+dmidecode -t system
+
+
+getent:
+=======
+used to get entries for 
+
+hosts,passwd,services,shadow etc
+
+
+Default Umask:
+==============
+located in /etc/profile
+
+For files:
+if UID -gt 199 umask is 002(ordinary users)
+else
+umask is 022(system users)
+
+Hence for root users,
+files permission will be 644 rw r r
+folders perm will be 755 rwx rx rx
+
+1-stickybit
+4-SGID
+2-SUID
+
+Hence for users above 199
+files permission will be 664 rw rw r
+folders permission will be 775 rwx rwx rx
+
+For individuals, we can edit the same in ~/.bash_profile or ~/.bashrc
+
+Diff between bashrc and bash_profile,
+
+If you are login to your redhat machine, bash_profile will be executed.
+If you already logged in to your machine, bashrc will be executed.
+Hence it is wise to add the env in bash_profile.
+
+Common networking:
+==================
+
+APPLICATION(SSH/HTTPS)----->Transport(TCP/UDP)-------->Networking(IP)---------->Link(Ethernet,MAC)
+
+SS command to replace netstat.
+
+Default port numbers:
+=====================
+
+FTP 	--21
+SSH 	--22
+TELNET	--23
+SMTP	--25
+DNS	--53
+DHCP	--67(H),68(C)
+HTTP	--80
+POP3	--110(post office protocol)
+IMAP	--143
+NTP	--123
+LDAP	--389 LDAP(S)--636
+HTTPS	--443
+MYSQL	--3306
+
+
+Network interface commands:
+===========================
+nmcli con show
+nmcli device
+nmcli dev status 
+ifup
+ifdown
+
+Archiving files and dir using TAR:
+==================================
+
+usage:
+
+tar cf/xf/tf xyz.tar <files> <dir> <files>
+
+cf---to create tar
+xf---to extract tar
+tf---to list the tar file
+p----to preserve permissions
+
+compressed archived file:
+
+gzip ------z
+bzip2------j
+xf---------J
+
+tar cvzf xyz.tar.gz <files>
+tar cvjf xyz.tar.bz2 <files>
+tar cvJf xyz.tar.xz <files>
+
+tar xvzf to untar the gzip files
+tar xvjf to untar the bzip files
+tar xvJf to untar the xz files
+
+To uncompress, use gunzip(gz), bunzip2(bz2), unxz(xz)
+
+File transfer using scp,rsync,sftp:
+===================================
+scp -r sakthi@192.168.0.19:/tmp/ /tmp (copy files from remote user sakthi and paste it in the local foldertmp)
+
+scp -r /tmp sakthi@192.168.019:/tmp/ (copy the local files to remote)
+
+rsync -avzPp <source> sakthi@destination
+
+SFTP:
+=====
+Using sftp,
+go to file location,
+for example you want to copy f2 file from tmp to sakthi@192.xxx.xx.xx
+
+cd /tmp
+
+sftp sakthi@192.xx.xx.xx
+>put tmp(to place the tmp files in remote)
+>get tmp(to copy the remote tmp files to local)
+
+Regular expressions:
+=====================
+^------->used to match the first string of the search pattern
+$------->used to match the last string of the search pattern
+
+grep -e 'dog' -e 'cat' <file.txt> ---->used to check for either dog or cat or both
+grep -iE "dog|cat" file.txt
+
+grep '^Aug *8 14:[345].*open' <file.txt> used to check the pattern starting with Aug for 8 with 14with 3,4,5 intermediate some strings indicates the dot after wildcards with open.
+example:
+========
+[sakthi@centoshost scripts]$ grep -e '^root.*kworker' save-the-file 
+root         5     2  0 17:06 ?        00:00:00 [kworker/0:0H]
+
+Screen command usage:
+======================
+Use ctrl+a for command mode.
+Use ctrl+a S for splitting horizontally
+
+    To split vertically: ctrla then |.
+    To split horizontally: ctrla then S (uppercase 's').
+    To unsplit: ctrla then Q (uppercase 'q').
+    To switch from one to the other: ctrla then tab
+ctrl +a c to open terminal in new window
+to detach: ctrl+a d
+
+crontab:
+========
+
+crontab -l ---------->to list the crons (as root user use crontab -lu sakthi to list the sakthi's cron)
+crontab -r ---------->to remove the entire cron
+crontab -e ---------->to edit the cronjob
+
+total 5 fields that includes, mins hrs day(0-31) month week * * * * *
+
+*/7 -------------->every 7 mins cron will executed
+7 2,13-15,19 12 Jan * ----> to execute cron on every year Jan 12th wih every seven mins from mrng 2:07am, 13:07,14:07,15:07 & 19:07.
+
+Linux process priority:
+=======================
+
+Nice levels range from -20 to +19. -20 is highest priority consequently 19 will be lower.
+
+from value 0 to 19 unprivileged user will set the nice value
+only root user has access to set negative value
+
+renice -n -20 <pid>
+
+Access control list(ACL):
+==========================
+It is a fine grained permissions.
+-rwxrw----+ ----------->+ at EOF indicates the acl permission granted on the files
+getfacl <foldr>/<file> to get the default acl permissions
+to set particular user to access the folder or file,
+setfacl -m u:ssn:g:ssngrp:rwx <folder>/<file>
+to remove acl,
+setfacl -x u:ssn <folder>/<file>
+
+IPv4 & subnetting:
+==================
+Ip address contains 4 octets means 4 * 8=32 bit address.
+
+Class A,B,C,D,E.. Of these we are using only class a,b & c. D is for military purpose and E is for R&D.
+
+CLASS A IP address from 1-126     subnet mask /8  255.0.0.0 broadcast N.255.255.255 Gateway:N.255.255.1
+CLASS B IP address from 128-191s  subnet mask /16 
+Class C IP address from 192-223    subnet mask /24
+
+Private IP address range:
+==========================
+A - 10.0.0.0-		10.255.255.255
+B -172.16.0.0-		172.31.255.255
+C-192.168.0.0.-		192.168.255.255
+
+
+Security enhanced Linux (SELINUX)
+=================================
+SELINUX is Mandatory access control (MAC) which implemented by US national security. It is a layer upon Discretionary access control(DAC).
+
+First of all DAC will be checked, after the MAC will filter the usage.
+
+#sestatus ---to see the selinux status
+
+/etc/selinux/config ;modes -- enforcing,permissive & disabled.
+In enforcing policy will enforce the unauthorized user, in permissive policy can be violated, but data will be logged. 
+
+Booleans:
+=========
+selinux has a policy which has some security policies, we can tweak the policy settings using booleans.
+
+semanage boolean -l --------> to list all booleans
+getsebool ftp_anon_write ---> to list exact boolean ans for ftp anonymous write permission.
+setsebool ftp_anon_write on ->to turn on the write perm.
+To make permanent, setsebool -P ftp_anon_write on
+
+Changing selinux context of file:
+=================================
+chcon & restorecon & semanage
+
+chcon -t httpd_sys_content_t /virtual to change context label using chcon.( but it is not advisable) it is not persisitent
+after that 
+use restorecon -vR /virtual to apply the changes in fcontext
+
+
+semanage fcontext used to display and modify the context.
+
+semanage fcontext -a -t httpd_sys_content_t '/virtual(/.*)?'
+
+Restorecon -RFv /virtual to force modify the context in the directory
+
+To revert the any fault changes, use
+restorecon -v /virtual
+
+Selinux syntax:
+===============
+user,roles,process&file
+system user object---system_u
+others	          ---unconfineduser_u
+
+
+TCP wrappers:
+/etc/hosts.allow
+/etc/hosts.deny
+used to block the particular network address or host 
+pattern:
+ALL : 	192.168.0.104 or ALL : 192.168.0 (to block all network ip from this network)
+sshd,vsftpd : 192.168.0.104
+
+Logging:
+=========
+/var/log/messages ----------->service related logs
+/var/log/secure ------------->user authentication logs
+/var/log/cron	------------->cron executed logs
+/var/log/boot.log------------>boot time logs
+/var/log/maillog------------->mail related logs
+
+Links:
+======
+hardlink
+========
+it will create link between two files with different inodes for same file in difference locations. if one link deleted, we will able to use another link.
+ln <existing_available_file> <link to be created location>
+
+soft link:
+==========
+it is a special file type begins with l. The inode will be available in source only, in link file inode if just forwarding to source. If source deleted means data will be in loss.
+ln -s <existing_available_file> <link to be created location>
+
+Apache basic configuration with htaccess: apache 2.4
+
+<VirtualHost *:80> ##multi ip
+DocumentRoot /home/sakthi/apache 
+ServerName ssnlocal.com #domain name registered in hosts entry
+CustomLog /var/log/httpd/ssnlocal.log Combined
+ErrorLog /var/log/httpd/ssnlocalerr.log
+<Directory "/home/sakthi/apache">
+AllowOverride All ##Process the .htaccess file
+AuthType Basic
+AuthName "Authentication Required" #pop up screen message
+AuthUserFile /home/sakthi/apache/.htpasswd
+Require valid-user #require the user who exists in .htaccess
+#Require all granted ##TO allow all user, .htaccess wont work in this mode
+#<IfModule dir_module>  #to tell the directory index file
+#    DirectoryIndex index.html
+#</IfModule>
+</Directory>
+</VirtualHost>
+
+<<<<<<< HEAD
+Use foremost application to recover the files, if you deleted.
+
+Remove Duplicate packets using sysctl:
+======================================
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=14.2 ms
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=55 time=14.4 ms (DUP!)
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=56 time=10.1 ms
+
+This is due to host system acts as a router, becoz net.ipv4.ip_forward is enabled in sysctl.
+use sysctl -w net.ipv4.ip_forward=0 for temporary purpose
+for permanent, add an entry net.ipv4.ip_forward=0 in /etc/sysctl.conf
+and use sysctl -p /etc/sysctl.conf to apply the changes  effectively.
+
+Grub default:
+============
+UEFI:
+=====
+default grub location: /boot/efi/EFI/centos/grub.cfg
+default grub env:/boot/efi/EFI/centos/grubenv
+symlink:/etc/grub2.cfg
+
+BIOS:
+=====
+default grub location: /boot/grub2/grub
+defaul grub env:/boot/grub2/grubenv
+symlink:/etc/grub2.cfg
+
+To change the default boot value,
+awk -F\' '$1=="menuentry "{print $2}' /etc/grub2.cfg 
+you can find the menu entries below
+CentOS Linux (3.10.0-957.21.3.el7.x86_64) 7 (Core)  -----entry 0
+CentOS Linux (3.10.0-862.el7.x86_64) 7 (Core) -------entry 1
+CentOS Linux (0-rescue-0b8d9d8173a34f1a97b8bd0afbbe1192) 7 (Core) --------entry 2
+
+grub2-set-default {ur entries}
+
+After that your grubenv should have changed as per your entry.
+
+To rebuild the /boot/efi/EFI/centos/grub.cfg or /etc/grub2.cfg
+
+Use grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+
+Single User Mode:
+================
+
+To change any unwanted settings or using single user mode,
+During the Grub interval,
+press `e`, and enter in the grub option,
+find the line "linux16"
+
+in that replace `rw init=/sysroot/bin/sh` instead of ro 
+press ctrl + X
+chroot /sysroot
+use your commands,
+after that for labelling kernel,
+use touch /.autorelabel
+reboot -f
+
+FSCK error codes:
+=================
+unmount the disk using fdisk or lsblk
+use fsck with option -a(to fix error automatically) or use -f to check forcefully or -A to check all disk in fstab.
+
+
+
+0 	No errors
+1 	Filesystem errors corrected
+2 	System should be rebooted
+4 	Filesystem errors left uncorrected
+8 	Operational error
+16 	Usage or syntax error
+32 	Checking canceled by user request
+128 	Shared-library error
+
+Recover accidentally removed files using lsof:
+===============================================
+
+use lsof | grep deleted file
+sh        11021               sakthi  255r      REG              253,0        10 24379410 /tmp/filetodelete.txt (deleted)
+
+where is second field is PID of file
+4th field is file descriptor
+
+Hence it will be underlying in /proc/11021/fd/255.
+
+Use foremost tool to recover the files
+=======
+How to find SSD/HDD
+====================
+If its a ordinary drive, the path cat /sys/block/sd[a-z]/queue/rotational has the value of 1. If its SSD then it will be 0
+>>>>>>> a8807f0d4c7192539496f4fad03cef3951aacd33
+
+<<<<<<< HEAD
+RPC in NFS:
+============
+RPC is a protocol that allows calls to be made across a network. The goal was to simplify building client-server applications across the network. NFS is built on RPC.
+
+Exportfs command is used to export changes in the /etc/exports file. exports -r is used to export all entries in exports file.
+
+DNS concepts:
+=============
+=======
+Disk partitioning and LVM:
+==========================
+lsblk
+sdb               8:16   0 20.4G  0 disk 
+>>>>>>> cab0569199afd1b9af537282660c26e4da5f0b68
+
+fdisk /dev/sdb
+Command (m for help): n
+Partition type:
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended
+Select (default p): 
+Using default response p
+Partition number (1-4, default 1): 
+First sector (2048-42814559, default 2048): 
+Using default value 2048
+Last sector, +sectors or +size{K,M,G} (2048-42814559, default 42814559): 
+Using default value 42814559
+Partition 1 of type Linux and of size 20.4 GiB is set
+
+Command (m for help): t
+Selected partition 1
+Hex code (type L to list all codes): 8e
+Changed type of partition 'Linux' to 'Linux LVM'
+
+Command (m for help): w
+The partition table has been altered!
+
+partprobe
+
+[root@centos7 ~]# blkid
+/dev/sda1: UUID="04c76f6c-f061-42ff-ab61-b1066a932572" TYPE="xfs" 
+
+[root@centos7 ~]# mkfs.xfs /dev/sdb1 
+
+
+pvcreate /dev/sdb1
+vgcreate -s 16M vg_new /dev/sdb
+lvcreate -L 5G -n newlv(newname) vg_new(vgname)
+lvdisplay
+LV Path                /dev/vg_new/newlv
+lvextend -L +size /lvpath /pvdisk
+
+mkfs.ext4 /dev/vg_new/newlv
+
+Linux file types:
+=================
+-	-- regular file
+d	-- directory
+b	-- block device ( hard disk)
+l	-- link files
+s	-- socket
+p	-- named pipe
+c	-- special or device file
+
+How to check RAM type and speed.
+dmidecode --type 17

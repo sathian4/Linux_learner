@@ -1,0 +1,11 @@
+Docker is a os level virtualization technology, which is a image. Docker image on runtime is called as a containers.
+
+Docker has two versions. Community and enterprise.
+
+Installing Docker:
+=================
+1. Install docker
+2. add user to docker group
+3. clone my github repo
+4. get a code editor
+5. tweak your terminal and shell options

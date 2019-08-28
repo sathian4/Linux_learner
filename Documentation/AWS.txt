@@ -1,0 +1,151 @@
+Difference between public and private cloud:
+============================================
+Public cloud-- cloud service available via internet
+AWS,AZURE,Google cloud, Alibaba
+Private cloud -- cloud service available via intranet
+HP helium,Xen,Hyper V, Openstack
+Hybrid cloud-- expanding the private cloud infra to public cloud( eg. we can extend opennebula infra to aws)
+
+POC=proof of concept
+
+the word cloud computing was invented by ramnath chellappa
+CAPEX == capital expenditure(fully owned by us)
+OPEX  == Operational expenditure(services alone owned)
+
+Currently AWS has 22 Geographical regions.
+Region comprises of availability zones
+Availability zones is a logical division of a region.
+
+Region==>Availability zones===>physical infra	
+Amazon's Hypervisor is Xen.
+Hypervisor is a software used to create virtual infra.
+Microsoft uses Hyper-V hyperviosor. 
+
+VPC(virtual private cloud).
+Amazon's default network is 172.31.0.0/16. This notation is known as classless inter domain routing.(CIDR)
+Amazon reserved IP's(5)
+10.0.0.0: Network address.
+10.0.0.1: Reserved by AWS for the VPC router.
+10.0.0.2: Reserved by AWS. The IP address of the DNS server is always the base of the VPC network range plus two; however, we also reserve the base of each subnet range plus two. For VPCs with multiple CIDR blocks, the IP address of the DNS server is located in the primary CIDR. For more information, see Amazon DNS Server.
+10.0.0.3: Reserved by AWS for future use.
+10.0.0.255: Network broadcast address. We do not support broadcast in a VPC, therefore we reserve this address.
+
+Amazon EBS(Elastic block store)
+Jump server is also known as bastion host.
+
+
+
+############################################################
+Exams are 130mins that is 2.10mins
+60questions
+all are multiple choices
+Marks will be 100-1000, whereas pass mark will be 720
+certificaton valid for 2 years
+###############################################################
+Free tier:
+750 hrs/month of t2micro (1vcpu + 1gb ram) linux server or windows server.
+30GB EBS(primary and secondary HD)
+1GB snapshot (backup)
+
+Amazon account support type:
+			Basic 		Developers		Business	Enterprise
+
+Account/Billing supp 	yes		 yes			yes		yes
+Technical support	NA		  yes			yes		yes
+SLA(u will get 		NA		24hrs			1hr		15mins
+first response in)			
+Support fee		NA		$29/Mon			$100/mon	$15000/mn		
+
+
+Regions:
+========
+N.Virginia is where the new services are take place & also it not recommended to take production over there since it is not stable amongst.
+
+Region is a physical location which consists two or more availability zones.
+Region-availability zones
+Simple a region consists for two availability zones, availability zones means datacenter.
+
+Edgelocations: Edgelocations are endpoints  for AWS which used for caching content. which is basically cloud front, the Content delivery network for AWS.
+edgelocation--cachingcontent--cloudfront
+
+Identity access Management:(IAM)
+================================
+IAM allows you to manage the users & their level of access to AWS console.
+Centralized control of AWS accnt; shared access to your account; Granular permission(permitting only specific services & their level of access), multifactor authentication(login,pwd & special character box), Identity federation(includes AD,FB etc)
+IAM policies should have 4 elements, its JSON format.
+1.Principal - Dont provide everyone for access
+2.Action    - Type of access
+3.Resource   -object
+4.condition  -restriction
+sign in:
+https://sathian4.signin.aws.amazon.com/console
+Goto myaccount-->mybilling dashboard--->enable billing alerts to email--->cloudwatch--->billing--->create an alarm
+
+S3:(Simple storage Service)
+==
+It provides highly scalable object storage.
+
+S3 is object based i.e it allows you to upload files
+Files size will be 0bytes to 5TB
+Files are stored in buckets(bucket is basically a folder)
+It must be unique, becoz it will have one ipaddress globally.(Universal Namespace)
+When you upload the files, it will be HTTP200 status once it uploaded successfully
+Simple storage service(S3) consists of,
+*Key(name of the object)
+*value(data made up of sequence of bytes)
+*Version ID(version controlling for data)
+*Metadata(data about data)
+*Access control lists & torrents 
+
+How S3 is consistent:
+=====================
+Read after write consistency for PUTS of New Objects
+Eventual consistencty for overwrite PUTS & Deletes (can take some time to propagate)
+
+Means,
+If you write the newfile & read it immediately afterwards, you will able to view that data.
+If you update an existing file or delete a file and read it immediately , you may get older version or may not. but it takes a little bit of time
+to propagate.
+
+S3 features:
+==============
+*Tiered storage
+*Life cycle management(optional to  move the files if it gets 30days old& etc)
+*Versioning
+*encryption
+*MFA for delete(Multi factor authentication)
+*secure data using ACL & bucket policies.
+
+Storage classes:
+================
+*S3 standard (99.99% availabilty & durability) & redundant storage across multiple devices in multiple facilities.
+*S3-Infrequent access:(for data accessed less frequently, but requires fast access when needed. Lower fee than S3, but charges on data retrieval.
+*S3-one zone IA:same has previous, but it located in one zone only, not redundant(It is also called RRS(reduce redundant storage))
+*S3 Intelligent Tiering: Designed to optimize cost by automatically moving data to most cost effective access tier.
+*S3 Glacier:storing archived data. Retrieval times configurable from minutes to hours.
+*S3 Glacier deep archival: S3 glacier is S3's lowest cost storage class where retrieval time of 12hrs is acceptable.(but we can get data after 12hrs only)
+/home/sakthi/Pictures/Screenshot from 2019-06-08 13-16-32.png
+
+Amazon S3 transfer acceleration, it takes advantage of cloudfront(edge locations to bucket)
+
+S3 is not suitable for installing OS & databases
+
+Create an S3 Bucket:
+====================
+For viewing buckets, the locations will be changed to global.
+
+Cloud computing offers 
+IAAS,SAAS,PAAS
+
+Infrastructure as a service offers
+Virtual servers, virtual storage , virtual networks & also bare metal servers(which is a dedicated hardware server)
+
+
+
+
+
+
+
+
+
+VPC(superblock)-->subnet(2)-->IGW-->attache IGW with VPC-->route table creattion--->associate subnet with IGW 	sroute table

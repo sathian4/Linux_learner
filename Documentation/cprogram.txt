@@ -1,0 +1,180 @@
+Author: Jason Fedin
+
+Four stages of C:
+=================
+Editing 
+Compiling
+Linking (process all related obj files as one bundle for execution)
+Executing
+
+Output of four stages:
+======================
+.c --->.o----->a.out--->anyname(which is executable)
+
+In linux:
+/home/sakthi/cprograms/test/obj/Debug/test ----object file after compilation
+/home/sakthi/cprograms/test/bin/test --->complete console application
+
+*C-codes ends with a .c extensions.
+*IDE stands for Integrated Development Environment
+*Compiler converts the source code into machine language. i.e process of converting source code into an object code.
+It has two process.
+Preprocessing compilation & actual compilation
+Output of compiler with an extension .o in linux (.obj in windows)
+
+C structure:
+============
+#header section(used for including library functions)
+main-->it is the entry point of the program
+statements(in squiggly brackets)
+
+Comments:
+=========
+multi line comments:
+====================
+/*HI this 
+*is
+*multi line comment in c
+*thats it */
+
+Single line comment:
+=====================
+//hi this is single line comment
+
+Pre-processor:
+==============
+Unique feature of C, which will not available in other High level languages
+used to create,
+own constants, macros using #define
+build own lib files
+to make powerful programs using #ifdef, #endif, #else
+
+#standard header files #include <stdio.h>
+#user defined header file #include <sakthi.h> //it will search the header file in current directory
+Header file includes
+#include, #define, structure declarations, typedef statements, function prototype
+example for macro:
+Macros are handled by preprocessor.
+=================
+#define c 299792458  // speed of light
+
+Reading User Input:
+=====================
+scanf() used to read the user input
+%s,%d,%c,%f ---------->strings,integers,characters & floats
+*in float we can use %2.f for 2 decimal point numbers
+%i integer
+%e,%g double
+
+%s etc is also known as format specifier.
+int i--->where i is called identifier
+
+
+Basic Scan and print functions:
+===============================
+#include <stdio.h>
+
+int main()
+
+{
+int i; #declaring i to integer
+char str[10]; #declaring str with 10characters
+
+printf("Enter your age & name:");
+
+scanf("%d %s", &i, str); #use &only to point the integer, for strings just point the variable name
+
+printf("Your entered age as %d and name as %s", i, str); just print using variable
+
+return 0;
+
+}
+
+Variables & data types:
+=======================
+
+Memory basics:
+===============
+RAM is a ordered sequence of boxes,
+each box is filled with either 1 or empty as 0
+one box is called as a bit, & it is grouped into 8 to called as a byte.
+Each byte has a unique address in computer memory
+
+Constants--->value does not change throughout the life
+variables---->values may change, according to assignment
+ex:
+int i = 10;
+i = 12;here i is modified to 12.
+
+Naming variables:
+================
+In C, the variable must begin with underscore(_) or letters(that may contain integers or upper or lowercase)
+DO not use 3var, var$name, var name like mentioned variables.
+
+Declaring variables:
+====================
+int i; int i,y,z; int x = 12; int x = 12, y = 14;
+int x,z = 10; In this case, value 10 is assigned to x only, though it is acceptable. but it is a poor thing.
+
+Basic Data types:
+=================
+int,float,double,char,_Bool bool ---------->
+To use hexadecimal numbers,use 0x beforevalue, int rgbcolor = 0xFFEF0D
+hexadecimal numbers such as 1 to 9,A,B,C,D,E,F.
+
+adjective keywords are short, long, unsigned, long long int
+
+Enum:(enumerated data type)
+====
+Enum is a datatype which used to assign variable with defined valid values.
+
+Enums are assigned as integers in c
+
+for ex. enum month {jan,feb,mar,apr}
+jan integer array value should be 0
+feb will be 1 and so forth
+
+We can explicitely assign the alternate values, like enum month {jan,feb,mar = 10, apr}
+in this case jan will be 0, feb will be 1, and mar will be 10, apr will be 11.
+
+Char:
+=====
+It is a character datatype. assign it using one letter, one number or one symbols like char ssn = '1'; char ssn = 'a'.
+In C, anything inside the double quotes is string.
+
+Escape characters:
+==================
+\a 	= alert bell
+\b	= backspace
+\f	= formfeed
+\n	= newline
+\r 	= carriage return
+\t 	= horizontal tab
+\v	= vertical tab
+\\	= backslash
+\?	= question mark
+
+Enum example:
+=============
+int main()
+{
+enum myname {ssn, sakthi, sathia};
+
+enum myname shorform = ssn;
+enum myname anshortfrom = sakthi;
+enum myname halfname = sathia;
+
+printf("the enum is %d",sakthi); //the output will be 1.
+return 0;
+}
+
+argc------->argumentcount
+argv------->argument vector
+
+Passing arguments to the command line:
+=======================================
+
+main (int argc, char *argv[]);
+
+defining arguments in main function
+
