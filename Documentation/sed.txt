@@ -1,0 +1,4 @@
+Match and delete the whole line:
+
+sed '/^f/d'file 
+/<used to match the character/
