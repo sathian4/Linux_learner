@@ -1,0 +1,19 @@
+
+VPC - Region super block (10.5.0.0)
+
+Subnet - Zone (10.5.0.x) (10.5.1.x) (NACL) Stateless firewall  each subnet 
+security group statefull is for each ec2 instance
+
+After creating the VPC route table will be automatically created.
+
+Public IP & Elatic IP 
+
+Route Table 
+IGW -
+
+0.0.0.0/0 IGW
+
+NACL --> for new NACL please add new rule #100 for inbound/outbound to alltraffic for 0.0.0.0/0
+
+
+NAT GW --> need one IGW associated Subnet to create NAT GW and then this NAT GW can be associated to any of the Private Subnet (where IGW not associated)

@@ -1,0 +1,68 @@
+Dear Sakthi,
+
+As discussed, PFB the updated steps.
+
+dt=`date +"%d%b%Y"`
+
+ls -ltrh /etc/httpd/conf*/*conf_${dt}
+
+ls -ltrh /etc/httpd/conf.d/autoindex.conf*
+
+mkdir /etc/httpd/conf.d/Backup/
+
+mv /etc/httpd/conf.d/autoindex.conf* /etc/httpd/conf.d/Backup/
+
+ls -ltrh /etc/httpd/conf.d/autoindex.conf*
+
+grep -ir " Indexes" /etc/httpd/conf*/*conf | grep -v "#" | grep "Options"
+
+grep -ir " -Indexes" /etc/httpd/conf*/*conf | grep -v "#" | grep "Options"
+
+grep -ir " Indexes" /etc/httpd/conf*/*conf| grep -v "#" | grep "Options" | awk '{print $1}' | sort | uniq | cut -d ':' -f1
+
+grep -ir " Indexes" /etc/httpd/conf*/*conf| grep -v "#" | grep "Options" | awk '{print $1}' | sort | uniq | cut -d ':' -f1 |awk -vdt="${dt}" '{print "cp -ap "$1,$1"_"dt}' | sudo sh
+
+ls -ltrh /etc/httpd/conf*/*conf_${dt}
+
+grep "TraceEnable" /etc/httpd/conf/httpd.conf | grep -v "#" ; traceenable=$?
+
+if [ ! $traceenable -eq 0 ] && [ ! -f /etc/httpd/conf/httpd.conf_${dt} ] ; then sudo cp -ap /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf_${dt} ; fi
+
+
+ls -ltrh /etc/httpd/conf/httpd.conf_${dt}
+
+if [ ! $traceenable -eq 0 ]; then sudo sed -i '$ a TraceEnable off' /etc/httpd/conf/httpd.conf; fi
+
+
+IFS=$'\n'; for file in `grep -ir " Indexes" /etc/httpd/conf*/*conf| grep -v "#" | grep "Options" | awk '{print $1}' | cut -d ':' -f1 | sort | uniq`; do for src in `grep -ir " Indexes" /etc/httpd/conf*/*conf| grep -v "#" | grep "Options" | cut -d ':' -f2`; do dst=`echo $src |sed -r 's/[^ ]+/+&/g;s#\+Indexes#\-Indexes#g;s#\+Options#Options#g'`; sed -i "s#$src#$dst#g"  $file; done ;done
+
+grep -ir " Indexes" /etc/httpd/conf*/*conf | grep -v "#" |grep "Options"
+
+grep -ir " -Indexes" /etc/httpd/conf*/*conf | grep -v "#" |grep "Options"
+
+grep "TraceEnable" /etc/httpd/conf/httpd.conf
+
+sdiff -s /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf_${dt} | grep TraceEnable
+
+for filediff in `grep -ir " Indexes" /etc/httpd/conf*/*conf_${dt} | grep -v "#" | grep "Options" | awk '{print $1}' | sort | uniq`; do echo $filediff | cut -d ':' -f1 | awk -F "_${dt}" '{print $1}'| awk -vdt="${dt}" -vq='"' '{print "sdiff -s " $1"_"dt,$1}' ; done | sh
+
+httpd -t
+
+service httpd status
+
+service httpd stop
+
+service httpd start
+
+service httpd status
+
+ps -ef | grep httpd
+
+cd /var/log/httpd
+
+ll -trh | tail
+
+tailf
+
+
+
