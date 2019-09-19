@@ -77,6 +77,8 @@ IAM policies should have 4 elements, its JSON format.
 2.Action    - Type of access
 3.Resource   -object
 4.condition  -restriction
+
+
 sign in:
 https://sathian4.signin.aws.amazon.com/console
 Goto myaccount-->mybilling dashboard--->enable billing alerts to email--->cloudwatch--->billing--->create an alarm
@@ -141,6 +143,19 @@ Infrastructure as a service offers
 Virtual servers, virtual storage , virtual networks & also bare metal servers(which is a dedicated hardware server)
 
 
+Virtual Private Cloud:
+=====================
+Default we can creat 5 VPC in a region.
+
+Private IP Ranges:
+10.0.0.0 to 10.255.255.255 /8
+172.16.0.0 to 172.31.255.255 /16
+192.168.0.0 to 192.168.255.255 /24
+
+If VPC created, it will create following defaultly,
+Route table,
+NACL,
+Security group
 
 
 
