@@ -1,0 +1,29 @@
+#!/bin/bash
+
+td=$(date +%F)
+leapdays=0
+read -p "Please enter your DOB(YYYY-MM-DD): " pd
+#INPUT DRY RUN TEST
+if [[ ! ${pd} =~ [0-9]+-[0-9]+-[0-9]+ ]]; then echo -e "\e[41m Please Enter the correct Date Format(YYYY-MM-DD) \e[0m"; fi
+
+birthyr=$(echo ${pd} | cut -d '-' -f1)
+birthmon=$(echo ${pd} | cut -d '-' -f2)
+curyr=$(echo ${td} | cut -d '-' -f1)
+curmon=$(echo ${td} | cut -d '-' -f2)
+
+#LEAP YEAR CALCULATION:
+for yr in `seq ${birthyr} ${curyr}`;
+do
+	leap=$(( ${yr}%4 ))
+	if [ ${leap} -eq 0 ];
+	then
+		leapdays=$(( $leapdays + 1 ))
+	done
+
+#AGE CALCULATION:
+if [ ${curmon} -lt ${birthmon} ];
+then
+	age=$((${curyr}-{birthyr})
+
+	echo "Your Age is "
+
