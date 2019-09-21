@@ -18,12 +18,27 @@ do
 	if [ ${leap} -eq 0 ];
 	then
 		leapdays=$(( $leapdays + 1 ))
+	fi
 	done
+#Days calculation:
+#==================
+f1=$(date -d "$td" +%s)
+f2=$(date -d "$pd" +%s)
+
+numdays=$(((${f1} - ${f2}) / 86400 ))
+numhrs=$(( ${numdays} * 24 ))
+nummins=$(( ${numhrs} * 60 ))
+numsecs=$(( ${nummins} * 60 ))
 
 #AGE CALCULATION:
-if [ ${curmon} -lt ${birthmon} ];
+if [ ${birthmon} -gt ${curmon} ];
 then
-	age=$((${curyr}-{birthyr})
+	f3=$(( (${curyr}-1) - ${birthyr} ))
+	echo -e "Your Age is : ${f3} Years :: ${curmon} Months :: ${numdays} Days :: ${leapdays} leapdays :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
+else
+f4=$(( ${curyr} - ${birthyr} ))
 
-	echo "Your Age is "
+echo -e "Your Age is : ${f4} Years :: `expr ${curmon} - ${birthmon}` Months $(date +%d) days :: ${numdays} Days :: ${leapdays} leapdays :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
+fi
+
 
