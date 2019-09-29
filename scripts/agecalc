@@ -4,7 +4,7 @@ td=$(date +%F)
 leapdays=0
 read -p "Please enter your DOB(YYYY-MM-DD): " pd
 #INPUT DRY RUN TEST
-if [[ ! ${pd} =~ [0-9]+-[0-9]+-[0-9]+ ]]; then echo -e "\e[41m Please Enter the correct Date Format(YYYY-MM-DD) \e[0m"; fi
+if [[ ! ${pd} =~ [0-9]+-[0-9]+-[0-9]+ ]]; then echo -e "\e[41m Please Enter the correct Date Format(YYYY-MM-DD) \e[0m"; exit 1 ; fi
 
 birthyr=$(echo ${pd} | cut -d '-' -f1)
 birthmon=$(echo ${pd} | cut -d '-' -f2)
@@ -29,16 +29,18 @@ numdays=$(((${f1} - ${f2}) / 86400 ))
 numhrs=$(( ${numdays} * 24 ))
 nummins=$(( ${numhrs} * 60 ))
 numsecs=$(( ${nummins} * 60 ))
+numweeks=$(( ${numdays} / 7 ))
+numweeks_days=$(( ${numdays}%7 ))
 
 #AGE CALCULATION:
 if [ ${birthmon} -gt ${curmon} ];
 then
 	f3=$(( (${curyr}-1) - ${birthyr} ))
-	echo -e "Your Age is : ${f3} Years :: ${curmon} Months :: ${numdays} Days :: ${leapdays} leapdays :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
+	echo -e "Your Age is : ${f3} Years :: ${curmon} Months :: ${numdays} Days :: ${leapdays} leapdays :: ${numweeks}weeks ${numweeks_days}days :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
 else
 f4=$(( ${curyr} - ${birthyr} ))
 
-echo -e "Your Age is : ${f4} Years :: `expr ${curmon} - ${birthmon}` Months $(date +%d) days :: ${numdays} Days :: ${leapdays} leapdays :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
+echo -e "Your Age is : ${f4} Years :: `expr ${curmon} - ${birthmon}` Months $(date +%d) days :: ${numdays} Days :: ${leapdays} leapdays :: ${numweeks}weeks ${numweeks_days}days :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
 fi
 
 
