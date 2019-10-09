@@ -37,7 +37,8 @@ then
 	echo -e "Your Age is : ${f3} Years :: ${curmon} Months :: ${numdays} Days :: ${leapdays} leapdays :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
 else
 f4=$(( ${curyr} - ${birthyr} ))
-
+f5=$((echo $pd | cut -d '-' -f2,3))
+f6=$((echo $curyr-f5))
 echo -e "Your Age is : ${f4} Years :: `expr ${curmon} - ${birthmon}` Months $(date +%d) days :: ${numdays} Days :: ${leapdays} leapdays :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
 fi
 
