@@ -1,7 +1,0 @@
-git add ; 
-git commit -m message; 
-git push origin <branch>; 
-git checkout <branch> ;
-git checkout -b <new_branch_name>; 
-git push -u origin <newly created branch name> ;
-git -T <ssh id> ; git pull ;
