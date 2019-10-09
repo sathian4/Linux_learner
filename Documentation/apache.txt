@@ -1,0 +1,45 @@
+Apache Source Installation:
+===========================
+
+yum groupinstall " Development Tools"  -y
+yum install expat-devel pcre pcre-devel openssl-devel -y
+Packages:
+=========
+Apache httpd - https://github.com/apache/httpd/releases
+Apr - https://github.com/apache/apr/releases
+Apr-util - https://github.com/apache/apr-util/releases
+
+ mv apr-1.6.2 httpd-2.4.28/srclib/apr
+mv apr-util-1.6.0 httpd-2.4.28/srclib/apr-util
+cd httpd-2.4.28
+./buildconf 
+./configure --enable-ssl --enable-so --with-mpm=<mpm module. --with-included-apr --prefix=/etc/httpd
+make
+make install
+check httpd -v. It wont list due to no path mentioned.
+Hence for global config, put entries in /etc/profile.d/
+
+vim /etc/profile.d/httpd.sh
+pathmunge /usr/local/apache2/bin
+
+Create daemon startup:
+=====================
+[Unit]
+Description=The Apache HTTP Server
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/apache2/bin/apachectl -k start
+ExecReload=/usr/local/apache2/bin/apachectl -k graceful
+ExecStop=/usr/local/apache2/bin/apachectl -k graceful-stop
+PIDFile=/usr/local/apache2/logs/httpd.pid
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
+systemctl daemon-reload
+
+
+

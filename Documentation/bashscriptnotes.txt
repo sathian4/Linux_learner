@@ -80,11 +80,9 @@ use bash built in printf
 
 let a=3/4 ; printf "%0.2f" $a
 
-
-
-
-
-
+Export varibles:
+================
+export var; to export the varibles to nested scripts
 
 printf:
 ======
@@ -93,6 +91,66 @@ printf "String %s" $VARIABLE_NAME
 printf "Signed Decimal Number %d" $VARIABLE_NAME
 printf "Floating Point Number %f" $VARIABLE_NAME
 printf "string %s" 
+
+xargs usage:
+============
+to replace all txt extension to sh
+
+ls *txt | xargs basename -s .txt -a | xargs -n1 -i mv {}.txt {}.sh
+
+-n1 ==== execute one by one argument
+
+Arithmetic using bash:
+======================
+
+use let for simple arithmetic:
+===============================
+usage
+let a=3+4
+or
+let "a = 3 + 4"
+python -c "print (${a}/${b})"
+ awk "BEGIN {print (20+5)/2}"
+to get exact float points use above command. There is no particular commands available in bash
+
+printf %.10f\\n "$((10**9 * 20/7))e-9"   # many shells. Not mksh.
+$ echo "$((20.0/7))"                       # (ksh93/zsh/yash, not bash)
+$ awk "BEGIN {print (20+5)/2}"
+$ zcalc
+$ bc <<< 20+5/2
+$ bc <<< "scale=4; (20+5)/2"
+$ dc <<< "4 k 20 5 + 2 / p"
+$ expr 20 + 5
+$ calc 2 + 4
+$ node -pe 20+5/2  # Uses the power of JavaScript, e.g. : node -pe 20+5/Math.PI
+$ echo 20 5 2 / + p | dc 
+$ echo 4 k 20 5 2 / + p | dc 
+$ perl -E "say 20+5/2"
+$ python -c "print(20+5/2)"
+$ python -c "print(20+5/2.0)"
+$ clisp -x "(+ 2 2)"
+$ lua -e "print(20+5/2)"
+$ php -r 'echo 20+5/2;'
+$ ruby -e 'p 20+5/2'
+$ ruby -e 'p 20+5/2.0'
+$ guile -c '(display (+ 20 (/ 5 2)))'
+$ guile -c '(display (+ 20 (/ 5 2.0)))'
+$ slsh -e 'printf("%f",20+5/2)'
+$ slsh -e 'printf("%f",20+5/2.0)'
+$ tclsh <<< 'puts [expr 20+5/2]'
+$ tclsh <<< 'puts [expr 20+5/2.0]'
+$ sqlite3 <<< 'select 20+5/2;'
+$ sqlite3 <<< 'select 20+5/2.0;'
+$ echo 'select 1 + 1;' | sqlite3 
+$ psql -tAc 'select 1+1'
+$ R -q -e 'print(sd(rnorm(1000)))'
+$ r -e 'cat(pi^2, "\n")'
+$ r -e 'print(sum(1:100))'
+$ smjs
+$ jspl
+
+
+
 
 Stream Editor:
 ==============
