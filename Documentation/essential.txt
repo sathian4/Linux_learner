@@ -265,6 +265,31 @@ C-192.168.0.0.-		192.168.255.255
 
 Security enhanced Linux (SELINUX)
 =================================
+
+SELINUX set of security rules that determine which process could access ports, files and directories. Each files, ports, directory have
+as special label known as SELINUX context.
+context type usually ends with _t
+System reboot requires to disable selinux entirely
+
+/etc/selinux/config
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 SELINUX is Mandatory access control (MAC) which implemented by US national security. It is a layer upon Discretionary access control(DAC).
 
 First of all DAC will be checked, after the MAC will filter the usage.
@@ -524,5 +549,18 @@ How to check applications uses Swap space:
 2.grep --color -i vmswap /proc/<PID>/status
 [sakthi@centoshost Documentation]$ grep --color -i vmswap /proc/7640/status
 VmSwap:	       0 kB
+
+
+Hypervisor:
+===========
+
+Type 1 and type 2:
+===================
+type 1 ---> baremetal hypervisor---> bare metal--->vmware esxi/hyper-v--->guest os
+type 2 ---> hosted hypervisor----> Host os--->vmware workstation--->guest os
+
+
+full virtualization and paravirtualization:
+===========================================
 
 
