@@ -516,3 +516,9 @@ c	-- special or device file
 
 How to check RAM type and speed.
 dmidecode --type 17
+
+
+$* ---> expands to positional parameters as single string
+$@----> expands to all poisitional parameters with space as delimited
+$$ --->current process id
+$!---->recently closed process id
