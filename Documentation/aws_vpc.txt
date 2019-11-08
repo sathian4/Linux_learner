@@ -1,4 +1,47 @@
 
+VPC:
+====
+It is region based.
+We can create 5VPC.
+
+VPC flow will be from IGW/Virtual private GW ----->Router--->Route Table---->NACL---->Security Group---->Public/Private Subnet
+NACL is known as the first layer of defence(Which is stateless---blocks specific IP address)
+Security group is 2nd layer of defence(which is statefull---blocks and filters the traffic)
+
+private ip ranges: 
+10.0.0.0 --10.255.255.255(10/8 prefix)
+172.16.0.0 --- 172.31.255.255 (16/12) prefix
+192.168.0.0 --- 192.168.255.255 (16 prefix)
+
+Largest subnet allowed in VPC is /16
+smallest subnet allowed in VPC is /28
+
+Default VPC vs 
+
+Info:
+=====
+192.168.0.60/22
+
+128-64-32-16-8-4-2-1.128-64-32-16-8-4-2-1.128-64-32-16-8-4-2-1.128-64-32-16-8-4-2-1
+
+/26 subnet
+
+255.255.255.192 /26
+8+8+8+2=26
+192=128+64
+to find no of subnet. we have subtract it with 256
+192-256=64
+
+64*4=256 hence we will get 4 subnet. Thus we will assign 4 groups.
+192.168.0.1-192.168.0.63 
+192.168.0.64-192.168.0.128
+192-256=64
+1 block =4
+we will provide it to 4 teams.
+
+
+
+
 VPC - Region super block (10.5.0.0)
 
 Subnet - Zone (10.5.0.x) (10.5.1.x) (NACL) Stateless firewall  each subnet 
@@ -17,3 +60,5 @@ NACL --> for new NACL please add new rule #100 for inbound/outbound to alltraffi
 
 
 NAT GW --> need one IGW associated Subnet to create NAT GW and then this NAT GW can be associated to any of the Private Subnet (where IGW not associated)
+
+

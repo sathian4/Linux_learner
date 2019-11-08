@@ -33,4 +33,3 @@ else
 echo "Script not completed kindly check for auth key, permission issue etc"
 fi
 done
-

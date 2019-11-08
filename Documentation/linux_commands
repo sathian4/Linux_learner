@@ -1,0 +1,3919 @@
+o##default corntab location######
+
+/var/spool/cron/
+
+Apache HTTP Server 2.4.23 (httpd)
+
+MPM - Multi-Processing Module (Apache)
+
+#######################################################
+
+--Apache--
+
+Prefork - utilize more RAM memory and CPU
+
+Event - one master process and all request will be child process (utilize cpu only)
+
+Worker - utilize more RAM memory and CPU
+
+###########################################################
+
+[root@mohan ~]# fping -g 192.168.4.1/24 -c 1 
+192.168.4.1   : [0], 96 bytes, 0.12 ms (0.12 avg, 0% loss)
+192.168.4.3   : [0], 96 bytes, 0.64 ms (0.64 avg, 0% loss)
+192.168.4.4   : [0], 96 bytes, 0.75 ms (0.75 avg, 0% loss)
+192.168.4.8   : [0], 96 bytes, 10.6 ms (10.6 avg, 0% loss)
+192.168.4.9   : [0], 96 bytes, 5.02 ms (5.02 avg, 0% loss)
+192.168.4.10  : [0], 96 bytes, 6.58 ms (6.58 avg, 0% loss)
+192.168.4.11  : [0], 96 bytes, 0.71 ms (0.71 avg, 0% loss)
+192.168.4.12  : [0], 96 bytes, 0.75 ms (0.75 avg, 0% loss)
+192.168.4.13  : [0], 96 bytes, 0.74 ms (0.74 avg, 0% loss)
+192.168.4.14  : [0], 96 bytes, 0.74 ms (0.74 avg, 0% loss)
+192.168.4.15  : [0], 96 bytes, 0.74 ms (0.74 avg, 0% loss)
+192.168.4.16  : [0], 96 bytes, 0.75 ms (0.75 avg, 0% loss)
+
+
+Linux general commands
+
+user password expiry date set
+set -o emacs 
+set -o vi
+
+chage Mohan -M 30
+
+#########disk read and write speed check command######
+dd if=/dev/sdb1 of=/tmp/mohan2 bs=200M count=2
+
+
+## Allow root to run any commands anywhere
+root    ALL=(ALL)       ALL
+Mohan   ALL=(ALL)       ALL
+#Admin  ALL=(ALL)       ALL
+data    192.168.4.105=(ALL) /bin/mount,/usr/sbin/useradd
+#data    ALL=(ALL) /bin/mount,/usr/sbin/useradd
+
+## Read drop-in files from /etc/sudoers.d (the # here does not mean a comment)
+#includedir /etc/sudoers.d
+Mohan ALL = NOPASSWD: /bin/su - root
+
+#############################################################
+
+increase history space and count and add time in linux history
+
+vi ~/.bash_profile
+
+export HISTFILESIZE=10000
+export HISTSIZE=20000
+export HISTTIMEFORMAT="%d/%m/%y %T "
+
+source .bash_profile 
+
+
+#############################################################
+
+---Linux networking Commands----
+
+ifconfig ----------------- show active interface
+ifconfig -a --------------- show all the interface
+route -n --------------- show the gateway
+ip route show ---------------- show the interface and its gateway routes
+
+[root@mSEDBM-KB-01 ~]# ip route show
+192.168.4.0/24 dev eth3  proto kernel  scope link  src 192.168.4.99 
+169.254.0.0/16 dev eth3  scope link  metric 1005 -----------------------------> to remove this IP need to enter the value in following file.
+default via 192.168.4.1 dev eth3 
+
+[root@SEDBM-KB-01 ~]# 
+
+less /etc/sysconfig/network 
+
+NETWORKING=yes
+NETWORKING_IPV6=no
+HOSTNAME=mohan
+NOZEROCONF=yes <-------------- add the below file to remove 169.254.0.0/16 in route -n output and restart the system
+
+
+##############################################################################
+skip-networking
+tcpdump -i eth3 src ip.com and dst google-public-dns-a.google.com and port 53 
+
+
+ip -s -s neigh flush all ---------> will clear the arp table.
+
+
+
+#############################################################################
+
+
+---Linux Mount Command----
+
+#mount -t cifs -o uid=90,gid=90,username=sysadmin,password=win7doz //192.168.6.248/mail_backup/ /NAS_Mail_Backup/
+
+
+
+#################################################################################
+
+clear artisan cache clear
+
+crontab -l | grep cache (root user)
+00 15 */2 * * /bin/bash /root/bin/php-ip2_cache-clear.sh 1> php-ip2_cache-clear.succ 2> php-ip2_cache-clear.err
+
+
+cd /home/indiaproperty/www/ip2/storage/framework/cache --------> will delete all the data before current date
+
+[root@MUMLIPWEB8V ~]# php /home/indiaproperty/www/ip2/artisan view:clear >/tmp/php-ip2_view-clear.txt ----> (if need to clear views- please run this command )
+
+grant all ON Mohan_DB.server_uptime_tbl TO 'root'@'192.168.4.206'
+
+lsof -Pnl +M  -i4
+
+select TABLE_SCHEMA,TABLE_NAME from TABLES where TABLE_NAME='mail_count_dtls';  --> TO FINE THE DB NAME
+
+s="50.94"; if [[ $s < 20 ]] ; then echo true ;else echo false; fi -- decimal values in if condition
+
+SELECT 'SphinxAutoId','ListingUnitId','ListingId','HighlightType','UserId','UserType','ListingType','PropertyCategory','PropertyType','MinPropertyPrice','MaxPropertyPrice','UnitPropertyPrice','MinNoofBedRooms','MaxNoofBedRooms','UnitNoofBedRooms','LocalityOthers','listingorder','Score','StateName','CityName','LocalityName','PropertyTypeString','UserTypeString','ListingTypeString','DbListing','ClusterId','MinNoofBedRoomsStr','MaxNoofBedRoomsStr','Masterid','listing_rank','locality_rank' UNION SELECT SphinxAutoId,ListingUnitId,ListingId,HighlightType,UserId,UserType,ListingType,PropertyCategory,PropertyType,MinPropertyPrice,MaxPropertyPrice,UnitPropertyPrice,MinNoofBedRooms,MaxNoofBedRooms,UnitNoofBedRooms,LocalityOthers,listingorder,Score,StateName,CityName,LocalityName,PropertyTypeString,UserTypeString,ListingTypeString,DbListing,ClusterId,MinNoofBedRoomsStr,MaxNoofBedRoomsStr,Masterid,listing_rank,locality_rank FROM ipsearch_algo.searchalgofinaldata WHERE CityId=3156 INTO OUTFILE '/tmp/chennai_MAIL1_29112017.csv' FIELDS TERMINATED BY '#$#' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+
+select listingId from sphinxiplisting where NoAdvertiserListingType =4 and LocalityId=99999 INTO OUTFILE '/tmp/listingId_13feb2018.csv' FIELDS TERMINATED BY '#$#' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+
+SELECT a,b,a+b INTO OUTFILE '/tmp/result.txt'  FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n'  FROM test_table;
+
+###################################mysql##########################################
+Mysql table engine and last updated time
+
+create user 'munna'@'localhost' identified by 'Mohan@123';	
+create user 'azar'@'192.168.4.109' identified by 'azar';
+
+select * from information_schema.user_privileges where grantee like '%munna%';
+
+select authentication_string from mysql.user where user='munna'; SELECT PASSWORD('Mohan@123');  ---- to view compare the password value.
+
++-------------------------------------------+
+| authentication_string                     |
++-------------------------------------------+
+| *A784F024AA850B8D870D663D0C4DE754140A7FFC |
++-------------------------------------------+
+1 row in set (0.00 sec)
+
+select password('Mohan@123');
+
++-------------------------------------------+
+| PASSWORD('Mohan@123')                     |
++-------------------------------------------+
+| *A784F024AA850B8D870D663D0C4DE754140A7FFC |
++-------------------------------------------+
+1 row in set, 1 warning (0.00 sec)
+
+show binlog events in 'mysql-bin.000065' limit 2;
+
+show binary logs;
+
+mysql ((none)) > \s
+
+mysql  Ver 14.14 Distrib 5.1.52, for pc-linux-gnu (i686) using readline 5.1
+
+Connection id:		8031540
+Current database:	
+Current user:		root@localhost
+SSL:			Not in use
+Current pager:		stdout
+Using outfile:		''
+Using delimiter:	;
+Server version:		5.1.52-log Source distribution
+Protocol version:	10
+Connection:		Localhost via UNIX socket
+Server characterset:	latin1
+Db     characterset:	latin1
+Client characterset:	latin1
+Conn.  characterset:	latin1
+UNIX socket:		/var/lib/mysql/mysql.sock
+Uptime:			4 days 14 hours 44 min 44 sec
+
+Threads: 10  Questions: 108921626  Slow queries: 17  Opens: 236  Flush tables: 1  Open tables: 227  Queries per second avg: 273.202
+--------------
+
+show master status \G
+show slave status \G
+
+mysqlbinlog mysqld-relay-bin.000010 > /tmp/relay.log
+show binlog events in 'mysql-bin.000064' from 253353984;
+
+show binlog events in 'mysql-bin.000065' limit 2;
+
+
+change master to master_user='rep_user', master_password='rep_pass',master_log_file='mysql-bin.000065', master_log_pos=106;
+
+change master to master_user='repuser',master_password='reppass',master_host='192.168.4.206',master_log_file='mohan-bin.000037', master_log_pos=13729;
+
+
+CHANGE MASTER TO MASTER_LOG_FILE='mohan-bin.000037', MASTER_LOG_POS=11761;
+
+
+mysqldump -ubmdbadmin -p --quick --master-data=2 -B onboarding dba indiaproperty | gzip > /data/newsetup.4.90.sql.gz
+mysql> select Host,User,authentication_string,password_last_changed from mysql.user;
++---------------+-----------+-------------------------------------------+-----------------------+
+| Host          | User      | authentication_string                     | password_last_changed |
++---------------+-----------+-------------------------------------------+-----------------------+
+| localhost     | root      | *01D267757AACA8078221C783BB1A470ED2813693 | 2017-03-13 16:47:50   |
+| localhost     | roundcube | *C882BC782EB8F544C2CD03957F66CA00CD613931 | 2017-03-13 16:47:50   |
+| localhost     | postfix   | *1EB6B2F4A458978E3097F309F37410060695DF56 | 2017-03-13 16:47:50   |
+| localhost     | cacti     | *0734E1EC92907634758621517846037AEA8106DE | 2017-03-13 16:47:50   |
+| 192.168.4.203 | cacti     | *89FA6EAF8B6264AC8D6E84759027252505A3EAEE | 2017-03-29 19:56:07   |
+| localhost     | mysql.sys | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | 2017-03-13 16:48:01   |
+| %             | SURYA     | *B6B2F7BC5F466B04B158F3FC43431DE1DC7EA5D4 | 2017-05-31 20:30:11   |
+| 192.168.4.105 | SURYA     | *B6B2F7BC5F466B04B158F3FC43431DE1DC7EA5D4 | 2017-05-31 20:31:07   |
+| localhost     | munna     | *A784F024AA850B8D870D663D0C4DE754140A7FFC | 2017-06-15 11:10:03   |
++---------------+-----------+-------------------------------------------+-----------------------+
+9 rows in set (0.00 sec)
+
+
+Server: MDB1
+use iplogdetails
+ 
+CREATE TABLE iplogdetails.ipsmstrack_temp LIKE ipsmstrack;
+ALTER TABLE iplogdetails.ipsmstrack_temp modify column ResponseId varchar(255) NOT NULL DEFAULT '';
+RENAME TABLE iplogdetails.ipsmstrack TO ipsmstrack_04072017;
+RENAME TABLE iplogdetails.ipsmstrack_temp TO ipsmstrack;
+
+
+
+select count(1) from iplogdetails.ipsmstrack;
+desc iplogdetails.ipsmstrack;
+show create table iplogdetails.ipsmstrack;
+select count(1) from iplogdetails.ipsmstrack;
+
+select count(1) from mohan_svn_upload_list; select sleep(5); select count(1) from mohan_svn_upload_list;
+
+
+\. /tmp/20939_sella_alter.sql ---> using file execution in mysql 
+
+
+mysqldump -uusername -p --quick --master-data=2 -B onboarding dba indiaproperty | gzip > /data/newsetup.4.90.sql.gz
+"-B" for multiple databases
+"| gzip" for convert to gzip
+
+mysqldump -uusername -p --no-create-info  db_name table_name --where="sro='1'" > /data/tbl_tmp_surveytransaction_tmp_19oct17.sql
+
+mysqldump --routines --triggers --no-create-info --no-data --no-create-db --skip-opt dbname
+
+
+select count(1) from mohan_svn_upload_list; select sleep(5); select count(1) from mohan_svn_upload_list;
+
+
+
+
+
+
+
+
+SHOW TABLE STATUS from mohan_test like 'mohan_tables' \G
+
+mysql> show grants for 'SURYA'@'192.168.4.105' ;
++-----------------------------------------------+
+| Grants for SURYA@192.168.4.105                |
++-----------------------------------------------+
+| GRANT USAGE ON *.* TO 'SURYA'@'192.168.4.105' |
++-----------------------------------------------+
+select Host,User,authentication_string,password_last_changed from mysql.user;
+
+##count the total tables in mysql##
+mysql> select TABLE_SCHEMA,count(1) from  information_schema.TABLES where TABLE_SCHEMA not in ('sys','performance_schema','information_schema','mysql') group by TABLE_SCHEMA;
++--------------+----------+
+| TABLE_SCHEMA | count(1) |
++--------------+----------+
+| department   |        1 |
+| emp          |        3 |
+| fun          |        3 |
+| gopi         |        1 |
+| ip           |        1 |
+| kavitha      |        2 |
+| Mohan_DB     |        5 |
+| stud         |        8 |
+| test         |        5 |
++--------------+----------+
+9 rows in set (0.01 sec)
+
+
+mysql> select * from  information_schema.TABLES where TABLE_NAME like 'mohan%' \G
+
+mysql> select * from  information_schema.TABLES where TABLE_NAME like 'mohan%' limit 1\G
+*************************** 1. row ***************************
+  TABLE_CATALOG: def
+   TABLE_SCHEMA: mohan_test
+     TABLE_NAME: Mohan_Table_1
+     TABLE_TYPE: BASE TABLE
+         ENGINE: MyISAM
+        VERSION: 10
+     ROW_FORMAT: Dynamic
+     TABLE_ROWS: 1
+ AVG_ROW_LENGTH: 28
+    DATA_LENGTH: 28
+MAX_DATA_LENGTH: 281474976710655
+   INDEX_LENGTH: 1024
+      DATA_FREE: 0
+ AUTO_INCREMENT: NULL
+    CREATE_TIME: 2016-08-26 13:53:10
+    UPDATE_TIME: 2017-04-12 18:21:42
+     CHECK_TIME: NULL
+TABLE_COLLATION: latin1_swedish_ci
+       CHECKSUM: NULL
+ CREATE_OPTIONS: 
+  TABLE_COMMENT: 
+1 row in set (0.00 sec)
+
+
+
+
+
+mysql> select database();
++--------------------+
+| database()         |
++--------------------+
+| information_schema |
++--------------------+
+1 row in set (0.00 sec)
+
+
+mysql> select * from COLUMNS where COLUMN_NAME like 'Phone_num%' \G
+*************************** 1. row ***************************
+           TABLE_CATALOG: def
+            TABLE_SCHEMA: mohan_test
+              TABLE_NAME: mohan_tables
+             COLUMN_NAME: Phone_number
+        ORDINAL_POSITION: 5
+          COLUMN_DEFAULT: NULL
+             IS_NULLABLE: YES
+               DATA_TYPE: int
+CHARACTER_MAXIMUM_LENGTH: NULL
+  CHARACTER_OCTET_LENGTH: NULL
+       NUMERIC_PRECISION: 10
+           NUMERIC_SCALE: 0
+      DATETIME_PRECISION: NULL
+      CHARACTER_SET_NAME: NULL
+          COLLATION_NAME: NULL
+             COLUMN_TYPE: int(12)
+              COLUMN_KEY: 
+                   EXTRA: 
+              PRIVILEGES: select,insert,update,references
+          COLUMN_COMMENT: 
+   GENERATION_EXPRESSION: 
+1 row in set (0.67 sec)
+
+
+
+
+
+
+
+
+mysql -uroot -pwin7doz -s -N -e "select * from Mohan_DB.server_uptime_tbl" ---> to remove the column and grid view
+
+ipsavesearch
+
+----MySql Commands----
+
+forget root password
+
+1. service mysqld stop
+2. mysqld_safe --skip-grant-tables &
+3. mysql
+4. UPDATE mysql.user SET Password=PASSWORD('win7doz') WHERE User='root'; ---> below 5.6
+4a. UPDATE mysql.user SET authentication_string=PASSWORD('win7doz') WHERE User='root';
+5. FLUSH PRIVILEGES;
+5a. exit;
+6. mysqladmin -u root -p shutdown or reset mysql service
+7. start mysql
+
+
+mysql> stop slave;
+mysql> reset slave;
+mysql> change master to master_host='the-master-host', master_user='replication', master_password='the-password', master_log_file='mysql-bin.000020', master_log_pos=66395191;
+mysql> start slave;
+
+CHANGE MASTER TO MASTER_HOST='192.168.13.2',MASTER_USER='repuser', MASTER_PASSWORD='replication', MASTER_LOG_FILE='', MASTER_LOG_POS= 982221192;
+mysql ((none)) > select 'drop procedure ',ROUTINE_NAME,';' from information_Schema.routines where ROUTINE_SCHEMA='ipsearch_algo';
+
+show procedure status \G
+
+MySql. .myd contains the data, .frm contains the table structure, and .myi contains the index for your data
+
+\. /tmp/20181.sql
+
+
+cat  ~/.mysql_history --- to check the mysql history 
+
+old_pos=`mysql -ualertuser -pP60t3cted@123 -e "show master status \G" | grep "Position" | awk '{print $2}'`
+
+sleep 50s
+
+new_pos=`mysql -ualertuser -pP60t3cted@123 -e "show master status \G" | grep "Position" | awk '{print $2}'`
+
+if [ "$old_pos" == "$new_pos" ]
+
+then
+
+echo -e "$old_pos\n\n$new_pos"
+
+else
+
+echo -e Working Fine `date`
+
+fi
+
+mutt -s "testmail from convox" mohan.l@indiaproperty.com </dev/null
+
+
+
+#############################################################################
+
+---Linux basic commands---
+
+echo -e "test1\ntest1" | passwd u10
+
+echo -e "`cat /tmp/pas`\n`cat /tmp/pas`" | passwd data
+
+sed -i 's/^/"/g;s/$/"/g'  /tmp/high_usage1.txt ---> to add double quote in starting and ending of the line
+echo 25 30 45 50 | sed 's# #+#g' | bc
+
+top -b -d 1 ---> to view 1 time top output for all the process
+
+sort option by column
+top -b -n1 | tail -n 20 | sort -g -k 7
+
+top -b -n1 | tail -n 20 | awk '{print $7 " " $0;}' | grep -v "^$" | sort -n | cut -d " " -f 2-
+
+cat test | tr [:lower:] [:upper:]
+cat test | awk '{for (i=1; i<=NF; ++i) { $i=toupper(substr($i,1,1)) tolower(substr($i,2)); } print }'
+cat test | awk '{print tolower($0) }'
+cat test | awk '{print toupper($0) }'
+
+strings /root/.parthatest.swp | grep -v  "\#\"\!" | wc -l
+
+ps -eo pid,cmd,lstart ------> to check the process start time
+
+read -s mohan 
+
+
+
+screen command 
+
+screen -list or -ls ----> to list the screens
+CTRL+A+D ---> to detach the screen 
+screen -r {prcessid shown in the screen -ls} ---> restore the output
+screen -X -S [session # you want to kill] kill
+
+
+#############################################################################
+
+
+for ip in 10.72.178.6 10.72.178.20 10.72.178.21 10.72.178.22 10.72.178.29 10.72.178.45 10.72.178.48 ; do ssh ${ip} "ls -lrth  /home/indiaproperty/www/experian/commonfunctions.php"; done
+
+
+mysql> SELECT TIMEDIFF("2017-07-23 15:06:46", "2017-07-22 15:05:06");
++--------------------------------------------------------+
+| TIMEDIFF("2017-07-23 15:06:46", "2017-07-22 15:05:06") |
++--------------------------------------------------------+
+| 24:01:40                                               |
++--------------------------------------------------------+
+1 row in set (0.00 sec)
+SELECT DATE_ADD("2018-06-29 11:40:00", INTERVAL 510 MINUTE);
+
+delete from Mohan_DB.server_uptime_tbl where IP_Addrs in ('192.168.4.109','192.168.4.191','192.168.4.106','192.168.4.105');
+
+
+mysql> select Server_Name from Mohan_DB.server_uptime_tbl order by Server_Name;
++-----------------+
+| Server_Name     |
++-----------------+
+|                 |
+| babuji          |
+| babuji          |
+| babuji          |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |grep --include=\*.sh -rnw '/home/pentaho/cronjob/dwhapp/' -e "dwhadmin.tbl_dim_transfile"
+/home/pentaho/cronjob/dwhapp/src/Frans/DWHreportStatus.sh:19:mysql -udwhbiuser -pdwhBI2@ip -h192.168.4.69 -t  --execute='select * from dwhadmin.tbl_log_transformation where  exectime>=curdate() and transfileid in ( select transfileid from dwhadmin.tbl_dim_transfile where scriptid in (select scriptid from dwhadmin.tbl_sa_process_dtls_ip where  datamovedtime>=curdate()))' >>DwhTodays_Status
+/home/pentaho/cronjob/dwhapp/alternate/script.sh:2:echo "SELECT Location FROM dwhadmin.tbl_dim_transfile where scriptid=$1 order by execorder" | mysql -udwhdesigner -phouse4design -h 192.168.1.41 | tail -n +2
+/home/pentaho/cronjob/dwhapp/alternate/script_run.sh:2:echo "SELECT concat('sh /home/pentaho/Kettle/pan.sh -file ',Location,' -level\:minimal') FROM dwhadmin.tbl_dim_transfile where scriptid=$1 order by execorder" | mysql -udwhdesigner -phouse4design -h 192.168.1.41 | tail -n +2
+/home/pentaho/cronjob/dwhapp/scripts/reportstatus/DWHreportStatus.sh:19:mysql -udwhbiuser -pdwhBI2@ip -h192.168.4.69 -t  --execute='select * from dwhadmin.tbl_log_transformation where  exectime>=curdate() and transfileid in ( select transfileid from dwhadmin.tbl_dim_transfile where scriptid in (select scriptid from dwhadmin.tbl_sa_process_dtls_ip where  datamovedtime>=curdate()))' >>DwhTodays_Status
+grep: warning: /home/pentaho/cronjob/dwhapp/data/ipsearchviews/demo1/ipdemo1: recursive directory loop
+
+grep: warning: /home/pentaho/cronjob/dwhapp/data/ipsearchviews/ipdemo1/ipdemo1: recursive directory loop
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| kavitha         |
+| kavitha         |
+| kavitha         |
+| kavitha         |
+| kavitha         |
+| kavitha         |
+| mail.partha.com |
+| mail.partha.com |
+| surya.sedbm.com |
+| surya.sedbm.com |
+| surya.sedbm.com |
++-----------------+
+32 rows in set (0.03 sec)
+
+mysql> select Server_Name from Mohan_DB.server_uptime_tbl order by Server_Name desc;
++-----------------+
+| Server_Name     |
++-----------------+
+| surya.sedbm.com |
+| surya.sedbm.com |
+| surya.sedbm.com |
+| mail.partha.com |
+| mail.partha.com |
+| kavitha         |
+| kavitha         |grep --include=\*.sh -rnw '/home/pentaho/cronjob/dwhapp/' -e "dwhadmin.tbl_dim_transfile"
+/home/pentaho/cronjob/dwhapp/src/Frans/DWHreportStatus.sh:19:mysql -udwhbiuser -pdwhBI2@ip -h192.168.4.69 -t  --execute='select * from dwhadmin.tbl_log_transformation where  exectime>=curdate() and transfileid in ( select transfileid from dwhadmin.tbl_dim_transfile where scriptid in (select scriptid from dwhadmin.tbl_sa_process_dtls_ip where  datamovedtime>=curdate()))' >>DwhTodays_Status
+/home/pentaho/cronjob/dwhapp/alternate/script.sh:2:echo "SELECT Location FROM dwhadmin.tbl_dim_transfile where scriptid=$1 order by execorder" | mysql -udwhdesigner -phouse4design -h 192.168.1.41 | tail -n +2
+/home/pentaho/cronjob/dwhapp/alternate/script_run.sh:2:echo "SELECT concat('sh /home/pentaho/Kettle/pan.sh -file ',Location,' -level\:minimal') FROM dwhadmin.tbl_dim_transfile where scriptid=$1 order by execorder" | mysql -udwhdesigner -phouse4design -h 192.168.1.41 | tail -n +2
+/home/pentaho/cronjob/dwhapp/scripts/reportstatus/DWHreportStatus.sh:19:mysql -udwhbiuser -pdwhBI2@ip -h192.168.4.69 -t  --execute='select * from dwhadmin.tbl_log_transformation where  exectime>=curdate() and transfileid in ( select transfileid from dwhadmin.tbl_dim_transfile where scriptid in (select scriptid from dwhadmin.tbl_sa_process_dtls_ip where  datamovedtime>=curdate()))' >>DwhTodays_Status
+grep: warning: /home/pentaho/cronjob/dwhapp/data/ipsearchviews/demo1/ipdemo1: recursive directory loop
+
+grep: warning: /home/pentaho/cronjob/dwhapp/data/ipsearchviews/ipdemo1/ipdemo1: recursive directory loop
+| kavitha         |
+| kavitha         |
+| kavitha         |
+| kavitha         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| babuji          |
+| babuji          |
+| babuji          |
+|                 |
++-----------------+
+32 rows in set (0.00 sec)
+
+mysql> select Server_Name from Mohan_DB.server_uptime_tbl order by Server_Name asc;
+
+mysql> select Server_Name from Mohan_DB.server_uptime_tbl order by Server_Name ;
++-----------------+
+| Server_Name     |
++-----------------+
+|                 |
+| babuji          |
+| babuji          |
+| babuji          |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| karthik         |
+| kavitha         |
+| kavitha         |
+| kavitha         |
+| kavitha         |
+| kavitha         |
+| kavitha         |
+| mail.partha.com |
+| mail.partha.com |
+| surya.sedbm.com |
+| surya.sedbm.com |
+| surya.sedbm.com |
++-----------------+
+32 rows in set (0.00 sec)
+
+mysql> select Server_Name from Mohan_DB.server_uptime_tbl group by Server_Name ;
++-----------------+
+| Server_Name     |
++-----------------+
+|                 |
+| babuji          |
+| karthik         |
+| kavitha         |
+| mail.partha.com |
+| surya.sedbm.com |
++-----------------+
+6 rows in set (0.00 sec)
+
+mysql> select Server_Name,count(Server_Name) from Mohan_DB.server_uptime_tbl group by Server_Name ;
++-----------------+--------------------+
+| Server_Name     | count(Server_Name) |
++-----------------+--------------------+
+|                 |                  1 |
+| babuji          |                  3 |
+| karthik         |                 17 |
+| kavitha         |                  6 |
+| mail.partha.com |                  2 |
+| surya.sedbm.com |                  3 |
++-----------------+--------------------+
+6 rows in set (0.00 sec)
+
+mysql> select Server_Name,count(Server_Name) as cnt from Mohan_DB.server_uptime_tbl group by Server_Name having cnt >2;
++-----------------+-----+
+| Server_Name     | cnt |
++-----------------+-----+
+| babuji          |   3 |
+| karthik         |  17 |
+| kavitha         |   6 |
+| surya.sedbm.com |   3 |
++-----------------+-----+
+4 rows in set (1.70 sec)
+
+mysql> select Server_Name,count(Server_Name) as cnt from Mohan_DB.server_uptime_tbl group by Server_Name having cnt =2;
++-----------------+-----+
+| Server_Name     | cnt |
++-----------------+-----+
+| mail.partha.com |   2 |
++-----------------+-----+
+1 row in set (0.00 sec)
+
+mysql> select Server_Name,count(Server_Name) as cnt from Mohan_DB.server_uptime_tbl group by Server_Name;
++-----------------+-----+
+| Server_Name     | cnt |
++-----------------+-----+
+|                 |   1 |
+| babuji          |   3 |
+| karthik         |  17 |
+| kavitha         |   6 |
+| mail.partha.com |   2 |
+| surya.sedbm.com |   3 |
++-----------------+-----+
+6 rows in set (0.00 sec)
+
+mysql> select Server_Name,count(Server_Name) as cnt,sum(cnt) from Mohan_DB.server_uptime_tbl group by Server_Name;
+ERROR 1054 (42S22): Unknown column 'cnt' in 'field list'
+mysql> select Server_Name,count(Server_Name) as cnt,sum(total_hrs) from Mohan_DB.server_uptime_tbl group by Server_Name;
++-----------------+-----+----------------+
+| Server_Name     | cnt | sum(total_hrs) |
++-----------------+-----+----------------+
+|                 |   1 |           NULL |
+| babuji          |   3 |           NULL |
+| karthik         |  17 |             80 |
+| kavitha         |   6 |           NULL |
+| mail.partha.com |   2 |           NULL |
+| surya.sedbm.com |   3 |           NULL |
++-----------------+-----+----------------+
+6 rows in set (0.00 sec)
+
+mysql> select sum(sl_no) as total from Mohan_DB.server_uptime_tbl where server_downtime!='still active';
++-------+
+| total |
++-------+
+|  2665 |
++-------+
+1 row in set (0.00 sec)
+
+
+sed -i 's/^/\^/g;s/$/\$/g' /tmp/list
+echo -e "mohan\nkumar\ntest1\ntest2\ntest" | grep -f /tmp/list
+
+
+zcat  maillog.4.gz | awk -F "to=<" '{print $2}' | cut -d '>' -f1 | sort  > /tmp/total_mail_ids.txt
+
+
+cat /tmp/total_mail_ids.txt | cut -d '@' -f2 | egrep -vi "^yahoo.co.in$|^yahoo.com$|^gmail.com$|^gmail.co.in$|^outlook.com$|^indiaproperty.com$|^rediffmail.com$|^rediff.com$|^hotmail.com$|^yahoo.in$|^live.in$|^live.com$|^yahogrep --include=\*.sh -rnw '/home/pentaho/cronjob/dwhapp/' -e "dwhadmin.tbl_dim_transfile"
+/home/pentaho/cronjob/dwhapp/src/Frans/DWHreportStatus.sh:19:mysql -udwhbiuser -pdwhBI2@ip -h192.168.4.69 -t  --execute='select * from dwhadmin.tbl_log_transformation where  exectime>=curdate() and transfileid in ( select transfileid from dwhadmin.tbl_dim_transfile where scriptid in (select scriptid from dwhadmin.tbl_sa_process_dtls_ip where  datamovedtime>=curdate()))' >>DwhTodays_Status
+/home/pentaho/cronjob/dwhapp/alternate/script.sh:2:echo "SELECT Location FROM dwhadmin.tbl_dim_transfile where scriptid=$1 order by execorder" | mysql -udwhdesigner -phouse4design -h 192.168.1.41 | tail -n +2
+/home/pentaho/cronjob/dwhapp/alternate/script_run.sh:2:echo "SELECT concat('sh /home/pentaho/Kettle/pan.sh -file ',Location,' -level\:minimal') FROM dwhadmin.tbl_dim_transfile where scriptid=$1 order by execorder" | mysql -udwhdesigner -phouse4design -h 192.168.1.41 | tail -n +2
+/home/pentaho/cronjob/dwhapp/scripts/reportstatus/DWHreportStatus.sh:19:mysql -udwhbiuser -pdwhBI2@ip -h192.168.4.69 -t  --execute='select * from dwhadmin.tbl_log_transformation where  exectime>=curdate() and transfileid in ( select transfileid from dwhadmin.tbl_dim_transfile where scriptid in (select scriptid from dwhadmin.tbl_sa_process_dtls_ip where  datamovedtime>=curdate()))' >>DwhTodays_Status
+grep: warning: /home/pentaho/cronjob/dwhapp/data/ipsearchviews/demo1/ipdemo1: recursive directory loop
+
+grep: warning: /home/pentaho/cronjob/dwhapp/data/ipsearchviews/ipdemo1/ipdemo1: recursive directory loopomail.com$|^yahoo.co.uk$"  | sort | uniq -c | sort -n | awk '{if($1>200) {print $0}}'
+
+mysql (iplogdetails) > ALTER TABLE iplogdetails.apply_credit_card MODIFY aadhaar_number bigint(12)  default 0 not null;
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+203.202.254.157 --- 53281 ----> proxy server ip and port
+
+13.230.154.231 8080
+[root@mohan ~]# cat /tmp/list
+500
+200
+300
+150
+
+[root@mohan ~]# cat /tmp/list | awk '{if($1>200) if($1<500) {print $1}}'
+300
+
+cat /tmp/list | awk -vd="\`" '{if($2>200) if($2<500) {print "echo" d"hostname"d $0}}'
+
+
+df -hP | grep -v 'Avail' | sed 's/%//g' |awk -vd="\`" '{if ($5>60) {print "echo In "d"hostname"d " disk space used is "$5"% on " $6" --> Available Space : "$4}}' | sed 's/echo /echo \"/g;s/$/\"/g' > /tmp/1111
+
+mailq | grep remote| cut -d '@' -f2 | egrep -vi "^yahoo.co.in$|^yahoo.com$|^gmail.com$|^gmail.co.in$|^outlook.com$|^indiaproperty.com$|rediffmail.com$|^rediff.com$|^hotmail.com$|^yahoo.in$|^live.in$|^live.com$|^yahoomail.com$|^yahoo.co.uk$|^propfinder$" | sort | uniq -c | sort -n
+
+strace -p 13777 -o /tmp/strace_out | tailf /tmp/strace_out | grep read
+
+dig -x 207.200.74.55 | grep "ANSWER SECTION" -A3 | egrep -v "ANSWER SECTION|^$"
+iptables -L; iptables -F; iptables -I INPUT -p tcp --dport 80 -m string --algo bm --string "Jorgee" --to 1000 -j DROP; iptables -L
+iptables -F; iptables -I INPUT -p tcp --dport 80 -m string --algo bm --string "Jorgee" --to 1000 -j DROP
+iptables -F; iptables -I INPUT -p tcp --dport 80 -m string --algo bm --string "Apache-HttpClient" --to 1000 -j DROP
+Apache-HttpClient
+iptables -I INPUT -p tcp --dport 80 -m string --algo bm --string "ru" --to 1000 -j DROP
+iptables -I INPUT -s 46.4.94.226 -j DROP
+iptables -I INPUT -s 62.210.247.93 -j DROP
+iptables -I INPUT -p tcp --dport 80 -m string --algo bm --string "WWW-Mechanize" --to 1000 -j DROP
+iptables -I INPUT -p tcp --dport 80 -m string --algo bm --string "panscient.com" --to 1000 -j DROP
+iptables -I INPUT -p tcp --dport 80 -m string --algo bm --string "Apache-HttpClient" --to 1000 -j DROP
+
+iptables -I INPUT -p tcp --dport 80 -m string --algo bm --string "python-requests" --to 1000 -j DROP
+
+dd if=/dev/sdb1 of=/dev/null bs=1024 count=1024
+
+zgrep -v "10.72." /var/log/httpd/*access_log.1.gz | grep "20/Aug/2017" | cut -d[ -f2 | cut -d] -f1 | awk -F: '{print $2}' | sort -n | grep -v "^$" | uniq -c | cut -d: -f1 |  awk '{$1=$1}1' | sed 's/ /,/g' 
+/usr/bin/mutt -s "Invalid Domains List in `hostname`" -a /tmp/top5_doubtful_domains_list -- sedbm@indiaproperty.com  < /tmp/invalid_domain_output
+sort -n -k2
+
+date "+%d/%b/%Y:%H:%M" -d "10 minutes ago" | sed 's#.........$# #'
+
+date "+%d/%b/%Y:%H:%M" -d "10 minutes ago" | sed 's#^.........# #'
+
+imgsoriginprod.indiaproperty.com/transpdf
+
+
+search seo rules enabled for alangudi. 
+
+Indi@Pr0PertY@2018
+
+
+cat validation_3.txt | mongo -uipsedbm -pipsedbm@123 10.72.178.25:27021/indiaproperty --authenticationDatabase admin > validation_3.out
+
+cat 
+
+mongo -uipsedbm -p 10.72.178.25:27021/indiaproperty --authenticationDatabase admin
+
+mongodump -uipsedbm -pipsedbm@123 --host 10.72.178.25 --port 27021 --authenticationDatabase admin --db indiaproperty -c projects --gzip --out /data/mongo_DB_backup/
+
+mongodump -uipsedbm -pipsedbm@123 --host 10.72.178.17 --port 27021 --authenticationDatabase admin --db indiaproperty -c listings --gzip --out /tmp/mongo_DB_backup/
+
+> db.projects.find({}).count()
+45225
+> db.projects.find({"validation_status":0}).count()
+26
+> db.projects.find({"validation_status":1}).count()
+624
+> db.projects.find({"validation_status":2}).count()
+24558
+> db.projects.find({"validation_status":3}).count()
+19934
+> db.projects.find({"validation_status":4}).count()
+82
+> db.projects.find({ listing_ids : { $size : 0 }}).count()
+21486
+
+"	Double Quotes	"Double Quotes" - Anything enclose in double quotes removed meaning of that characters (except \ and $).
+'	Single quotes	'Single quotes' - Enclosed in single quotes remains unchanged.
+`	Back quote	
+`Back quote` - To execute command
+
+
+mongodump -umongodba -pmongodba@123 --host 192.168.4.92 --port 27021 --authenticationDatabase admin --db indiaproperty -c projects --gzip --out /data/Mongodb_Backup/$dt/$tym
+mongorestore -umongodba -pmongodba@123 --port 27017 --host 192.168.124.61 --db indiaproperty -c listings --authenticationDatabase admin --drop --gzip /tmp/indiaproperty/listings.bson.gz
+
+
+mongorestore -usuperdba -pAzs@12345 --port 27017 --host 192.168.124.61 --db iplocality --authenticationDatabase admin --drop --gzip /tmp/iplocality/
+
+177.31 - - Ind!@P2017
+/home/indiaproperty/www/ip2/config/app.php -- reverted
+/home/indiaproperty/www/ip2/app/SearchSeo/SeoMetaData.php -- synced from 4.64
+
+vpc-9bde28f2
+Need to change the cron timings as above on sunday night. 
+
+Mail sub - Property alert timing change
+Customer number - 100380712
+Username - indiaproperty1
+Password - GD@IPBl0g
+Expires 23/2/2019
+
+MSolr1, SSolr1, SSolr2,
+115.110.236.40
+
+jump box 172.16.31.102
+quikr NM solr 
+172.16.33.164 - master
+172.16.33.165 - slave
+172.16.33.167 - slave
+172.16.33.173 - onboarding DB
+172.16.33.171 - indiaproperty web server
+172.16.33.169 - propfinder server
+172.16.33.170 -- api server -- ports (80 and 443)
+172.16.33.174 -- file01 server
+172.16.33.172 -- onboarding web server
+
+123.108.33.113 -- indiaproperty
+123.108.33.114 -- api.indiaproperty.com
+123.108.33.112 -- propfinder.in
+
+
+Jenkins
+http://192.168.101.83:8080/login?from=/job/indiaproperty_propfinder/
+UN: mohan.l
+Pass: w3S%lkv2
+
+Bitbucket
+http://192.168.124.91:7990/login?next=/projects/IP/repos/propfinder/
+UN: mohan.l
+Pass: IndiaProp2019
+
+"NM Solr portal"
+hostentry - 172.16.31.102  33-167_solr-s.com 33-164_solr-m.com 33-165_solr-s.com
+http://33-167_solr-s.com:8080/solr -- for solr
+
+WelCome@2019IP
+Banu@4365
+
+ErrorLog /var/log/httpd/ssl_propfinder_error_log
+TransferLog /var/log/httpd/ssl_propfinder_access_log
+CustomLog /var/log/httpd/propfinder.in-access_log combined
+ErrorLog /var/log/httpd/propfinder.in-error_log
+
+
+APPS_TS_TX_DATA
+For 1 month 1 email account it is:- 39/- number of years you go with.
+webmail - email.secureserver.net
+outlook 
+
+
+vavizhian@gmail.com
+suresh 9884951084
+sss11008895
+5459 6488 0732 0099
+KARTHIKEYAN S
+
+11/19
+464
+
+##TCL CONTACT##
+B Ramesh - 8148061840 - sales
+Kishore - 9036069333 - technical
+
+
+
+python syntax check
+python -m py_compile /root/.config/sublime-text-2/Packages/Vintage/vintage_motions.py
+postconf -n 
+postsuper -d ALL -- delete mailq 
+postsuper -r ALL --- requeue the mail
+
+tcpdump -i eth4 not '(src net (10 or 172.16/12 or 192.168/16 or 0.0.0.0/0 ) and dst net (10 or 172.16/12 or 192.168/16 or 0.0.0.0/0))' -- exclude the source and destination
+
+sudo su - root -c whoami
+
+/sbin/service ntpd stop; /bin/date; /sbin/ntpdate pool.ntp.org; /bin/date; /sbin/service ntpd start; /bin/date
+
+for ip in 10.72.177.22 10.72.177.31 10.72.177.59 10.72.177.134 10.72.177.138 10.72.177.139 10.72.177.140 10.72.177.141 10.72.177.142 10.72.177.144 10.72.177.146 10.72.177.148 10.72.177.149 10.72.177.152 10.72.177.153 10.72.177.154 10.72.177.155 10.72.177.157 10.72.177.160 10.72.177.164 10.72.177.169 10.72.177.170 10.72.177.171 10.72.177.172 10.72.177.174 10.72.177.175 10.72.177.176 10.72.177.177 10.72.177.180 10.72.177.184 10.72.177.187 10.72.177.188 10.72.177.194 10.72.177.195 ; do echo `ssh ${ip} "date; hostname; ntpstat"`; done
+
+
+for ip in 10.72.177.22 10.72.177.31 10.72.177.59 10.72.177.134 10.72.177.138 10.72.177.139 10.72.177.140 10.72.177.141 10.72.177.142 10.72.177.144 10.72.177.146 10.72.177.148 10.72.177.149 10.72.177.152 10.72.177.153 10.72.177.154 10.72.177.155 10.72.177.157 10.72.177.160 10.72.177.164 10.72.177.169 10.72.177.170 10.72.177.171 10.72.177.172 10.72.177.174 10.72.177.175 10.72.177.176 10.72.177.177 10.72.177.180 10.72.177.184 10.72.177.187 10.72.177.188 10.72.177.194 10.72.177.195; do ssh ${ip}  "df -P | grep -v 'Capa' |sed 's/%//g'| awk -v q='\`' '{if (\$5 > 85) print \"echo In \" q\"hostname\"q \" disk space used is \"\$5\"% on \"\$6\" --> Available space: \"\$4/1024/1024\" GB\"}'  | sed 's/echo /echo \"/g;s/\$/\"/g' | sh " ; done
+
+
+for ip in 10.72.178.31 10.72.178.9 10.72.178.10 10.72.178.11 10.72.178.12 10.72.178.23 10.72.178.14 10.72.178.16 10.72.178.17 192.168.4.68;do echo "** ${ip} ** ";mysql -uglobaluser -pglobalpass -h${ip} -s -N -e "show global variables like 'open%'" ; done
+
+for ip in  10.72.178.9 10.72.178.10 10.72.178.11 10.72.178.12 10.72.178.23 10.72.178.14 10.72.178.16 10.72.178.17 192.168.4.68;do echo "** ${ip} ** ";mysql -uglobaluser -pglobalpass -h${ip} -s -N -e "show global variables like 'server_id'" ; done
+
+for ip in 10.72.178.9 10.72.178.10 10.72.178.11 10.72.178.12 10.72.178.23 10.72.178.14 192.168.4.68; do mysql -uglobaluser -N -s -pglobalpass -h${ip} iplogdetails -e "show global variables like 'server_uuid'"; done
+
+data    ALL=(ALL) NOPASSWD: /usr/sbin/useradd --- visudo (special permission for some users)
+echo 54545454 | sed 's/\B/mohan/g' --- bc total for all the numbers
+
+lsof -Pnl +M -i4 | egrep "mongod" | grep "ESTABLISHED"| cut -d '>' -f2 | cut -d ':' -f1 | sort | uniq -c | sort -n
+
+50100021087089
+IFSC Code:HDFC0001284
+printenv  -- shows the environment variables
+
+Lwc3*2S13ef@g
+AwK$ed@252L1nX
+
+###################################
+alias grey-grep="GREP_COLOR='1;30' grep --color=always"
+alias red-grep="GREP_COLOR='1;31' grep --color=always"
+alias green-grep="GREP_COLOR='1;32' grep --color=always"
+alias yellow-grep="GREP_COLOR='1;33' grep --color=always"
+alias blue-grep="GREP_COLOR='1;34' grep --color=always"
+alias magenta-grep="GREP_COLOR='1;35' grep --color=always"
+alias cyan-grep="GREP_COLOR='1;36' grep --color=always"
+alias white-grep="GREP_COLOR='1;37' grep --color=always"
+####################################
+
+
+
+$$ - shows the entire script process id
+$! - shows the last commands process id
+$0 - shows the script name
+$? - shows the commands last execution status
+
+Exit code 0        Success
+Exit code 1        General errors, Miscellaneous errors, such as "divide by zero" and other impermissible operations
+Exit code 2        Misuse of shell builtins (according to Bash documentation)        Example: empty_function() {}
+
+
+https://www.cyberciti.biz/tips/linux-bond-or-team-multiple-network-interfaces-nic-into-single-interface.html
+Changingredhat
+http://www.publicproxyservers.com/proxy/list1.html
+odsh.win  --proxy
+blkid /dev/sda5 -- to check uuid
+ssh -p 8000 192.168.4.206 "echo -e \"data@test11\ndata@test11\"| passwd data"
+
+Amazon S3indiaproperty-backup/DB-backup-production/ip-production-backup/2017/12/01
+/etc/login.defs --- umask
+
+
+for group in `cut -d: -f1  /etc/group`; do groups $group 2>>/tmp/group.err ; done
+usermod -a -g 500 Sahul
+usermod -a -G Mohan Sahul -- change or add the group 
+
+
+bitly.com 
+Vidhya@3972
+
+
+
+pidstat -dl | awk '{if ($4>3 || $5>3) print $0}' --> awk command with if and "or"
+
+
+select TABLE_SCHEMA as DataBase_Name,TABLE_NAME,COLUMN_NAME from information_schema.TABLES where COLUMN_NAME='ticket_no'; --------------> to find the field name belongs to which table and db
+
+
+4.33
+manage
+!manage
+mysql> select (curdate() - interval 1 month );
++---------------------------------+
+| (curdate() - interval 1 month ) |
++---------------------------------+
+| 2017-07-23                      |
++---------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select (now() - interval 1 month );
++-----------------------------+
+| (now() - interval 1 month ) |
++-----------------------------+
+| 2017-07-23 15:21:16         |
++-----------------------------+
+1 row in set (0.00 sec)
+
+
+s3cmd sync -r --multipart-chunk-size-mb=5 --stats --no-preserve "MARUTHAM Breeze" "s3://indiaproperty-backup/ip.com-doc-dilip-team/"
+
+###############################################################
+
+1. Munin ----> 
+2. AWS----->
+3. MYSQL---->
+
+3. Linux
+4. Networking
+5. Webserver
+6. how our site is working????????
+
+
+
+
+mysql -ubmdbadmin -p 
+
+mysql ((none)) > show variables like "general%";
++------------------+--------------------------------+
+| Variable_name    | Value                          |
++------------------+--------------------------------+
+| general_log      | OFF                            | 
+| general_log_file | /var/lib/mysql/MUMLIPMDB1V.log | 
++------------------+--------------------------------+
+2 rows in set (0.00 sec)
+
+set global general_log=ON;
+
+Kindly monitor the below file size which is log writting 
+du -sh  /var/lib/mysql/MUMLIPMDB1V.log 
+
+
+After 1.30AM zip the file and replay to meen's mail
+
+gzip  /var/lib/mysql/MUMLIPMDB1V.log
+>/var/lib/mysql/MUMLIPMDB1V.log
+mysql -ubmdbadmin -p 
+>set global general_log=OFF;
+> show variables like "general%";
+
+It should be like, OFF
++------------------+--------------------------------+
+| Variable_name    | Value                          |
++------------------+--------------------------------+
+| general_log      | OFF                            | 
+| general_log_file | /var/lib/mysql/MUMLIPMDB1V.log | 
++------------------+--------------------------------+
+
+
+http://10.72.177.169:5555/dashboard/ -------> celery in new01 and new02
+https://www.site24x7.com/app/client#/home/noc-view 
+https://indiaproperty-aws.signin.aws.amazon.com/console
+http://www.sedbm.com/admin/resultServer1.php sedbm@ip.com
+http://pms.indiaproperty.com/index.php/tasks 
+http://munin.indiaproperty.com/ -- admin
+http://sensu.indiaproperty.com:3030/login -- admin
+hrms.indiaproperty.com/echain
+http://10.72.177.174:8080/solr/
+https://mxtoolbox.com/SuperTool.aspx?action=blacklist#
+http://sensu.indiaproperty.com:3000/#/events
+http://52.66.117.68:3000 --sensu
+http://192.168.13.2/ConVox3.0 -- outbound
+http://192.168.13.8/ConVox3.0 -- inbound
+munin-sysdba---sysdba@123
+https://www.keycdn.com/support/304-not-modified/
+https://blog.serverdensity.com/80-linux-monitoring-tools-know/
+https://hetrixtools.com -- blacklist check
+1 4 * * * rm -rf $(find /var/www/html/calls/ -type d -mtime +75 -exec ls -1d {} \; | grep -vE  "out|in" | sort -d)
+
+crontab -l | egrep -v "^#|^$"
+https://www.youtube.com/watch?v=gO744w5uiss
+
+தொழிலதிபர் entrepreneur
+
+SELECT SEC_TO_TIME( SUM( TIME_TO_SEC(total_hrs) ) ) AS totaltime FROM server_uptime_tbl where server_downtime like '%2017-09-01%';
+
+mysql ((none)) > show slave status \G
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting for master to send event
+                  Master_Host: 10.72.177.142
+                  Master_User: rep_user
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: ipspx1-slave-bin.001762
+          Read_Master_Log_Pos: 381121303
+               Relay_Log_File: DWHSTG01-relay-bin.000780
+                Relay_Log_Pos: 149368798
+        Relay_Master_Log_File: ipspx1-slave-bin.001762
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: No
+              Replicate_Do_DB: 
+          Replicate_Ignore_DB: affiliatepromo,ipsearch_algo
+           Replicate_Do_Table: 
+       Replicate_Ignore_Table: iplisting.iplistinglocalityrank,iplisting.sphinxiplistingnew
+      Replicate_Wild_Do_Table: 
+  Replicate_Wild_Ignore_Table: 
+                   Last_Errno: 1594
+                   Last_Error: Relay log read failure: Could not parse relay log event entry. The possible reasons are: the master's binary log is corrupted (you can check this by running 'mysqlbinlog' on the binary log), the slave's relay log is corrupted (you can check this by running 'mysqlbinlog' on the relay log), a network problem, or a bug in the master's or slave's MySQL code. If you want to check the master's binary log or slave's relay log, you will be able to know their names by issuing 'SHOW SLAVE STATUS' on this slave.
+                 Skip_Counter: 0
+          Exec_Master_Log_Pos: 380784999
+              Relay_Log_Space: 149707406
+              Until_Condition: None
+               Until_Log_File: 
+                Until_Log_Pos: 0
+           Master_SSL_Allowed: No
+           Master_SSL_CA_File: 
+           Master_SSL_CA_Path: 
+              Master_SSL_Cert: 
+            Master_SSL_Cipher: 
+               Master_SSL_Key: 
+        Seconds_Behind_Master: NULL
+Master_SSL_Verify_Server_Cert: No
+                Last_IO_Errno: 0
+                Last_IO_Error: 
+               Last_SQL_Errno: 1594
+               Last_SQL_Error: Relay log read failure: Could not parse relay log event entry. The possible reasons are: the master's binary log is corrupted (you can check this by running 'mysqlbinlog' on the binary log), the slave's relay log is corrupted (you can check this by running 'mysqlbinlog' on the relay log), a network problem, or a bug in the master's or slave's MySQL code. If you want to check the master's binary log or slave's relay log, you will be able to know their names by issuing 'SHOW SLAVE STATUS' on this slave.
+  Replicate_Ignore_Server_Ids: 
+             Master_Server_Id: 57
+                  Master_UUID: 
+             Master_Info_File: /data/mysql/master.info
+                    SQL_Delay: 0
+          SQL_Remaining_Delay: NULL
+      Slave_SQL_Running_State: 
+           Master_Retry_Count: 86400
+                  Master_Bind: 
+      Last_IO_Error_Timestamp: 
+     Last_SQL_Error_Timestamp: 170903 04:38:06
+               Master_SSL_Crl: 
+           Master_SSL_Crlpath: 
+           Retrieved_Gtid_Set: 
+            Executed_Gtid_Set: 
+                Auto_Position: 0
+1 row in set (0.00 sec)
+
+mysql ((none)) > 
+
+mysql> GRANT REPLICATION SLAVE ON *.* TO 'alertuser'@'localhost';
+MYSQL> GRANT REPLICATION CLIENT ON *.* TO 'alertuser'@'localhost';
+
+
+stop slave;
+reset slave;
+CHANGE MASTER TO MASTER_HOST='10.72.177.142',MASTER_USER='rep_user', MASTER_PASSWORD='replication', MASTER_LOG_FILE='ipspx1-slave-bin.001762', MASTER_LOG_POS=380784999;
+start slave;
+show slave status \G
+
+timeout 10s sh /tmp/12
+
+df -P | grep -v "Capa" |sed 's/%//g' | awk -v q="\`" '{if ($5 > 85) print "echo In " q"hostname"q " disk space used is "$5"% on "$6" --> Available space: "$4/1024/1024" GB"}' | sed 's/echo /echo "/g;s/$/"/g' | sh > /tmp/disk-file.txt
+
+du -sh $(lsof | grep [0-9]w | egrep -v "socket|pipe"| awk '{print $9}' | sort | uniq) | sort -h | awk '{if($1>1) {print $0}}' | grep [0-9]G
+
+
+for domain in `cat /tmp/valid_domain_list.txt`; do echo "$domain "`HEAD curl http://promo.indiaproperty.com/$domain  | grep "Client-Response-Num:" -A2 | egrep -v "^$|-"  | tail -2 | head -1`; done
+
+
+iptables -I INPUT 1 -p all -s 5.9.83.211 -j DROP
+[root@MUMLIPWEB248V ~]# iptables -L --line-number --> to show the line number
+Chain INPUT (policy ACCEPT)
+num  target     prot opt source               destination         
+1    DROP       tcp  --  static.211.83.9.5.clients.your-server.de  anywhere            tcp dpt:http 
+2    DROP       tcp  --  static.211.83.9.5.clients.your-server.de  anywhere            tcp dpt:https 
+3    DROP       tcp  --  anywhere             anywhere            tcp dpt:http STRING match "MegaIndex.ru" ALGO name bm TO 1000
+4    DROP       tcp  --  anywhere             anywhere            tcp dpt:http STRING match "megaindex.com" ALGO name bm TO 1000
+5    DROP       tcp  --  anywhere             anywhere            tcp dpt:http STRING match "Apache-HttpClient" ALGO name bm TO 1000
+6    DROP       tcp  --  anywhere             anywhere            tcp dpt:http STRING match "panscient.com" ALGO name bm TO 1000
+7    DROP       tcp  --  anywhere             anywhere            tcp dpt:http STRING match "WWW-Mechanize" ALGO name bm TO 1000
+8    DROP       tcp  --  anywhere             anywhere            tcp dpt:http STRING match "Jorgee" ALGO name bm TO 1000
+
+Chain FORWARD (policy ACCEPT)
+num  target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+num  target     prot opt source               destination         
+[root@MUMLIPWEB248V ~]# 
+iptables -D INPUT 1 --> iptables delete line 
+
+
+mysqldump -ubmdbadmin -p iplisting. >/data/iplogdetails-ippricetrendsavg-jun8-2017.sql
+mysqldump -umatriservices -p iplogdetails proagent_notification_log > proagent_notification_log_19apr2017.sql
+
+
+mysql -ubmdbadmin -p iplisting < tbl_tmp_survey_locality_trend.sql
+
+[lamatri@MUMLIPMAIL2V ~]$ sudo su - root
+[root@MUMLIPMAIL2V ~]# su - indimail
+-bash-3.2$ cd control
+-bash-3.2$ pwd
+/var/indimail/control
+-bash-3.2$ ll -trh | tail
+drwxr-x--- 3 indimail indimail 4.0K Aug 21  2014 bounces.indialist.com
+-rw-r--r-- 1 indimail indimail  238 Aug 21  2014 virtualdomains
+-rw-r--r-- 1 root     root       49 Aug 21  2014 locals
+-rw-r--r-- 1 root     root       26 Sep  3  2014 defaulthost
+-rw-r--r-- 1 root     root      118 Aug  8  2016 goodrcptto
+-rw-r--r-- 1 root     root      197 Aug 26  2016 rcpthosts
+lrwxrwxrwx 1 indimail indimail    9 Aug  8 18:06 badrcptto -> badmailto
+-rw-r--r-- 1 root     root      109 Aug 17 13:07 smtproutes
+drwxrwxr-x 2 indimail indimail 4.0K Aug 17 13:10 inquery
+-rw-r--r-- 1 indimail indimail 1.3K Sep  6 17:16 badmailto
+
+-bash-3.2$ less badmailto
+
+zcat walajabad-localities-sitemap1.xml.gz | sed 's#https#\n#g;s#" \/#@#g;s#<#@#g' | sed 's#:\/##g' | cut -d@ -f1 | less
+zcat walajabad-sitemap.xml.gz| sed 's#http#\n#g;s#" \/#@#g;s#<#@#g' | sed 's#:\/##g' | cut -d@ -f1 | sort | uniq | sed 's#s\/www#https:\/\/www#g' | head
+
+
+[root@mohan output]# grep "^/www" *.csv | cut -d : -f1 | sort | uniq -c | sort -n | tail | awk '{print $2}' | xargs | sed 's/csv/xml.gz/g'
+lucknow-compare-projects-sitemap1.xml.gz compare-projects-sitemap1.xml.gz greater-noida-sitemap.xml.gz navi-mumbai-sitemap.xml.gz hyderabad-compare-projects-sitemap1.xml.gz pune-compare-projects-sitemap1.xml.gz chennai-compare-projects-sitemap1.xml.gz mumbai-compare-projects-sitemap1.xml.gz bangalore-compare-projects-sitemap1.xml.gz delhi-sitemap.xml.gz
+[root@mohan output]# 
+
+
+
+SELECT CONCAT('ALTER TABLE ', TABLE_SCHEMA, '.', TABLE_NAME,' ENGINE=InnoDB;') FROM Information_schema.TABLES WHERE TABLE_SCHEMA = 'analytics' AND ENGINE = 'MyISAM' AND TABLE_TYPE = 'BASE TABLE';
+
+select TABLE_SCHEMA,TABLE_NAME from information_schema.tables where TABLE_SCHEMA not in ('information_schema','performance_schema','mysql','sys'); --> to fine the table and db names
+
+
+change master to master_user='rep_user', master_password='rep_pass',master_host='10.72.178.12',master_log_file='ipspx1-slave-bin.001816', master_log_pos=150638286;
+
+for ip in  10.72.178.9 10.72.178.10 10.72.178.11 10.72.178.12 10.72.178.23 10.72.178.14 10.72.178.16 10.72.178.17 192.168.4.68;do echo "** ${ip} ** ";mysql -uglobaluser -pglobalpass -h${ip} -s -N -e "show global variables like 'server_id'" ; done
+
+
+for ip in 10.72.178.9 10.72.178.10 10.72.178.11 10.72.178.12 10.72.178.23 10.72.178.14 192.168.4.68; do mysql -uglobaluser -N -s -pglobalpass -h${ip} -e "show global variables like 'server_uuid'"; done
+
+for ip in  10.72.178.9 10.72.178.10 10.72.178.11 10.72.178.12 10.72.178.23 10.72.178.14 10.72.178.16 10.72.178.17 192.168.4.68;do echo "** ${ip} ** ";mysql -uglobaluser -pglobalpass -h${ip} -s -N -e "show global variables like 'binlog_format'" ; done
+
+s3cmd  --no-mime-magic --no-preserve --add-header="Expires:`date -u +"%a, %d %b %Y %H:%M:%S GMT" --date "5 Year"`" put  ${source_file/folder}  s3://imgsoriginprod.indiaproperty.com/${destination}
+
+s3cmd  --no-mime-magic --no-preserve --add-header="Expires:`date -u +"%a, %d %b %Y %H:%M:%S GMT" --date "5 Year"`" put  ${source_file/folder}  s3:/imgsoriginprod.propfinder.in/${destination}
+
+[root@MUMLIPWEB224V ~]# iptables -L
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+DROP       tcp  --  anywhere             anywhere            tcp dpt:http STRING match "okhttp" ALGO name bm TO 1000
+DROP       tcp  --  anywhere             anywhere            tcp dpt:http STRING match "Apache-HttpClient" ALGO name bm TO 1000
+DROP       tcp  --  anywhere             anywhere            tcp dpt:http STRING match "WWW-Mechanize" ALGO name bm TO 1000
+DROP       tcp  --  anywhere             anywhere            tcp dpt:http STRING match "Jorgee" ALGO name bm TO 1000
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination 
+
+
+
+
+mysql> select concat(IP_Addrs,'_&_',server_Name,' Total_Count ',(select count(1) from server_uptime_tbl)) from server_uptime_tbl where total_hrs='';
++---------------------------------------------------------------------------------------------+
+| concat(IP_Addrs,'_&_',server_Name,' Total_Count ',(select count(1) from server_uptime_tbl)) |
++---------------------------------------------------------------------------------------------+
+| 192.168.4.95_&_Sysadmin-TT Total_Count 148                                                  |
+| 192.168.4.105_&_surya.sedbm.com Total_Count 148                                             |
+| 192.168.4.95_&_Sysadmin-TT Total_Count 148                                                  |
+| 192.168.4.191_&_mail.partha.com Total_Count 148                                             |
+| 192.168.4.108_&_kavitha Total_Count 148                                                     |
+| 192.168.4.109_&_karthik Total_Count 148                                                     |
+| 192.168.4.106_&_babuji Total_Count 148                                                      |
++---------------------------------------------------------------------------------------------+
+7 rows in set (0.00 sec)
+select distinct(Server_Name),count(*) from server_uptime_tbl group by Server_Name having count(*) > 20;
+select distinct Server_Name,IP_Addrs,count(1) from server_uptime_tbl group by Server_Name order by count(1);
+
+mysql> select distinct Server_Name,IP_Addrs,count(1) from server_uptime_tbl group by Server_Name order by count(1);
++-----------------+---------------+----------+
+| Server_Name     | IP_Addrs      | count(1) |
++-----------------+---------------+----------+
+| Sysadmin-TT     | 192.168.4.95  |        5 |
+| mail.partha.com | 192.168.4.191 |       24 |
+| babuji          | 192.168.4.106 |       24 |
+| surya.sedbm.com | 192.168.4.105 |       36 |
+| kavitha         | 192.168.4.108 |       84 |
+| karthik         | 192.168.4.109 |      109 |
++-----------------+---------------+----------+
+
+
+echo -e "25 nigab\n35 adsf\n75 kumares\n28 asdjwe" | awk '($1>25)'
+
+
+awk -vDate=`date -d'now-5 minutes' +[%d/%b/%Y:%H:%M:%S` '$4 > Date {print $7 ":"  $11/1000000}' /var/log/httpd/indiaproperty.com-access_log  |egrep "searchs\/"  |sort -t: -k2 -r| head -1 | cut -d":" -f2
+
+
+irctcravikumar@gmail.com 
+Welcome@@123
+
+https://www.namecheap.com/
+rkbabaya
+Welcome@@123
+
+
+[root@mohan ~]# s3cmd --configure
+
+Enter new values or accept defaults in brackets with Enter.
+Refer to user manual for detailed description of all options.
+
+Access key and Secret key are your identifiers for Amazon S3. Leave them empty for using the env variables.
+Access Key [AKIAINIUHPF4CFMREBWQ]: AKIAIIZPKHVOEUC44OKQ
+Secret Key [RF2E+O+3S2xxKiOUb6L2p3AxwGkalgXW4GEwzr9Y]: AAMgrlRjQC/J2hyR6xREfkefITICGcuoT3BjoDyq
+Default Region [US]: ap-south-1
+
+Encryption password is used to protect your files from reading
+by unauthorized persons while in transfer to S3
+Encryption password: 
+Path to GPG program [/usr/bin/gpg]:  
+
+When using secure HTTPS protocol all communication with Amazon S3
+servers is protected from 3rd party eavesdropping. This method is
+slower than plain HTTP, and can only be proxied with Python 2.7 or newer
+Use HTTPS protocol [Yes]:    
+
+New settings:
+  Access Key: AKIAIIZPKHVOEUC44OKQ
+  Secret Key: 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
+  Default Region: ap-south-1
+  Encryption password: 
+  Path to GPG program: /usr/bin/gpg
+  Use HTTPS protocol: True
+  HTTP Proxy server name: 
+  HTTP Proxy server port: 0
+
+Test access with supplied credentials? [Y/n] Y
+Please wait, attempting to list all buckets...
+Success. Your access key and secret key worked fine :-)
+
+Now verifying that encryption works...
+Not configured. Never mind.
+
+Save settings? [y/N] y
+Configuration saved to '/root/.s3cfg'
+
+/usr/bin/rsync -aHAXxvp -E --progress -e "ssh -T -c arcfour -o Compression=no -x"  --exclude-from '/home/indiaproperty/exclude.txt'  indiaproperty@10.72.178.6:/home/indiaproperty/iplib /home/indiaproperty/
+
+[root@convoxbox ~]# cat /etc/my.cnf | grep skip
+skip-slave-start
+
+mysqldump -uusername -ppassword --no-create-info
+
+mysqldump -umatriservices -p --no-create-info  developmenthub_ip tbl_tmp_surveytransaction_tmp --where="sro='1'" > /data/tbl_tmp_surveytransaction_tmp_19oct17.sql
+
+show grants for root@192.168.4.206;
+mysql> revoke all on *.* from root@192.168.4.206;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> grant all on *.* to root@192.168.4.206;
+Query OK, 0 rows affected (0.16 sec)
+
+
+
+
+for list in `cat /tmp/4`; do local=`echo $list | awk -F '#' '{print $1}' | cut -d'.' -f2`; mdb=`echo $list | awk -F '#' '{print $2}' | cut -d'.' -f2`; echo "%s#\`$local\`#\`$mdb\`#g";done
+
+
+IndiaProp@2017
+
+Server load check commands
+
+vmstat -m
+pidstat -dl 5
+w
+top
+iostat
+
+less /etc/mtab -- to view the mounted paths
+
+for dump in `cat /tmp/mdb1_dump`; do db=`echo $dump | cut -d'.' -f1`;table=`echo $dump | cut -d'.' -f2`;echo "mysqldump -ubmdbadmin -p $db $table > /data/`date +%d%b%Y`/backup/${db}_${table}_`date +%d%b%Y`";  done
+for dump in `cat /tmp/mdb1_dump`; do echo "select count(1) from $dump;";  done
+
+
+[root@mohan script]# IFS=$'\n'
+[root@mohan script]# for l in `cat /tmp/123`; do echo $l; sleep 1s;done
+1 2 3 4 5
+6 7 8 9 10
+11 12 13 14 15
+
+cat /tmp/tmp/date_out.txt | awk '$1 < "2018-01-01 20:35" {print $0}'
+
+
+cat /tmp/tmp/date_out.txt | awk '$1 ~ "-03-" || $2 ~ "13" {print $0}' -- s3cmd to delete from and to date
+
+[root@mohan 8226_1549]# kill -STOP 18109
+[root@mohan 8226_1549]# kill -CONT 18109
+
+
+lsof | awk '$4 ~ "[0-9]w" {print $0}'awk
+
+lsof | awk '$4 ~ "[0-9]r" && $5 == "REG" {print $0}'  | sort | uniq | awk '{print substr($0, index($0,$9))}' -- print after 9th column
+
+lsof |  awk '$4 ~ "[0-9]r" && $5 != "REG" {print $0}' | less
+
+awk '$1  > "2018-01-01" {print  $4}'
+
+| awk -vDate=`date -d '2 months ago' +"%Y-%m-%d"` '$1 < Date {print $0}'
+#################
+ awk -vDate=`date -d '2 months ago' +"%Y-%m-%d"` '$1 < Date {print $0}'
+ /usr/local/bin/s3cmd --recursive ls "s3://autoscale-instances-logs/Testing/" | awk -F"/" '{print $5" "$0}'  | sed 's#^ ##g' |awk -vdt=`date -d'2 months ago' +%Y-%m-%d` '$1 < dt {print "s3cmd del " "\""$5"\""}' | sh
+#################
+lsof | awk '$4 ~ "[0-9]w" {print $0}'
+#############
+du -sch $(lsof | awk '$4 ~ "[0-9]w" && $5 == "REG" {print $9}'  | sort | uniq ) | sort -h | tail
+lsof |  awk '$4 ~ "[0-9]r" && $5 == "REG" {print $0}'  | sort | uniq | awk '{print substr($0, index($0,$9))}'
+
+karthick@Ubuntu-desktop:~$ ls -n
+drwxr-xr-x  2 1000 1000  4096 2010-12-02 15:56 Books
+
+First Column: drwxr-xr-x
+
+    It shows file permission.
+
+Second Column: 2
+
+    It shows the hard link count to that file/directory.
+
+Third nd Fourth Column: 1000 1000
+
+    It shows UID and GID of the user.
+
+Fifth column: 4096
+
+    It shows the size.
+
+Sixth column: 2010-12-02 15:56
+
+    It shows last modified date and time.
+
+Seventh column: Books
+
+    It shows name of the file/directory.
+
+
+
+    - : regular file.
+    d : directory.
+    c : character device file.
+    b : block device file.
+    s : local socket file.
+    p : named pipe.
+    l : symbolic link.
+
+for IP in 106 108 109; do ssh 192.168.4.${IP} "useradd munnamohanl20"; ssh 192.168.4.${IP} "echo Mohan@123 | passwd munnamohanl20" --stdin; done
+
+
+bucket[/prefix]/AWSLogs/aws-account-id/elasticloadbalancing/region/yyyy/mm/dd/aws-account-id_elasticloadbalancing_region_load-balancer-name_end-time_ip-address_random-string.log
+
+
+timestamp elb client:port backend:port request_processing_time backend_processing_time response_processing_time elb_status_code backend_status_code received_bytes sent_bytes "request" "user_agent" ssl_cipher ssl_protocol
+
+2017-12-19T02:00:33.709515Z indiaproperty 34.192.116.178:50210 10.72.177.186:443 0.000034 7.900395 0.000031 200 200 0 27131 "GET https://www.indiaproperty.com:443/account/create-account.php HTTP/1.1" "Mozilla/5.0 (compatible; SMTBot/1.0; +http://www.similartech.com/smtbot)" ECDHE-RSA-AES128-GCM-SHA256 TLSv1.2
+
+
+
+
+[root@DWHSTG01 19]# cat 049664238862_elasticloadbalancing_ap-south-1_indiaproperty_20171219T0200Z_35.154.192.55_1qctysg7.log 049664238862_elasticloadbalancing_ap-south-1_indiaproperty_20171219T0200Z_35.154.106.104_4ovt9b2n.log 049664238862_elasticloadbalancing_ap-south-1_indiaproperty_20171219T0300Z_35.154.192.55_5hr45bbi.log  049664238862_elasticloadbalancing_ap-south-1_indiaproperty_20171219T0300Z_35.154.106.104_v3cm6ca7.log | grep "smtbot" |awk '{print $8" "$9" "$11" "$12" "$13}' | sort -k3 | sort -n | awk '{print $1}' | sort -n | uniq -c 
+   1705 200
+     99 301
+     43 302
+      3 401
+      2 403
+      5 404
+  12880 503
+    241 504
+
+[root@DWHSTG01 19]# cat 049664238862_elasticloadbalancing_ap-south-1_indiaproperty_20171219T0200Z_35.154.192.55_1qctysg7.log 049664238862_elasticloadbalancing_ap-south-1_indiaproperty_20171219T0200Z_35.154.106.104_4ovt9b2n.log 049664238862_elasticloadbalancing_ap-south-1_indiaproperty_20171219T0300Z_35.154.192.55_5hr45bbi.log  049664238862_elasticloadbalancing_ap-south-1_indiaproperty_20171219T0300Z_35.154.106.104_v3cm6ca7.log | grep "smtbot"|awk '{print $8" "$9" "$11" "$12" "$13}' | sort -k3 | sort -n | awk '{print $5}' | sort | uniq -c | sort -n | tail
+     36 https://www.indiaproperty.com:443/akshaya-today-in-thaiyur-chennai-pl2295824
+     36 https://www.indiaproperty.com:443/career.php
+     36 https://www.indiaproperty.com:443/contact-us.php
+     37 https://www.indiaproperty.com:443/ipapps/
+     37 https://www.indiaproperty.com:443/page-not-found
+     40 https://www.indiaproperty.com:443/ads.txt
+     60 https://www.indiaproperty.com:443/helpguide/faq.php
+     68 https://www.indiaproperty.com:443/customer-support.php?type=buyer
+    174 https://www.indiaproperty.com:443/robots.txt
+    249 https://www.indiaproperty.com:443/
+
+
+[root@mohan test]# sar -n SOCK
+Linux 2.6.32-573.26.1.el6.x86_64 (mohan) 	12/19/2017 	_x86_64_	(2 CPU)
+
+12:00:01 AM    totsck    tcpsck    udpsck    rawsck   ip-frag    tcp-tw
+12:10:01 AM       879        30        10         2         0        33
+12:20:01 AM       879        30        10         2         0        27
+12:30:01 AM       877        29        10         1         0        33
+
+
+
+[root@mohan test]# sar -n DEV
+Linux 2.6.32-573.26.1.el6.x86_64 (mohan) 	12/19/2017 	_x86_64_	(2 CPU)
+
+12:00:01 AM     IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s
+12:10:01 AM        lo      1.30      1.30      0.11      0.11      0.00      0.00      0.00
+12:10:01 AM      eth4     16.15     13.01      2.19      1.91      0.00      0.00      0.26
+12:20:01 AM        lo      1.30      1.30      0.11      0.11      0.00      0.00      0.00
+12:20:01 AM      eth4     15.80     12.74      2.14      1.87      0.00      0.00      0.22
+12:30:01 AM        lo      1.30      1.30      0.11      0.11      0.00      0.00      0.00
+12:30:01 AM      eth4     15.79     12.74      2.14      1.87      0.00      0.00      0.20
+12:40:01 AM        lo      1.30      1.30      0.11      0.11      0.00      0.00      0.00
+12:40:01 AM      eth4     16.16     12.81      2.19      1.88      0.00      0.00      0.29
+12:50:01 AM        lo      1.30      1.30      0.11      0.11      0.00      0.00      0.00
+
+
+[root@mohan ~]# sar -d  -p | head -5
+Linux 2.6.32-573.26.1.el6.x86_64 (mohan) 	03/13/2018 	_x86_64_	(2 CPU)
+
+12:00:01 AM       DEV       tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util
+12:10:01 AM       sda      3.23     31.09    152.15     56.76      0.12     36.41     17.52      5.66
+12:10:01 AM       sdb      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+
+[root@mohan ~]# sar -d  | head -5
+Linux 2.6.32-573.26.1.el6.x86_64 (mohan) 	03/13/2018 	_x86_64_	(2 CPU)
+
+12:00:01 AM       DEV       tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util
+12:10:01 AM    dev8-0      3.23     31.09    152.15     56.76      0.12     36.41     17.52      5.66
+12:10:01 AM   dev8-16      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+
+
+
+
+sar -b --> iowait utilization
+sar -r --> ram utilization
+sar -q --> cpu utilization 
+
+
+echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse -- close the time wait connection
+echo 1 > /proc/sys/net/ipv4/tcp_tw_recycle -- close the time wait connection
+
+
+
+
+centos 7 single user mode:
+rename ---> ro -- rw init=/sysroot/bin/sh 
+Ctrl-X
+chroot /sysroot/
+after the password change
+reboot -f
+
+
+
+[root@babuji ~]# ssh-copy-id sysadmin@192.168.4.95
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+sysadmin@192.168.4.95's password: 
+
+watch -n1 -d "ps axu | awk '{if (\$8==\"D\") {print \$0}}'"
+
+
+mysql> CREATE TABLE  mohan_svn_upload_list  ( sl_no  int(11) NOT NULL AUTO_INCREMENT,  ticket_no  varchar(15) NOT NULL,  svn_repo  varchar(255) NOT NULL,  upload_time  varchar(15) NOT NULL, PRIMARY KEY ( sl_no ) );
+Query OK, 0 rows affected (0.46 sec)
+
+
+mysql> alter table mohan_svn_upload_list add column (upload_by varchar(15) not null);
+Query OK, 0 rows affected (0.68 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into mohan_svn_upload_list (ticket_no,svn_repo,upload_time,upload_by) values ('1234_test','ipcrm','Dec 28, 2017 13:25','Mohan L');
+Query OK, 1 row affected (0.07 sec)
+
+
+Mohan_DB.mohan_svn_upload_list
+
+
+
++-------+-----------+----------+--------------------+-----------+
+| sl_no | ticket_no | svn_repo | upload_time        | upload_by |
++-------+-----------+----------+--------------------+-----------+
+|     1 | 1234_test | ipcrm    | Dec 28, 2017 13:25 | Mohan L   |
++-------+-----------+----------+--------------------+-----------+
+
+
+/usr/bin/mysql -h192.168.4.105 -uroot -proot@123 -e "insert into Mohan_DB.mohan_svn_upload_list (ticket_no,svn_repo,upload_time,upload_by) values ('${ticket}','${svn_repos}','${date}','${user}')"
+
+insert into mohan_svn_upload_list (ticket_no,svn_repo,upload_time,upload_by) values ('${ticket}','${svn_repos}','${date}','${user}');
+
+
+
+sdiff -s  -i -B  -b  web4_vhosts_otherdomain.conf web9_vhosts_otherdomain.conf > output/web4_and_web9_otherdomain_vhosts_diff.txt
+
+for list in `ls -1`; do date=`ls -1 ./$list/ | awk -F 'indiaproperty_' '{print $2}'| cut -d'T' -f1 | sort | uniq| head -1`;echo "Date-"$date " bingbot="`cat ./$list/*.log | grep "bingbot" | wc -l` " Googlebot=" `cat ./$list/*.log | grep "Googlebot" | wc -l`  " Total_Request_Count=" `cat ./$list/*.log | wc -l`; done
+
+
+bucket[/prefix]/AWSLogs/aws-account-id/elasticloadbalancing/region/yyyy/mm/dd/aws-account-id_elasticloadbalancing_region_load-balancer-name_end-time_ip-address_random-string.log
+
+
+
+timestamp elb client:port backend:port request_processing_time backend_processing_time response_processing_time elb_status_code backend_status_code received_bytes sent_bytes "request" "user_agent" ssl_cipher ssl_protocol
+
+2017-12-19T02:00:33.709515Z indiaproperty 34.192.116.178:50210 10.72.177.186:443 0.000034 7.900395 0.000031 200 200 0 27131 "GET https://www.indiaproperty.com:443/account/create-account.php HTTP/1.1" "Mozilla/5.0 (compatible; SMTBot/1.0; +http://www.similartech.com/smtbot)" ECDHE-RSA-AES128-GCM-SHA256 TLSv1.2
+
+UPDATE iplogdetails.ipenquirylog SET UserId=2554155 WHERE UserId=2477910 AND ListingId=5723252;
+
+select count(1) from iplogdetails.ipenquirylog WHERE UserId=2477910 AND ListingId=5723252;
+
+/var/www/api.indiaproperty.com/bin/python /var/www/api.indiaproperty.com/src/ipinfra/manage.py listingsync --settings=ipinfra.settings.production
+
+
+
+[ipinfra@MUMLIPNEW01V ~]$ /var/www/api.indiaproperty.com/bin/python /var/www/api.indiaproperty.com/src/ipinfra/manage.py listingsync --settings=ipinfra.settings.production
+SYNC START
+START TIME : 2017-12-27 19:16:55.515125
+2017-12-26 00:00:00
+2017-12-26 23:59:59
+0
+
+
+CREATE TABLE `server_uptime_tbl` (`sl_no` int(11) NOT NULL AUTO_INCREMENT,   `IP_Addrs` varchar(15) NOT NULL,   `Server_Name` varchar(255) NOT NULL,   `server_uptime` varchar(255) NOT NULL,   `server_downtime` varchar(255) NOT NULL,   `total_hrs` varchar(255) DEFAULT NULL,   PRIMARY KEY (`sl_no`),   KEY `Server_Name` (`sl_no`) ) ENGINE=InnoDB AUTO_INCREMENT=641 DEFAULT CHARSET=latin1
+
+
+CREATE TABLE  mohan_svn_upload_list  ( sl_no  int(11) NOT NULL AUTO_INCREMENT,  ticket_no  varchar(15) NOT NULL,  svn_repo  varchar(255) NOT NULL,  upload_time  varchar(15) NOT NULL, PRIMARY KEY ( sl_no ) );
+
+
+
+
+mysql> CREATE TABLE  mohan_svn_upload_list  ( sl_no  int(11) NOT NULL AUTO_INCREMENT,  ticket_no  varchar(15) NOT NULL,  svn_repo  varchar(255) NOT NULL,  upload_time  varchar(15) NOT NULL, PRIMARY KEY ( sl_no ) );
+Query OK, 0 rows affected (0.46 sec)
+
+
+mysql> alter table mohan_svn_upload_list add column (upload_by varchar(15) not null);
+Query OK, 0 rows affected (0.68 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into mohan_svn_upload_list (ticket_no,svn_repo,upload_time,upload_by) values ('1234_test','ipcrm','Dec 28, 2017 13:25','Mohan L');
+Query OK, 1 row affected (0.07 sec)
+
+
+Mohan_DB.mohan_svn_upload_list
+
+
+
++-------+-----------+----------+--------------------+-----------+
+| sl_no | ticket_no | svn_repo | upload_time        | upload_by |
++-------+-----------+----------+--------------------+-----------+
+|     1 | 1234_test | ipcrm    | Dec 28, 2017 13:25 | Mohan L   |
++-------+-----------+----------+--------------------+-----------+
+
+
+/usr/bin/mysql -h192.168.4.105 -uroot -proot@123 -e "insert into Mohan_DB.mohan_svn_upload_list (ticket_no,svn_repo,upload_time,upload_by) values ('${ticket}','${svn_repos}','${date}','${user}')"
+
+insert into mohan_svn_upload_list (ticket_no,svn_repo,upload_time,upload_by) values ('${ticket}','${svn_repos}','${date}','${user}');
+
+
+
+
+
+
+
+
+
+
+
+#!/bin/bash
+
+##Exclude IP list##
+(
+echo 10.72.1. #ELB Private IPs
+echo 10.72.0. #ELB Private IPs
+echo 10.72.177 #Server Private IPs
+echo 10.72.178 #Server Private IPs
+echo 115.111.183.14 #Guindy Tata IP
+echo "-"
+) > /tmp/ip_exclude_list.txt
+
+dt=`date +"%d/%b/%Y:%H:"`
+
+load=`cat /proc/loadavg | awk '{print $1}'|cut -d. -f1`
+
+if [ ${load} -ge 6 ]
+
+then
+
+echo -en "---Hourly Bot Counts---\n`grep $dt /var/log/httpd/ssl_access_log | egrep -v "^10.72" | awk '{print $15}' | grep -v "^$" | sort | egrep -vi '^\"|^[0-9]|Android|bingbot|google|nt|yahoo|MSIE|Windows|YandexBot|Linux|X11|UCWEB|CPU|Java|U\;|Apple|Phone|LYF|x86_64' | sort | uniq -c | sort -k1 -g | tail -5`\n\n" > /tmp/load_bot.txt
+
+echo -en "---Netstat Status---\n`netstat -antpl | awk '{if ($3 > 10 || $2 >20 ) print $0}'`\n\n"  >> /tmp/load_bot.txt
+
+echo -en "---Top Concurrency Count---\n`cat /var/log/httpd/ssl_access_log | egrep -v "^10.72" |cut -d[ -f2 | cut -d] -f1 | awk -F: '{print $2":"$3":"$4}' | sort -nk1 -nk2 | uniq -c | sort -k1 -g | tail -5`\n\n" >> /tmp/load_bot.txt
+
+echo -en "---Per day hit count sort by hourly----\n`less /var/log/httpd/ssl_access_log | cut -d[ -f2 | cut -d] -f1 | awk -F: '{print $2":00"}' | sort -n | uniq -c`\n\n" >> /tmp/load_bot.txt
+
+echo -en "---Public IP Count List---\n`grep $dt /var/log/httpd/ssl_access_log | awk '{print $1}'| sort |uniq -c|sort -nr| grep -v -f /tmp/ip_exclude_list.txt | awk '{if ($1>300) print $0}' | head -5`\n\n" >> /tmp/load_bot.txt
+
+echo -en "---ESTABLISHED CONNECTION----\n`lsof -Pnl +M  -i4`\n\n" >> /tmp/load_bot.txt
+echo -en "---Logged users----\n`/usr/bin/w`\n\n" >> /tmp/load_bot.txt
+echo -en "---High CPU process----\n`ps -eo pid,%cpu,vsz,args,wchan,state | sort -k2,3 -g | tail`\n\n" >> /tmp/load_bot.txt
+echo -en "---Mail process count----\n`ps -ef | egrep -ic "postfix|sendmail" | awk '{print "mailprocesscount="$0}'`\n\n" >> /tmp/load_bot.txt
+echo -en "---Apache count----\n`ps -ef | grep -ic apache | awk '{print "apachecount="$0}'`\n\n" >> /tmp/load_bot.txt
+echo -en "---Apache Memory Usage & Average Proccess Size ----\n`ps -ylC httpd | awk '{x += $8;y += 1} END {print "Apache Memory Usage (MB): "x/1024; print "Average Proccess Size (MB): "x/((y-1)*1024)}'`\n\n" >> /tmp/load_bot.txt
+
+
+#mutt -s "Critical! - Server Load is ${load} in `hostname`" mohan.l@indiaproperty.com  < /tmp/load_bot.txt
+
+mutt -s "Critical! - Server Load is ${load} in `hostname`" sedbm@indiaproperty.com  < /tmp/load_bot.txt
+
+fi
+
+
+asterisk -rx "pri show spans"
+ssh -p 2288 root@180.151.248.244 "asterisk -rx \"pri show spans\""
+stop slave; set global sql_slave_skip_counter=1; start slave;
+
+
+##test run in 4.69##
+[root@DWHHUB01 ~]# su - stguser
+[stguser@DWHHUB01 ~]$  sh Testrun dynamicaddon 105 >testrun_output.txt
+
+rpm -ev --nodeps vsftpd
+
+##per second hits count###
+less /var/log/httpd/ssl_access_log | awk '{print $4}' | awk -F '22/Jan/2018:' '{print $2}' | sort | uniq -c | less
+
+##highest concurrency hits per second###
+less /var/log/httpd/ssl_access_log | awk '{print $4}' | awk -F '22/Jan/2018:' '{print $2}' | sort | uniq -c | sort -n | tail
+[root@MUMLIPWEB8V ~]# less /var/log/httpd/ssl_access_log | awk '{print $4}' | awk -F '22/Jan/2018:' '{print $2}' | sort | uniq -c | sort -n | tail
+     62 11:08:35
+     64 10:17:13
+     64 10:24:33
+     64 10:32:48
+     66 10:35:24
+     68 10:34:46
+     68 10:36:36
+     68 11:27:18
+     70 10:53:50
+
+##per minute hits count###
+less /var/log/httpd/ssl_access_log | awk '{print $4}' | awk -F '22/Jan/2018:' '{print $2}' | cut -d ':' -f1,2 | sort | uniq -c | tail
+  886 13:53
+    944 13:54
+    990 13:55
+   1090 13:56
+    930 13:57
+    834 13:58
+    887 13:59
+    858 14:00
+    882 14:01
+    728 14:02
+
+nm="four"; echo -en "one\ntwo\nthree\nfour\nfive\n" | awk -v m="$nm" '{if ($1==m) print $0}' --> awk variable
+
+
+##hourly hit count####
+[root@MUMLIPWEB8V ~]# less /var/log/httpd/ssl_access_log | awk '{print $4}' | awk -F '22/Jan/2018:' '{print $2}'  | cut -d ':' -f1 | sort | uniq -c | awk '{print $0":00"}'| tail
+  43450 03:00
+  41534 04:00
+  40091 05:00
+  41971 06:00
+  46343 07:00
+  48649 08:00
+  75465 09:00
+ 103344 10:00
+ 103380 11:00
+  63686 12:00
+
+
+query lock checking script
+
+select * from information_schema.processlist where state in ('Opening tables','Copying to tmp table','Sending data','Sorting result','Updating');
+
+match calculation.... bodmas concept Brackets, Orders (powers and roots), Division and Multiplication, Addition and Subtraction
+
+The BODMAS acronym is for:
+
+    Brackets (parts of a calculation inside brackets always come first).
+    Orders (numbers involving powers or square roots).
+    Division.
+    Multiplication.
+    Addition.
+    Subtraction.
+
+Read more at: https://www.skillsyouneed.com/num/bodmas.html
+
+Live servers application Versions 
+- Solr 	 - 4.10.1
+- Sphnix - 2.0.6
+- Mysql  - Master(5.1) & slave(5.6)
+- Mongo  - 3.2.4
+- Apache - Apache/2.4.12 (Unix)
+- Linux  - Red Hat Enterprise Linux Server release 5.9 (Tikanga)
+
+
+
+###########postfix maillog############
+dt="Mar  1 11:4"; echo "################yahoo##############" && grep "to=" /var/log/maillog  | egrep "$dt" | grep -i "yahoo" | awk '{print $3}' | cut -d : -f1,2,3 | uniq -c |  tail && echo "################gmail##############" && grep "to=" /var/log/maillog  | egrep "$dt" | grep -i "gmail" | awk '{print $3}' | cut -d : -f1,2,3 | uniq -c |  tail
+
+grep "to=" /var/log/maillog  | awk '{print $3}' | cut -d : -f1,2 | uniq -c | sort -n | less ---> mailq concurrent count per minute
+
+grep "to=" /var/log/maillog  | awk '{print $3}' | cut -d : -f1,2,3 | uniq -c | sort -n --> per seconds mailq hits
+
+grep "status" /var/log/maillog | awk -F 'status=' '{print $2}' |grep -v "^$"  | awk '{print $1}' | sort | uniq -c && echo " `grep "status" /var/log/maillog| wc -l` total"
+
+
+grep "status" /var/log/maillog | egrep "15:5|16:" | awk -F 'status=' '{print $2}' |grep -v "^$"  | awk '{print $1}' | sort | uniq -c && echo "   `grep "status" /var/log/maillog|egrep "15:5|16:" |  awk -F 'status=' '{print $2}' | grep -v "^$" |wc -l` total"
+
+grep "to=" /var/log/maillog  | awk '{print $3}' | cut -d : -f1,2,3 | uniq -c |  tail -20 
+
+
+
+grep "to=" /var/log/maillog  | awk '{print $3" "$7" "$12}' | 
+sed 's#to=<##g;s#>,##g' | tail -20 -- to view the mail id list
+
+
+grep "to=" /var/log/maillog  | grep "Feb 22 16:" |awk '{print $7}' | cut -d '@' -f2 | cut -d '>' -f1 | sort | uniq -c | sort -n | tail --> domain wise count for particular time
+
+dt="Feb 23 17:" ;grep "status" /var/log/maillog | egrep "$dt" | awk -F 'status=' '{print $2}' |grep -v "^$"  | awk '{print $1}' | sort | uniq -c && echo "   `grep "status" /var/log/maillog|egrep "$dt" |  awk -F 'status=' '{print $2}' | grep -v "^$" |wc -l` total"
+
+
+`grep "to=" /var/log/maillog  | grep "Feb 22 16:" |  awk -F 'to=<' '{print $2}' | cut -d '@' -f2 | cut -d '>' -f1 | sort | uniq`
+
+grep "to=" /var/log/maillog  | grep "Feb 22 16:" | grep "yahoo.co.in" | awk -F 'status=' '{print $2}'| grep -v "^$" |awk '{print $1}' | sort | uniq -c  --> sent, deffered and bounce count of domain
+
+for domain in indiaproperty.com yahoo.com gh.com ; do echo -en "--------------$domain---------------\n";grep "to=" /var/log/maillog  | grep "Feb 22 16:" | grep "$domain" | awk -F 'status=' '{print $2}'| grep -v "^$" |awk '{print $1}' | sort | uniq -c; done
+
+
+dt="Feb 22 16:"; for domain in `grep "to=" /var/log/maillog  | grep "$dt" |  awk -F 'to=<' '{print $2}' | cut -d '@' -f2 | cut -d '>' -f1 | sort | uniq`; do echo -en "--------------$domain---------------\n";grep "to=" /var/log/maillog  | grep "$dt" | grep "$domain" | awk -F 'status=' '{print $2}'| grep -v "^$" |awk '{print $1}' | sort | uniq -c; done ##### domain wise sent, deffered and bounced count
+
+grep "Feb 27 11" /var/log/maillog  | awk -F 'to=<' '{print $2}' | cut -d '>' -f1 | sort | grep -v "^$" | cut -d '@' -f2 | sort | uniq -c ---> domain list
+
+dt="Feb 22 16:"; for domain in `grep "to=" /var/log/maillog  | grep "$dt" |  awk -F 'to=<' '{print $2}' | cut -d '@' -f2 | cut -d '>' -f1 |tr '[:upper:]' '[:lower:]' |sort|  uniq`; do echo -en "--------------$domain---------------\n";grep "to=" /var/log/maillog  | grep "$dt" | grep -i "@$domain" | awk -F 'status=' '{print $2}'| grep -v "^$" |awk '{print $1}' | sort |
+uniq -c; done  ---## removed case sensitive.
+
+egrep "Mar 27 " /var/log/maillog |grep -v "mail.findhouse.in"  | awk -F '=' '($2 ~ "@"){print $2" "$7}' | awk '{print $1" "$2" "$3}' | sed 's#>, relay##g;s#<##g' | sort > /tmp/maillog_out.txt ; for status in sent bounced deffered; do echo "$status - `grep -c $status /tmp/maillog_out.txt`" ; done; cat /tmp/maillog_out.txt | grep bouncedim
+
+
+egrep -A500000 "Mar 27 13:22" /var/log/maillog |egrep -v "mail.findhouse.in"  | awk -F 'to=<' '{print $2}' | sed 's#status=#status=>#g' | awk -F'>' '{print $1" "$3}' | awk '{print $1" "$2}' |sort | grep -v "^ " > /tmp/maillog_out.txt ; for status in sent bounced deferred; do echo "$status - `grep -c $status /tmp/maillog_out.txt`" ; done; cat /tmp/maillog_out.txt | grep deferred | sort | uniq -c | sort -n
+#############mail sent via telnet###############
+telnet mail.findhouse.in. 25
+
+helo bounces.indiaproperty.com
+
+
+mail from: noreply@bounces.indiaproperty.com
+
+rcpt to: mohan.l@indiaproperty.com, remove+52.66.24.251@db.justspam.org
+rcpt to: remove+52.66.24.251@db.justspam.org
+data
+
+Subject: remove 52.66.24.251 :x:e04cb308ad8bb76:x:
+Dear Team,
+
+Kindly remove the following IP "52.66.24.251" from dnsbl.justspam.org
+
+Thanks and Regards,
+Administrator
+
+
+<.>
+
+
+https://www.endpoint.com/blog/2014/04/15/spf-dkim-and-dmarc-brief-explanation --> about spf, dkim and dmarc
+
+###################################
+
+for ip in 10.72.178.6 10.72.178.20 10.72.178.21 10.72.178.22 10.72.178.29 10.72.178.85 10.72.178.86 10.72.178.8 10.72.178.19 10.72.178.9 10.72.178.10 10.72.178.11 10.72.178.12 10.72.178.23 10.72.178.16 10.72.178.17 10.72.178.14 10.72.178.15 10.72.178.27 10.72.178.49 10.72.178.33 10.72.178.34 10.72.178.25 10.72.178.39 10.72.178.40 10.72.178.41 10.72.178.36 10.72.178.37 10.72.178.83 10.72.178.84 ; do ssh $ip "echo \`hostname -s\` \`iostat | grep dm | awk '{print \$2}'  | xargs | sed 's# #+#g' | bc\`"; done
+
+
+zcat  /var/log/httpd/ssl_access_log.1.gz | awk -F\" '($2 ~ "^GET /"){print $6}' | grep -i "google"|sort|uniq | egrep -iv "code.google.com|feedfetcher"
+
+
+total
+
+
+cd /usr/local/redis-2.6.7/src/
+
+./redis-cli  -h localhost -p 6380 -a 36xouICp
+
+
+start=1990; end=1997; for year in $(seq $start $end); do echo $year; done
+
+
+
+commvault tape Backup Exclude server list - DR-PRODMAIL1-2, DWHHUB01, ipticketingtool, STGSLAVE01
+
+
+sar
+iotop
+iostat
+netstat
+tcpdump
+w
+who
+top
+
+
+
+for i in {1..100}; do ssh root@192.168.4.106 "w"; done
+zenity --entry --title="Answer these questions three" --text="What is your quest?"
+
+File descriptor 3 (/var/log/rootsh/lamatri.20180314123555.05a77) leaked on lvdisplay invocation. Parent PID 23160: bash
+  --- Logical volume ---
+  LV Name                /dev/ipweb2_datavg/lv_data
+  VG Name                ipweb2_datavg
+  LV UUID                DvgLd4-frfd-kc6G-1eYf-uFhZ-VAkj-2TwAHw
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                147.99 GB
+  Current LE             37885
+  Segments               3
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:2
+   
+  --- Logical volume ---
+  LV Name                /dev/vg_root/lv_root
+  VG Name                vg_root
+  LV UUID                3Abim4-sJwV-tCKi-SPC2-c5ZT-AjEm-SlRjEw
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                25.78 GB
+  Current LE             825
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:0
+   
+  --- Logical volume ---
+  LV Name                /dev/vg_root/lv_swap
+  VG Name                vg_root
+  LV UUID                y3V8wd-moDq-TTL0-3jdt-rN83-JtVX-HS0Ant
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                4.00 GB
+  Current LE             128
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:1
+   
+
+lvdisplay |awk  '/LV Name/{n=$3} /Block device/{d=$3; sub(".*:","dm-",d); print d,n;}'
+
+ ps aux --sort pmem | sort -g -k4 |  sed -n '1p;$p'
+
+
+###################################
+ssh pem key generate 
+ssh-keygen -b 2048 -f Mohannew -t rsa
+cat Mohannew.pub >> authorized_keys
+share the Mohannew file to remote system to login -- file should 600 permission
+.ssh should be 700
+#######################################
+
+######## TOP command details##########
+
+
+ us  --  User CPU time
+      The time the CPU has spent running users'  processes  that  are
+      not niced.
+
+    sy  --  System CPU time
+      The  time  the  CPU  has  spent  running  the  kernel  and  its
+      processes.
+
+    ni  --  Nice CPU time
+      The time the CPU has spent running users'  proccess  that  have
+      been niced.
+
+    wa  --  iowait
+      Amount of time the CPU has been waiting for I/O to complete.
+
+    hi  --  Hardware IRQ
+      The  amount  of  time  the  CPU  has  been  servicing  hardware
+      interrupts.
+
+    si  --  Software Interrupts
+      The  amount  of  time  the  CPU  has  been  servicing  software
+      interrupts.
+
+    st  --  Steal Time
+      The  amount  of  CPU  'stolen' from this virtual machine by the
+      hypervisor for other tasks (such  as  running  another  virtual
+      machine)
+
+######################################################
+###RAID Failed and Disk Rebuild in HP P2000 G3#####
+
+For MSA 2000 Gen 2, P2000 Gen 3:
+
+Follow the steps below to rebuild the VDisk after the hard drive failure:
+
+1. Log into the HP MSA Storage Management Utility (SMU).
+2. In the Configuration View panel, right-click a vdisk and select Configuration, Manage Dedicated Spares. 
+The main panel shows information about the selected vdisk, its spares, and all disks in the system. Existing spares are labeled SPARE.
+• In the disk selection sets table, the number of empty slots in the SPARE entry's Disks field shows how many spares can be added to the vdisk.
+• In the enclosure view or list, only existing spares and suitable available disks are selectable.
+3. Select disks to add as spares.
+4. Click Modify Spares. If the task succeeds, the panel is updated to show which disks are now spares for the vdisk.
+
+The rebuild will start and one can monitor the rebuild status.
+
+#######################################################
+
+
+
+aws ec2 instance status checks
+
+######EC2 - 0/2 checks passed #########
+
+System Status Checks
+
+Monitor the AWS systems required to use your instance to ensure they are working properly. These checks detect problems with your instance that require AWS involvement to repair. When a system status check fails, you can choose to wait for AWS to fix the issue, or you can resolve it yourself (for example, by stopping and starting an instance, or by terminating and replacing an instance).
+
+The following are examples of problems that can cause system status checks to fail:
+
+Loss of network connectivity
+
+Loss of system power
+
+Software issues on the physical host
+
+Hardware issues on the physical host
+
+
+#########EC2 - 1/2 checks passed ###########
+
+Instance Status Checks
+
+These checks monitor your software and network configuration for this instance.
+
+Instance reachability check failed at 2012-07-02 23:04 GMT+0800 (50 minutes, 23 seconds ago)
+
+but the another paid instance running never happen this error, (the paid instance is running under Amazon VPC )
+
+would any body advice me what is going on ?
+##################################################
+
+
+Active IP's List in 177 segment
+10.72.177.22 10.72.177.31 10.72.177.59 10.72.177.134 10.72.177.138 10.72.177.139 10.72.177.140 10.72.177.141 10.72.177.142 10.72.177.144 10.72.177.146 10.72.177.148 10.72.177.149 10.72.177.152 10.72.177.153 10.72.177.154 10.72.177.155 10.72.177.157 10.72.177.160 10.72.177.164 10.72.177.169 10.72.177.170 10.72.177.171 10.72.177.172 10.72.177.174 10.72.177.175 10.72.177.176 10.72.177.177 10.72.177.180 10.72.177.184 10.72.177.187 10.72.177.188 10.72.177.194 10.72.177.195
+
+Active IP's List in 180 segment
+10.72.178.6 10.72.178.8 10.72.178.9 10.72.178.10 10.72.178.11 10.72.178.12 10.72.178.14 10.72.178.15 10.72.178.16 10.72.178.17 10.72.178.19 10.72.178.20 10.72.178.21 10.72.178.22 10.72.178.23 10.72.178.25 10.72.178.29 10.72.178.33 10.72.178.34 10.72.178.37 10.72.178.40 10.72.178.41 10.72.178.49 10.72.178.83 10.72.178.84 10.72.178.85 10.72.178.86 10.72.178.92 10.72.178.27
+
+
+laravel cache clear 
+
+[indiaproperty@MUMLIPWEB9V ip2]$ php artisan cach:clear
+PHP Notice:  Undefined index: HTTP_HOST in /data/home/indiaproperty/www/ip2/config/ipvars.php on line 45
+Application cache cleared!
+[indiaproperty@MUMLIPWEB9V ip2]$ php artisan view:clear
+
+PHP Notice:  Undefined index: HTTP_HOST in /data/home/indiaproperty/www/ip2/config/ipvars.php on line 45
+Compiled views cleared!
+[indiaproperty@MUMLIPWEB9V ip2]$ 
+
+#######################apache vhost###########################
+<VirtualHost *:80>
+ServerName munin.mohan.com
+DocumentRoot /home/munin/
+CustomLog /var/log/httpd/munin_mohan_access_log combined
+ErrorLog /var/log/httpd/munin_mohan_error_log
+<Directory "/home/munin/">
+#AllowOverride AuthConfig
+AllowOverride all
+
+Options +Includes -Indexes
+Require all granted
+
+</Directory>
+
+</VirtualHost>
+
+#########################################################
+echo $b $a | awk '{ if ($1 > $2) print "ok"; else print "not ok"}'
+
+
+
+##open ssl version issue##
+1. Copy the cacert.pem file in /tmp/
+2. cat /tmp/cacert.pem >> /etc/pki/tls/certs/ca-bundle.crt
+certificates stored in /home/Mohan/Documents/SEDBM_Team_Docs/keys/openssl_troubleshoot
+curl https://www.googleapis.com/discovery/v1/apis 
+
+##TLS version check##
+openssl ciphers -v | awk '{print $2}' | sort | uniq
+
+for ip in 10.72.178.9 10.72.178.10 10.72.178.11 10.72.178.12 10.72.178.23 10.72.178.14 192.168.4.68 ;do echo "** ${ip} ** ";mysql -uglobaluser -pglobalpass -h${ip} -s -N -e "show slave status\G" | egrep -i "log|Running" | egrep -vi "until|State|Relay_Log" | xargs | awk '{if ($4==$12) print $4 " -ok- " $12 ; else print $4 "----- not ok -----" $12;}' ; done ; sh dbslave_delay.sh
+
+
+ /usr/local/bin/s3cmd --recursive ls "s3://autoscale-instances-logs/Testing/" | awk -F"/" '{print $5" "$0}'  | sed 's#^ ##g' |awk -vdt=`date -d'2 months ago' +%Y-%m-%d` '$1 < dt {print "s3cmd del " "\""$5"\""}' | sh ---> s3 files delete
+
+#############################################################
+alter Table mohan_ipnew modify column (sl_no int(11) NOT NULL AUTO_INCREMENT,  ticket_no varchar(255)  NULL,  svn_repo varchar(255)  NULL,  upload_time varchar(255)  NULL,  upload_by varchar(15)  NULL,  uploaded_server varchar(15)  NULL,  log_file varchar(255) DEFAULT NULL,  PRIMARY KEY (sl_no));
+
+
+mongodump -uipsedbm -pipsedbm@123 --host 10.72.178.17 --port 27021 --authenticationDatabase admin --db indiaproperty -c projects--gzip --out /data/Mongodb_Backup/03_apr_2018_projects.gz
+
+mongodump -uipsedbm -pipsedbm@123 --host 10.72.178.25 --port 27021 --authenticationDatabase admin --db indiaproperty -c projects --gzip --out /data/mongo_DB_backup/
+
+
+db.projects.find({}).count()
+
+
+
+
+Hi Team
+
+Purpose  :  Project Master DataBase Cleaning Under below Conditions
+
+1. If validation status is 3
+2. If validation status is 4
+3. if listing_ids is empty project collection.
+
+
+
+1. Request to take a backup up Live Mongo DB Before starting the Process
+2. Execute the Given  commands 
+3. Verify process 
+4. check the DB . 
+5. If any problem occurs please revert the db from backup.
+=========================================================
+
+Commands  : 
+
+# show databases 
+show dbs	
+
+# use database
+use indiaproperty
+
+# get total collection Count 
+db.projects.find({}).count()
+
+#################################################################
+
+#validation_status    = 0; new while listing creation.
+#validation_status    = 1;  Pending.
+#validation_status    = 2;  Approved.
+#validation_status    = 3;  Reject.
+#validation_status   = 4;  Deleted.
+
+
+
+# get new collection Count 
+db.projects.find({"validation_status":0}).count()
+
+# get pending collection Count 
+db.projects.find({"validation_status":1}).count()
+
+# get approved collection Count 
+db.projects.find({"validation_status":2}).count()
+
+# get rejected collection Count 
+db.projects.find({"validation_status":3}).count()
+
+# get deleted collection Count 
+db.projects.find({"validation_status":4}).count()
+
+# get empty listing  collection Count 
+db.projects.find({ listing_ids : { $size : 0 }}).count()
+
+
+#################################################################
+
+
+db.projects.find({"validation_status":3}).toArray()
+
+db.projects.find({"validation_status":4}).toArray()
+
+db.projects.find({ listing_ids : { $size : 0 }}).toArray()
+
+
+# Delete rejected collection  
+db.projects.delete_many({"validation_status":3})
+
+# Delete deleted collection  
+db.projects.delete_many({"validation_status":4})
+
+# Delete collection if listing ids array is 0
+db.projects.delete_many({ listing_ids : { $size : 0 }})
+
+
+
+################################################################
+
+Verify  :
+
+
+# get rejected collection Count 
+db.projects.find({"validation_status":3}).count()
+
+# get deleted collection Count 
+db.projects.find({"validation_status":4}).count()
+
+# get empty listing  collection Count 
+db.projects.find({ listing_ids : { $size : 0 }}).count()
+
+
+db.projects.find({"validation_status":3}).toArray()
+
+db.projects.find({"validation_status":4}).toArray()
+
+db.projects.find({ listing_ids : { $size : 0 }}).toArray()
+
+
+db.projects.find({}).count()
+#####################################################################
+
+##ACHIEVEMENTS DURING THE YEAR##
+1.) Created Shell script for manual routine process like file upload, server load alert, server uptime inventory, ssh active connection details, s3 upload, mysqldump from 4.69 to MDB1, etc... 
+
+2.) Successfully migrated from Belicia to Guindy RR Tower and Guindy RR Tower to Bristol IT within very short span of time, we have prepared pre and post migration checklist, coordinated with vendors for server dismantling and assembling.
+
+3.) Coordinated with AWS team to whitelist the public IP for Findhouse.in domain mail server. Created mail relay server using Postfix and configured MX, DKIM, SPF, DMARC records in Route 53
+
+
+
+##Contribution outside your KRA : New Initiatives etc.##
+1) Initiative in networking issues such as AWS VPC, Baston Host and local IP-Sec 		
+2) Internally moved from System Admin team to SEDBM team because of quick adaption of Linux, Networking and GApps Suite 
+
+##Outline your areas of improvement##
+1) Learning AWS Cloud and Citrix
+2) Learning Mysql and Mongo replication setup with Master/Slave concept
+
+##Self assessment##
+After internal movement from Sysadmin to SEDBM, learned more in Shell scripting, AWS, Linux, Mail Servers and other technologies.
+
+
+#We have lot of opportunities to learn in AWS Cloud, Shell script  and Gapps, and implement in live environment as per requirement
+
+
+start strace script for Public IP connection
+file upload script with mysql entries and logs
+msyql master/slave records count check script
+servers "startup script with services and its dependencies"
+mysql master/slave records values missmatch and update script to slave based on master record values.
+servers uptime inventory script using ssh 
+web servers access / error logs analysing script (per hour wise, min wise , sec wise concurrent hit count, top urls accessed, top ip list)
+based on disk usage (more than 80%) will delete the logs more than 90days.
+for production team requirement will create the shell script for the routine process
+echo -en "15 asdf\n5 asdfwe\n10 wer\n" | awk '{split($0,a); sum += a[1]} END {print sum}' -- SUM 1ST COLUMN
+
+
+muralikrishnan.b@indiaproperty.com
+raja.ganapathi@indiaproperty.com
+kuldeep.patel@indiaproperty.com
+sumithra.mathew@indiaproperty.com
+samidha.bansal@indiaproperty.com
+suresh.kumar@indiaproperty.com
+ramalingam.vaduganathan@indiaproperty.com
+gopi.d@indiaproperty.com
+yashwanth.ravikumar@indiaproperty.com
+jayaraj.s@indiaproperty.com
+anbarasi.arul@indiaproperty.com
+sathya.anand@indiaproperty.com
+vinodhini.parthasarathy@indiaproperty.com
+basheer.ahamed@indiaproperty.com
+
+
+stat -c%s ntp_restart.sh
+
+
+/usr/bin/rsync -aHAXxvp -E --progress -e "ssh -T -c arcfour -o Compression=no -x" <src> <dst>
+
+
+
+
+
+    int() - constructs an integer number from an integer literal, a float literal (by rounding down to the previous whole number) literal, or a string literal (providing the string 		    represents a whole number)
+    float() - constructs a float number from an integer literal, a float literal or a string literal (providing the string represents a float or an integer)
+    str() - constructs a string from a wide variety of data types, including strings, integer literals and float literals
+
+
+
+for i in {5..100..10} ; do echo $i ; sleep 1s ; done
+
+
+tree -Dfih | cut -d'[' -f2 |sed 's#^ ##g' | sort -h | tail
+
+
+
+dig -t txt  default._domainkey.findhouse.in +short -- dkim
+dig -t txt findhouse.in +short -- spf
+[root@mohan old]# dig -t txt  default._domainkey.findhouse.in +short
+"v=DKIM1\; r=postmaster\; g=*\; k=rsa\; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrvsjtt6VReS8t/Y8J63Cx5n+7eew6qFStNYd/2uQaO8g4GnxyQ1hVgxDwp8cjVE47kPPxgxsfBNwyIqN0MMB9Yy/IYDaUjcNUt9bwdu4QbCGfwnUcM3AWuNh4K6/9XvO5OTg0rW3+wWYfa+OQDDUo45nxXZmTLX4mP1XODPpoiQIDAQAB"
+
+
+min=12.95;val=12.85; echo "$min $val" | awk '{if ($1 < $2 ) print "val is greater"; else print "min is greater"}'
+
+
+#!/bin/bash
+min=12.45
+val=12.85    
+if (( ${val%%.*} < ${min%%.*} || ( ${val%%.*} == ${min%%.*} && ${val##*.} < ${min##*.} ) )) ; then    
+
+echo min is greater than val
+else
+echo val is greater than min
+
+#    min=$val
+fi
+echo $min
+min=12.95;val=12.85; echo "$min $val" | awk '{if ($1 > $2 ) print "min is greater"; if ($1 < $2 ) print "val is greater"}'
+
+v1=15.9999991;v2=15.9999992; if [ $(echo "$v1 > $v2" | bc)  -eq 0 ] ; then echo v1 is less; else echo v2 is less; fi
+
+export EMAIL=enquiry-update@findhouse.in && mutt -s "After Postfix Restart " munnamohanl20@gmail.com mohan.l@indiaproperty.com arunbabuji.rb@indiaproperty.com munnamohanl20@yahoo.com arun.babuji@gmail.com mohamed.azaruddin@indiaproperty.com  gopi.d@indiaproperty.com </dev/null
+
+Dear Team,
+
+Kindly whitelist the Public IP 52.66.24.251
+
+Regards,
+System Administrator
+
+export EMAIL=noreply@bounces.indiaproperty.com && mutt -s "remove 52.66.24.251 :x:e04cb308ad8bb76:x:" mohan.l@indiaproperty.com </tmp/mail
+
+
+
+ -rw-rw-r- permissions
+1 : number of linked hard-links
+lilo: owner of the file
+lilo: to which group this file belongs to
+0: size
+Feb 26 07:08 modification/creation date and time
+file1: file/directory name
+
+
+Dacamsys Biometric 1 Year AMC for Application and Device - Chennai, Bangalore, Hyderabad and Mumbai
+Rs. 37,000/- 
+AMC Ended on March 18
+Contact No: Ruthuraj 9600081284
+
+
+
+Convox 75nos of License (Affected Team - Noor Team {Inbound/Outbound}) - DB Authendication/ Predictive calls issues fixing/ Cache clearing in Application/ Customization (routine issues)
+1 Year Support/Maintenance, invoice shared to Finance
+Rs. 70,800/-
+AMC ended on Dec 18 
+Contact No: Faizan-8144180890 
+
+
+
+
+Octel Networks - EPABX (Hardware issues/Customization)
+ME - AMC Support (on-call support not possible)
+Rs. 85,106/-
+Contact No: Prasanna/Sridar/Ravi - 
+
+
+
+
+
+
+Media Agility - Rs. 129,800.00
+GApps 400 License 275 Unit Price
+Aayush Sharma +91-9650092410
+Ajay  Gupta +91-9650092410
+
+
+
+Skylark
+Rs. 37,170.00 + Rs. 37,170.00
+Total Rs. 74340
+VM Storage HDD Replacement 600GB SAS
+Raju - 9940409847
+
+
+Media Agility - Rs. 129,800.00 
+GApps 400 License 275 Unit Price
+Aayush Sharma +91-9650092410
+Ajay  Gupta +91-9650092410
+
+
+
+Skylark 
+Rs. 37,170.00 + Rs. 37,170.00
+Total Rs. 74340
+VM Storage HDD Replacement 600GB SAS
+Raju - 9940409847
+
+
+############################SPF RECORD SYNTAX############################
+
+[root@mohan ~]# dig @8.8.8.8 +short NS indiaproperty.com
+ns-1089.awsdns-08.org.
+ns-151.awsdns-18.com.
+ns-1750.awsdns-26.co.uk.
+ns-589.awsdns-09.net.
+
+[root@mohan ~]# dig indiaproperty.com NS +short
+ns-1089.awsdns-08.org.
+ns-151.awsdns-18.com.
+ns-1750.awsdns-26.co.uk.
+ns-589.awsdns-09.net.
+
+
+
+
+
+Components	Description
+TXT	The DNS zone record type; SPF records are written as TXT records
+@	In a DNS file, the "@" symbol is a placeholder used to represent "the current domain"
+v=spf1	Identifies the TXT record as an SPF record, utilizing SPF Version 1
+a	Authorizes the host(s) identified in the domain's A record(s) to send e-mail
+include:	Authorizes mail to be sent on behalf of the domain from google.com
+~all	Denotes that this list is all inclusive, and no other servers are allowed to send e-mail
+
+
+Mechanism	Description
+all	Matches all local and remote IPs and goes at the end of the SPF record. Example: "v=spf1 +all"
+ip4	Specifies a single IPv4 address or an acceptable IPv4 address range. A mask of /32 is assumed if no prefix-length is included. Example: "v=spf1 ip4:192.168.0.1/16 -all"
+ip6	Same concept found in ip4, but, obviously, with IPv6 addresses, instead. If no prefix-length is given, /128 is assumed (singling out an individual host address). Example: "v=spf1 ip6:1080::8:800:200C:417A/96 -all"
+a	Specifies all IPs in the DNS A record. Example: "v=spf1 a:domain.com -all"
+mx	Specifies all A records for each host's MX record. Example: "v=spf1 mx mx:domain.com -all"
+ptr	Specifies all A records for each host's PTR record. Example: "v=spf1 ptr:domain.com -all"
+exists	Specifies one or more domains normally singled out as exceptions to the SPF definitions. An A query is performed on the provided domain; if a result is found a match occurs. Example: "v=spf1 exists:domain.com -all"
+include	Specifies other domains that are authorized domains. Example: "v=spf1 include:outlook.microsoft.com -all"
+
+
+Qualifier	Description
++	Pass = The address passed the test; accept the message. Example: "v=spf1 +all"
+-	(Hard) Fail = The address failed the test; bounce any e-mail that does not comply. Example: "v=spf1 -all"
+~	Soft Fail = The address failed the test, but the result is not definitive; accept & tag any non-compliant mail. Example: "v=spf1 ~all"
+?	Neutral = The address did not pass or fail the test; do whatever (probably accept the mail). Example: "v=spf1 ?all"
+
+
+trackon courier - 4306025327
+
+
+#############DKIM SYNTAX###########
+DKIM-Signature: v=1; a=rsa-sha256; d=example.net; s=brisbane;
+     c=relaxed/simple; q=dns/txt; l=1234; t=1117574938; x=1118006938;
+     h=from:to:subject:date:keywords:keywords;
+     bh=MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI=;
+     b=dzdVyOfAKCdLXdJOc9G2q8LoXSlEniSbav+yuU4zGeeruD00lszZ
+              VoG4ZHRNiYzR
+
+
+    v is the version,
+    a is the signing algorithm,
+    d is the domain,
+    s is the selector,
+    c is the canonicalization algorithm(s) for header and body,
+    q is the default query method,
+    l is the length of the canonicalized part of the body that has been signed,
+    t is the signature timestamp,
+    x is its expire time, and
+    h is the list of signed header fields, repeated for fields that occur multiple times.
+
+
+https://app.dmarcanalyzer.com/dns/spf?simple=1   --spf checker
+https://www.mail-tester.com/spf-dkim-check --spf and dkim checker
+http://www.kitterman.com/spf/getspf2.py --will shows the spf errors
+
+[root@mohan ~]# dig -t txt  bounces.indiaproperty.com +short
+"google-site-verification=370Vjr7B4b8cigcCZRiGHtcyv-YALw0l34xn2ATJ-zM"
+"google-site-verification=uzx1ZhfYC7nL9FR46AhJULQBF74HsBSnCtMpnNaaVOs"
+"v=spf1 a mx ip4:35.154.73.36 ip4:52.66.24.251 ip4:52.66.113.47 ip4:115.111.183.12/30 ip4:125.16.2.178/32 a:msl1.indiaproperty.com include:ocmail.in ~all"
+
+
+[root@mohan ~]# dig -t txt  acl._domainkey.bounces.indiaproperty.com +short
+"k=rsa\; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJVeHt6JKPkLHa36TSYtVaZSYvFWWzITHZXjkIyg7SHZ3B6YI7hwg09kAtZbqYFDEBokEUx2lBK/rE/OAKHX7Wn4eLhkvD0apls1QZEj/0lEZt0JIt5QThQqQDj9DNEBktkP9lIynYtV99Lhf02la7Cex5HCHG5cHvS30e3chElQIDAQAB"
+
+
+[root@mohan ~]# dig -t txt  _dmarc.bounces.indiaproperty.com +short
+"v=DMARC1\; p=none"
+
+
+########################################
+
+tree -Dfi /home/indiaproperty/www/${file} | grep ".js" | grep "`date  "+%b %_d"`" | grep "`date  "+%R" -d "1 min ago"`"  >> /tmp/listoffilechanges.log
+
+
+
+
+Route 53 : indiaproperty.com --> bounces.indiaproperty.com
+################old configurations##############
+
+"v=spf1 a mx ip4:35.154.73.36 ip4:52.66.24.251 ip4:52.66.113.47 ip4:115.111.183.12/30 ip4:125.16.2.178/32 include:msl1.indiaproperty.com ~all"
+"google-site-verification=370Vjr7B4b8cigcCZRiGHtcyv-YALw0l34xn2ATJ-zM"
+
+
+####################################################
+changes need to done
+
+txt
+
+"v=spf1 a mx ip4:35.154.73.36 ip4:52.66.24.251 ip4:52.66.113.47 ip4:115.111.183.12/30 ip4:125.16.2.178/32 include:msl1.indiaproperty.com include:ocmail.in ~all"
+"google-site-verification=370Vjr7B4b8cigcCZRiGHtcyv-YALw0l34xn2ATJ-zM"
+
+
+acl._domainkey.bounces
+
+k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJVeHt6JKPkLHa36TSYtVaZSYvFWWzITHZXjkIyg7SHZ3B6YI7hwg09kAtZbqYFDEBokEUx2lBK/rE/OAKHX7Wn4eLhkvD0apls1QZEj/0lEZt0JIt5QThQqQDj9DNEBktkP9lIynYtV99Lhf02la7Cex5HCHG5cHvS30e3chElQIDAQAB
+
+
+
+#!/bin/bash
+
+cd /var/log/httpd/
+find . -type f -iname "*.gz" -mtime -7 -exec ls -1 {} \; > /tmp/7days_access_logs.txt
+
+for i in {1..3}; do echo `date +"%d-%b-%Y" -d "$i day ago"` -- `zcat $(grep .$i.gz /tmp/7days_access_logs.txt | xargs) | grep -ic "Googlebot"`;done > /tmp/`hostname`_googlebot.txt
+
+sed ':a;N;$!ba;s/\n/ /g' -- replace newline in same line
+
+
+
+flush tables; flush host; ---> for closed the active connections in mysql db
+
+show global status like '%com_select%';
+
+s3cmd --add-header='content-type':'application/javascript'
+
+SELECT *  FROM  mohan_svn_upload_list WHERE svn_repo REGEXP '^[0-9]+';
+
+a=5000;b=$(echo "($a/100)*2");c=$(echo "($b/100)*18"); echo "scale=2; $a+$b+$c" | bc -l
+
+
+
+Tata - TCL ILL 
+
+Jan,Feb,Mar - Payment done
+Apr,May,Jun - Payment done
+
+Jun - 1st - request for disconnect
+Jun - 30th will be disconnected.
+
+
+
+***May month Downtime details***
+May 04th - 11:30AM to 2:00PM - 2:30hrs
+May 08th - 04:30AM to 4:50AM - 20mins
+May 10th - 11:50AM to 1:50PM - 2hrs
+May 26th - 06:00AM to 8:00PM - 13hrs
+
+total 18hrs
+
+
+
+
+11 *2000 = 22000
+
+1*1500*11=16500
+85000
+
+9345484128 - krishna
+
+
+SSLCertificateFile /usr/local/apache2/conf/ssl.crt/indiaproperty.com.crt
+SSLCertificateKeyFile /usr/local/apache2/conf/ssl.key/indiaproperty.com.key
+
+[root@mohan ~]# dig -t txt oct._domainkey.indiaproperty.com +short
+"k=rsa\; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJkYGPvx3Vvn8gFvJfgmrrHDjeqqyOHzVrxe+NjWUZc5yd/zLF0RE9qoGMLDCXO7QZoxVxikflXcSv5H9LqbMRqdWieh0xn2M7pgWVIe/e5gvQThXDu164FJx1bAeuX5fJKm3W+LT8IooUgPPr1JGETIszCABya6W6WAkKvsaomQIDAQAB"
+
+[root@mohan ~]# dig -t txt _dmarc.indiaproperty.com +short
+"v=DMARC1\; p=none"
+
+[root@mohan ~]# dig -t txt indiaproperty.com +short
+"google-site-verification=9zBxYjT94llasBZYDi4VWChxOD_2Zpjh1oJ5of1KV5M"
+"google-site-verification=odAB1LSEW7_mq9tOL7rFHrD6--vIPqXTFm5mJcVDLUY"
+"ip4:14.141.138.182 ip4:include:email.freshdesk.com include:_spf.google.com include:ocmail.in ~all include:email.freshdesk.com include:_spf.google.com ~all"
+"v=spf1 ip4:35.154.73.36 ip4:52.66.24.251 ip4:52.66.113.47 ip4:115.111.183.12/30"
+
+
+
+
+##bounces.indiaproperty.com##
+dkim
+"k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDaizJFURZNtiOqidqRR2GpmuibBU2Ko4EFOifARuaAtImBA4qX+tDIMHtNxOj63jbEqrlL9pGz/zyg/o9q2RKrkIwp4JrwaXnyMULe+0XREifMLz20jZqTmPYKWYG4bXidt7ycYjvJpvMKrgpdpQs1F6JHYyxLPACQKWtEcRDYFwIDAQAB"
+
+spf
+"v=spf1 a mx ip4:35.154.73.36 ip4:52.66.24.251 ip4:52.66.113.47 ip4:115.111.183.12/30 ip4:125.16.2.178/32 a:msl1.indiaproperty.com include:ocmail.in ~all"
+"google-site-verification=370Vjr7B4b8cigcCZRiGHtcyv-YALw0l34xn2ATJ-zM"
+"google-site-verification=uzx1ZhfYC7nL9FR46AhJULQBF74HsBSnCtMpnNaaVOs"
+
+
+dmarc
+"v=DMARC1; p=none"
+-----------------------------------------------------------------------------------------------
+##indiaproperty.com##
+dkim
+oct._domainkey
+k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJkYGPvx3Vvn8gFvJfgmrrHDjeqqyOHzVrxe+NjWUZc5yd/zLF0RE9qoGMLDCXO7QZoxVxikflXcSv5H9LqbMRqdWieh0xn2M7pgWVIe/e5gvQThXDu164FJx1bAeuX5fJKm3W+LT8IooUgPPr1JGETIszCABya6W6WAkKvsaomQIDAQAB
+
+
+spf
+v=spf1 include:ocmail.in ~all
+
+dmarc
+v=DMARC1; p=none
+-----------------------------------------------------------------------------------------------
+
+dig -t txt _dmarc.bounces.indiaproperty.com +short
+"v=DMARC1\; p=none"
+
+dig -t txt _dmarc.indiaproperty.com +short
+-----------------------------------------------------------------------------------------------
+SPF
+before
+"v=spf1 ip4:35.154.73.36 ip4:52.66.24.251 ip4:52.66.113.47 ip4:115.111.183.12/30"
+"google-site-verification=9zBxYjT94llasBZYDi4VWChxOD_2Zpjh1oJ5of1KV5M"
+"ip4:14.141.138.182 ip4:include:email.freshdesk.com include:_spf.google.com ~all include:email.freshdesk.com include:_spf.google.com ~all"
+"google-site-verification=odAB1LSEW7_mq9tOL7rFHrD6--vIPqXTFm5mJcVDLUY"
+
+after
+"v=spf1 ip4:35.154.73.36 ip4:52.66.24.251 ip4:52.66.113.47 ip4:115.111.183.12/30"
+"google-site-verification=9zBxYjT94llasBZYDi4VWChxOD_2Zpjh1oJ5of1KV5M"
+"ip4:14.141.138.182 ip4:include:email.freshdesk.com include:_spf.google.com include:ocmail.in ~all include:email.freshdesk.com include:_spf.google.com ~all"
+"google-site-verification=odAB1LSEW7_mq9tOL7rFHrD6--vIPqXTFm5mJcVDLUY"
+-----------------------------------------------------------------------------------------------
+dmarc
+"v=DMARC1; p=none"
+-----------------------------------------------------------------------------------------------
+
+pls ask the question total record or any uniq key
+
+
+vijee78@yahoo.com
+
+
+	<mimeMap fileExtension=".eot" mimeType="application/vnd.ms-fontobject" />
+        <mimeMap fileExtension=".ttf" mimeType="application/octet-stream" />
+        <mimeMap fileExtension=".svg" mimeType="image/svg+xml" />
+        <mimeMap fileExtension=".woff" mimeType="application/font-woff" />
+        <mimeMap fileExtension=".woff2" mimeType="application/font-woff2" />
+
+
+openssl s_client -connect indiaproperty.com:443 
+Dglohith@2013
+
+cat test |grep mohan |  sed  's/rv[]=[]*[^*]*URE/ URE/'
+echo -n | openssl s_client -connect stackoverflow.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | openssl x509 -pubkey -noout
+
+#limit=8;start=0;end=24; for list in $(seq $start $limit $end); do mysql -uroot -pwin7doz -N -s -e "select sl_no from Mohan_DB.mohan_svn_upload_list limit $list,$limit" ; done
+
+mysql -uxx -pxx -e "select * from tablename where ID between 559 and 597\G" > master.txt;  
+mysql -uxxxx -pxx -hserver2 -e "select * from tablename where ID between 559 and 597\G" > slave.txt
+paste master.txt slave.txt | grep -v "\*\*" | awk '{$1=$1}1' | awk '{if($2!=$4) print $0 }' >> output.txt
+
+sdiff -s -w280
+
+IndiaProp@2015
+
+cd /usr/local/redis-2.8.19/src/
+./redis-cli  -p 6379 -a 36xouICp -h 10.72.178.33
+
+
+10.72.178.33:6379> CONFIG GET maxmemory
+1) "maxmemory"
+2) "7516192768"
+
+
+
+# Memory
+used_memory:709185520
+used_memory_human:676.33M
+used_memory_rss:779390976
+used_memory_peak:733983184
+used_memory_peak_human:699.98M
+
+
+redis spec in AWS (elastic cache)
+
+Type		CPU	RAM	Hourly cost	Montly Cost 	INR 
+cache.m4.large 	2 	6.42 	$0.220 		$161.04		Rs. 11,109.00
+
+
+Memory allocated in redis : 7GB 
+Max used memory : 2GB
+
+
+for msgid in `zless /var/log/maillog* | grep "sm@oxoniyabuilders.com" | awk -F ':'  '{print $4}'`; do zgrep $msgid /var/log/maillog* | grep "header Subject" ;echo -en "------------------------------------------------\n"; done
+
+sed  '$ s/,$/;/g' /tmp/gopi_lastline.txt
+
+
+echo -en "oohan, kmar,kjajasd,\noohan, kmar,kjajasd,\noohan, kmar,kjajasd,\noohan, kmar,kjajasdlast,\n" | sed  "1s/.*/insert into /;$ s/,$/;/g" 
+insert into 
+oohan, kmar,kjajasd,
+oohan, kmar,kjajasd,
+oohan, kmar,kjajasdlast;
+
+
+[Mohan@mohan script]$ cat /tmp/6464646464. | sed '1s#^\b#insert into #g;$s#,$#;#g'
+insert into 1oohan, kmar,kjajasd,
+2oohan, kmar,kjajasd,
+3oohan, kmar,kjajasd,
+4oohan, kmar,kjajasdlast;
+
+
+until [ -s /tmp/1234 ]; do ls -1 /home/karthik/Downloads/ | tail -1 | while read file; do mv /home/karthik/Downloads/* /home/babuji/doc/ ; done ; sleep 1s;done
+
+lsof +L1 -- to show the delete files 
+
+
+table.txt
+(12,11,76,0.13,NULL),
+(0,11,70,0.2,NULL),
+(0,11,87,1.03,NULL),
+(00,81,69,0.91,NULL),
+(0,181,69,0.353,NULL),
+(0,11,74,1.011,NULL),
+(40,1,65,1,NULL),
+
+cat table.txt | awk '{$1=$1}1'| sed 's# #,#g;s#^#(#g;s#$#),#g' | sed '1s#^#INSERT  IGNORE INTO tblname VALUES #g;$ s/,$/;/g' | sed '0~2 s#),#);\n INSERT  IGNORE INTO tblname VALUES \t #g' > ${file}.sql
+
+head -200 <filename> |  xargs -n 2 | sed 's# #,#g  --- 500 -- 500
+
+Google Apps
+total license - 400
+per license yearly - 1100
+per license quarterly - 275
+ending period - September 2018
+Total Cuncurrent license details till Aug 04 2018 is 327 nos
+
+
+total 22000+
+chennai 3500+
+
+new01 access log -- cat /var/log/httpd/api.indiaproperty.com.error.log /var/log/httpd/api.indiaproperty.com.error_ssl.log | cut -d ":" -f1,2 | cut -d " " -f4| sort | uniq -c 
+new01 error log -- cat /var/log/httpd/api.indiaproperty.com.access.log /var/log/httpd/api.indiaproperty.com.access_ssl.log | cut -d ":" -f2,3 | sort | uniq -c
+
+mysql> select count(1) as count,DATE_FORMAT(CREATE_TIME, "%Y-%m-%d") as date from TABLES group by DATE_FORMAT(CREATE_TIME, "%Y-%m-%d") order by date ;
++-------+------------+
+| count | date       |
++-------+------------+
+|   199 | NULL       |
+|    46 | 2016-01-27 |
+|    13 | 2016-03-15 |
+|    13 | 2016-06-17 |
+|     2 | 2016-08-26 |
+|    97 | 2017-03-13 |
+|     1 | 2017-05-21 |
+|     1 | 2017-05-31 |
+|     3 | 2017-06-16 |
+|     1 | 2018-03-14 |
+|     1 | 2018-04-03 |
+|     2 | 2018-04-06 |
+|     1 | 2018-05-11 |
+|     1 | 2018-05-14 |
+|     1 | 2018-05-26 |
+|     1 | 2018-06-19 |
+|     4 | 2018-06-27 |
+|     2 | 2018-06-29 |
+|     1 | 2018-07-24 |
+|    51 | 2018-08-30 |
++-------+------------+
+20 rows in set (0.31 sec)
+
+mysql> select count(1) as count,DATE_FORMAT(CREATE_TIME, "%Y-%m") as date from TABLES group by DATE_FORMAT(CREATE_TIME, "%Y-%m") order by date ; group by month and date
++-------+---------+
+| count | date    |
++-------+---------+
+|   199 | NULL    |
+|    46 | 2016-01 |
+|    13 | 2016-03 |
+|    13 | 2016-06 |
+|     2 | 2016-08 |
+|    97 | 2017-03 |
+|     2 | 2017-05 |
+|     3 | 2017-06 |
+|     1 | 2018-03 |
+|     3 | 2018-04 |
+|     3 | 2018-05 |
+|     7 | 2018-06 |
+|     1 | 2018-07 |
+|    51 | 2018-08 |
++-------+---------+
+14 rows in set (0.12 sec)
+
+
+
+
+awk '{$1=$1}1'| sed 's# #,#g;s#^#(#g;s#$#),#g' | sed '1s#^#INSERT  IGNORE INTO tblname VALUES #g;$ s/,$/;/g' | sed '0~2 s#),#);\n INSERT  IGNORE INTO tblname VALUES \t #g'
+
+mysql username password --triggers --routines --no-data --no-create-info dbname | sed -e 's/DEFINER[ ]*=[ ]*[^*]*\*/\*/' | sed -e 's/DEFINER[ ]*=[ ]*[^*]*PROCEDURE/PROCEDURE/' | sed -e 's/DEFINER[ ]*=[ ]*[^*]*FUNCTION/FUNCTION/'  > /data/filename.sql
+
+
+
+sed 's/\.[]*=[ ]*[^*]*Z//' ---> remove between characters
+
+
+[lamatri@MUMLIPFILE1V 03sep18_ip_elb_logs]$ cat 049664238862_elasticloadbalancing_ap-south-1_indiaproperty_20180903T2300Z_35.154.249.214_5ua8simx.log | awk '{if ($8 == 504) print $1" "$8" "$9}' | head -5 | sed 's/\.[]*=[ ]*[^*]*Z//'
+2018-09-03T22:02:09 504 0
+2018-09-03T22:07:04 504 0
+2018-09-03T22:06:24 504 0
+2018-09-03T22:09:24 504 0
+2018-09-03T22:09:37 504 0
+
+
+
+
+echo -en "Enter InTime : "
+read intime 
+string2="08:30"
+StartDate=$(date -u -d "$intime" +"%s")
+FinalDate=$(date -u -d "$string2" +"%s")
+echo -en "Output= `date -u -d "0 $FinalDate sec + $StartDate sec" +"%H:%M:%S"`\n\n"
+exit 0
+
+
+/.eot$
+/.svg$
+/.ttf$
+/.woff$
+/.woff2$
+
+
+ps -ef | grep "/root/bin/cache_free.sh" | grep -v grep >/dev/null && echo "working fine" || free -m | grep -E "Mem:|Swap:" | awk -vs="\`" -vd="\"" '{if ($3/($2/100) > 90) print "sh /root/bin/cache_free.sh;""mutt -s "d"Cache Clear done in "s"hostname"s" server -- at "s"date"s d" sedbm@indiaproperty.com </dev/null"}' | sh
+
+
+ntfsfix /dev/sdc1 -- check disk for pendrive
+Mounting volume... OK
+Processing of $MFT and $MFTMirr completed successfully.
+Checking the alternate boot sector... OK
+NTFS volume version is 1.2.
+NTFS partition /dev/sdc1 was processed successfully.
+
+
+
+ps -ef | grep "/root/bin/cache_free.sh" | grep -v grep >/dev/null && echo "working fine" || free -m | grep -E "Mem:|Swap:" | awk -vs="\`" -vd="\"" '{if ($3/($2/100) > 90) print "echo -en "d"\nBefore the Cache Clear\n"d" > /tmp/memory.txt ;""free -m >> /tmp/memory.txt ;""sh /root/bin/cache_free.sh;""echo -en "d"\nAfter the Cache Clear\n"d" >> /tmp/memory.txt ;""free -m >> /tmp/memory.txt;""mutt -s "d"Cache Clear done in "s"hostname"s" server -- at "s"date"s d" sedbm@indiaproperty.com </tmp/memory.txt"}' | sh
+
+
+
+for (i=0; i >= 200; i++) {db.kavi.insert({$i})};
+
+
+[root@kavitha tmp]# cat script.sh 
+i=1
+limit=25;
+start=0;
+end=$(echo "db.kavi.count()" | mongo -uuser4ip -pkavitha@123 192.168.4.108:27017/ipfeed --authenticationDatabase admin | grep -B1 bye| head -1)
+
+for count in $(seq $start $limit $end); do 
+
+###JSON format###
+mongoexport  -uuser4ip -pkavitha@123 --host 192.168.4.108 --port 27017  --authenticationDatabase admin --db ipfeed --collection kavi --skip $count --limit $limit --out export${i}.json
+
+###CSV format###
+mongoexport  -uuser4ip -pkavitha@123 --host 192.168.4.108 --port 27017  --authenticationDatabase admin --db ipfeed --collection kavi --skip $count --limit $limit --fields _id,name --type=csv --out export${i}.csv
+
+let i++
+
+done[root@mohan ~]# seq -f "%02g" 6
+01
+02
+03
+04
+05
+06
+
+
+cat data2.json | egrep "current_company|full_name|first_name|location|current_title"  | grep -v "full_name_hb_matched" |  cut -d":" -f2 | awk 'NR%6{printf "%s ",$0;next;}1'
+
+mysql> show global variables like 'general_log%';
++------------------+--------------------------+
+| Variable_name    | Value                    |
++------------------+--------------------------+
+| general_log      | OFF                      |
+| general_log_file | /var/lib/mysql/mohan.log |
++------------------+--------------------------+
+2 rows in set (0.00 sec)
+
+mysql> set global general_log=ON;
+Query OK, 0 rows affected (0.31 sec)
+
+mysql> 
+mysql> 
+mysql> 
+mysql> show global variables like 'general_log%';
++------------------+--------------------------+
+| Variable_name    | Value                    |
++------------------+--------------------------+
+| general_log      | ON                       |
+| general_log_file | /var/lib/mysql/mohan.log |
++------------------+--------------------------+
+2 rows in set (0.49 sec)
+
+
+#!/bin/bash
+ps -ef | grep "/root/bin/cache_free.sh" | grep -v grep >/dev/null && echo "working fine" || free -m | grep -E "Mem:" | awk -vs="\`" -vd="\"" '{if ($3/($2/100) > 90) print "echo -en "d"\nBefore the Cache Clear\n"d" > /tmp/memory.txt ;""free -m >> /tmp/memory.txt ;""sh /root/bin/cache_free.sh >> /tmp/memory.txt ;""echo -en "d"\nAfter the Cache Clear\n"d" >> /tmp/memory.txt ;""free -m >> /tmp/memory.txt;""mutt -s "d"Cache Clear done in "s"hostname"s" server -- at "s"date"s d" sedbm@indiaproperty.com </tmp/memory.txt"}' | sh
+
+
+IFS=$'\n'; for file in `ls -p1Q| grep -v /`; do folder=$(echo "$file" | cut -d '.' -f1 | cut -d '(' -f1 | sed 's# #_#g;s#$#"#g;s#""$#"#g');  if [ ! "${file}" == "${folder}" ]; then echo -en "mkdir $folder; mv $file $folder\n\n" | sh  ; fi; done
+
+
+s=54;i=53; for dt in {53..1}; do  query=$(echo "`date +"%Y-%m" -d "$i months ago"`-01"); echo "PARTITION PY`date +"%Y" -d "$s months ago"`M`date +"%m" -d "$s months ago"` VALUES LESS THAN (`mysql -uroot -pwin7doz -N -s -e "select to_days ('$query')" 2>/dev/null`) ENGINE = MyISAM,"; let i--;let s--; sleep 1s;done
+
+
+
+INSERT INTO destinationTable (SELECT * FROM sourceDbName.SourceTableName);
+
+
+[root@mohan ~]# s=54;i=53; for dt in {70..1}; do  query=$(echo "`date +"%Y-%m" -d "$i months ago"`-01"); echo "PARTITION PY`date +"%y" -d "$s months ago"`M`date +"%m" -d "$s months ago"` VALUES LESS THAN (`mysql -uroot -pwin7doz -N -s -e "select to_days ('$query')" 2>/dev/null`) ENGINE = MyISAM,"; let i--;let s--;done
+PARTITION PY14M03 VALUES LESS THAN (735689) ENGINE = MyISAM,
+PARTITION PY14M04 VALUES LESS THAN (735719) ENGINE = MyISAM,
+PARTITION PY14M05 VALUES LESS THAN (735750) ENGINE = MyISAM,
+PARTITION PY14M06 VALUES LESS THAN (735780) ENGINE = MyISAM,
+PARTITION PY14M07 VALUES LESS THAN (735811) ENGINE = MyISAM,
+PARTITION PY14M08 VALUES LESS THAN (735842) ENGINE = MyISAM,
+PARTITION PY14M09 VALUES LESS THAN (735872) ENGINE = MyISAM,
+PARTITION PY14M10 VALUES LESS THAN (735903) ENGINE = MyISAM,
+PARTITION PY14M11 VALUES LESS THAN (735933) ENGINE = MyISAM,
+PARTITION PY14M12 VALUES LESS THAN (735964) ENGINE = MyISAM,
+PARTITION PY15M01 VALUES LESS THAN (735995) ENGINE = MyISAM,
+PARTITION PY15M02 VALUES LESS THAN (736023) ENGINE = MyISAM,
+PARTITION PY15M03 VALUES LESS THAN (736054) ENGINE = MyISAM,
+PARTITION PY15M04 VALUES LESS THAN (736084) ENGINE = MyISAM,
+PARTITION PY15M05 VALUES LESS THAN (736115) ENGINE = MyISAM,
+PARTITION PY15M06 VALUES LESS THAN (736145) ENGINE = MyISAM,
+PARTITION PY15M07 VALUES LESS THAN (736176) ENGINE = MyISAM,
+PARTITION PY15M08 VALUES LESS THAN (736207) ENGINE = MyISAM,
+PARTITION PY15M09 VALUES LESS THAN (736237) ENGINE = MyISAM,
+PARTITION PY15M10 VALUES LESS THAN (736268) ENGINE = MyISAM,
+PARTITION PY15M11 VALUES LESS THAN (736298) ENGINE = MyISAM,
+PARTITION PY15M12 VALUES LESS THAN (736329) ENGINE = MyISAM,
+PARTITION PY16M01 VALUES LESS THAN (736360) ENGINE = MyISAM,
+PARTITION PY16M02 VALUES LESS THAN (736389) ENGINE = MyISAM,
+PARTITION PY16M03 VALUES LESS THAN (736420) ENGINE = MyISAM,
+PARTITION PY16M04 VALUES LESS THAN (736450) ENGINE = MyISAM,
+PARTITION PY16M05 VALUES LESS THAN (736481) ENGINE = MyISAM,
+PARTITION PY16M06 VALUES LESS THAN (736511) ENGINE = MyISAM,
+PARTITION PY16M07 VALUES LESS THAN (736542) ENGINE = MyISAM,
+PARTITION PY16M08 VALUES LESS THAN (736573) ENGINE = MyISAM,
+PARTITION PY16M09 VALUES LESS THAN (736603) ENGINE = MyISAM,
+PARTITION PY16M10 VALUES LESS THAN (736634) ENGINE = MyISAM,
+PARTITION PY16M11 VALUES LESS THAN (736664) ENGINE = MyISAM,
+PARTITION PY16M12 VALUES LESS THAN (736695) ENGINE = MyISAM,
+PARTITION PY17M01 VALUES LESS THAN (736726) ENGINE = MyISAM,
+PARTITION PY17M02 VALUES LESS THAN (736754) ENGINE = MyISAM,
+PARTITION PY17M03 VALUES LESS THAN (736785) ENGINE = MyISAM,
+PARTITION PY17M04 VALUES LESS THAN (736815) ENGINE = MyISAM,
+PARTITION PY17M05 VALUES LESS THAN (736846) ENGINE = MyISAM,
+PARTITION PY17M06 VALUES LESS THAN (736876) ENGINE = MyISAM,
+PARTITION PY17M07 VALUES LESS THAN (736907) ENGINE = MyISAM,
+PARTITION PY17M08 VALUES LESS THAN (736938) ENGINE = MyISAM,
+PARTITION PY17M09 VALUES LESS THAN (736968) ENGINE = MyISAM,
+PARTITION PY17M10 VALUES LESS THAN (736999) ENGINE = MyISAM,
+PARTITION PY17M11 VALUES LESS THAN (737029) ENGINE = MyISAM,
+PARTITION PY17M12 VALUES LESS THAN (737060) ENGINE = MyISAM,
+PARTITION PY18M01 VALUES LESS THAN (737091) ENGINE = MyISAM,
+PARTITION PY18M02 VALUES LESS THAN (737119) ENGINE = MyISAM,
+PARTITION PY18M03 VALUES LESS THAN (737150) ENGINE = MyISAM,
+PARTITION PY18M04 VALUES LESS THAN (737180) ENGINE = MyISAM,
+PARTITION PY18M05 VALUES LESS THAN (737211) ENGINE = MyISAM,
+PARTITION PY18M06 VALUES LESS THAN (737241) ENGINE = MyISAM,
+PARTITION PY18M07 VALUES LESS THAN (737272) ENGINE = MyISAM,
+PARTITION PY18M08 VALUES LESS THAN (737303) ENGINE = MyISAM,
+PARTITION PY18M09 VALUES LESS THAN (737333) ENGINE = MyISAM,
+PARTITION PY18M10 VALUES LESS THAN (737364) ENGINE = MyISAM,
+PARTITION PY18M11 VALUES LESS THAN (737394) ENGINE = MyISAM,
+PARTITION PY18M12 VALUES LESS THAN (737425) ENGINE = MyISAM,
+PARTITION PY19M01 VALUES LESS THAN (737456) ENGINE = MyISAM,
+PARTITION PY19M02 VALUES LESS THAN (737484) ENGINE = MyISAM,
+PARTITION PY19M03 VALUES LESS THAN (737515) ENGINE = MyISAM,
+PARTITION PY19M04 VALUES LESS THAN (737545) ENGINE = MyISAM,
+PARTITION PY19M05 VALUES LESS THAN (737576) ENGINE = MyISAM,
+PARTITION PY19M06 VALUES LESS THAN (737606) ENGINE = MyISAM,
+PARTITION PY19M07 VALUES LESS THAN (737637) ENGINE = MyISAM,
+PARTITION PY19M08 VALUES LESS THAN (737668) ENGINE = MyISAM,
+PARTITION PY19M09 VALUES LESS THAN (737698) ENGINE = MyISAM,
+PARTITION PY19M10 VALUES LESS THAN (737729) ENGINE = MyISAM,
+PARTITION PY19M11 VALUES LESS THAN (737759) ENGINE = MyISAM,
+PARTITION PY19M12 VALUES LESS THAN (737790) ENGINE = MyISAM,
+[root@mohan ~]# 
+
+
+s=1;i=2; for dt in {1..12}; do  query=$(echo "`date +"%Y-%m" -d "$i months "`-01"); echo "PARTITION PY`date +"%y" -d "$s months "`M`date +"%m" -d "$s months "` VALUES LESS THAN (`mysql -uroot -pwin7doz -N -s -e "select to_days ('$query')" 2>/dev/null`) ENGINE = MyISAM,"; let i++;let s++;done
+
+INSERT INTO destinationTable (SELECT * FROM sourceDbName.SourceTableName);
+
+cat /etc/os-release
+
+
+
+mysql> select Host, User from mysql.user WHERE Host REGEXP '203|108';
++---------------+---------+
+| Host          | User    |
++---------------+---------+
+| 192.168.4.108 | kavitha |
+| 192.168.4.108 | repuser |
+| 192.168.4.203 | cacti   |
++---------------+---------+
+3 rows in set (0.04 sec)
+
+mysql> select Host, User from mysql.user WHERE Host REGEXP ! '203|108';
++---------------+----------+
+| Host          | User     |
++---------------+----------+
+| 192.168.4.103 | rpl_user |
+| 192.168.4.105 | SURYA    |
+| 192.168.4.106 | babuji   |
+| 192.168.4.108 | kavitha  |
+| 192.168.4.108 | repuser  |
+| 192.168.4.203 | cacti    |
+| 192.168.4.206 | dbauser  |
+| 192.168.4.206 | rpl_user |
++---------------+----------+
+8 rows in set, 1 warning (0.06 sec)
+
+select CONCAT('SELECT COUNT(1) FROM ',TABLE_SCHEMA,'.',TABLE_NAME,' WHERE ', COLUMN_NAME, ' LIKE "qq.com";') from information_schema.COLUMNS where COLUMN_NAME like '%email%';
+
+select TABLE_SCHEMA as DB, TABLE_NAME, COLUMN_NAME as Field from information_schema.COLUMNS where TABLE_SCHEMA like 'iplisting' and COLUMN_NAME like '%email%' limit 100;
+
+select CONCAT('SELECT COUNT(1) FROM ',TABLE_SCHEMA,'.',TABLE_NAME,' WHERE ', COLUMN_NAME, ' LIKE "%qq.com";') from information_schema.COLUMNS where TABLE_SCHEMA like 'iplisting' and COLUMN_NAME like '%email%' limit 100;
+
+
+mysql -uroot -pwin7doz  -N -s -e "select CONCAT('mysql -uroot -pwin7doz -v -N -s -e \"SELECT COUNT(1) FROM ',TABLE_SCHEMA,'.',TABLE_NAME,' WHERE ', COLUMN_NAME, ' LIKE \'%qq.com\';\"') from information_schema.COLUMNS where COLUMN_NAME like '%email%';" | sh
+
+
+mysql -ubmdbadmin -pbmdbadmin  -N -s -e "select CONCAT('mysql -ubmdbadmin -pbmdbadmin -v -N -s -e \"SELECT COUNT(1) FROM ',TABLE_SCHEMA,'.',TABLE_NAME,' WHERE ', COLUMN_NAME, ' LIKE \'%qq.com\';\"') from information_schema.COLUMNS where COLUMN_NAME like '%email%';" | sh
+
+mysql -ubmdbadmin -pbmdbadmin  -N -s -e "select CONCAT('mysql -ubmdbadmin -pbmdbadmin -v -N -s -e \"SELECT COUNT(1) FROM ',TABLE_SCHEMA,'.',TABLE_NAME,' WHERE ', COLUMN_NAME, ' LIKE \'%@qq.com\';\"') from information_schema.COLUMNS where COLUMN_NAME like 'email' and TABLE_SCHEMA not in ('affiliatepromo','mysql','information_schema','performance_schema');" | sh
+
+##take dump in mysql for specific dbs##
+echo -en "Username : "; read user; echo -en "Password : "; read -s password; mysql -u${user} -p${password} -N -s -e "select CONCAT('mysqldump -u${user} -p${password} ',TABLE_SCHEMA,' ',TABLE_NAME,' > /tmp/',TABLE_SCHEMA,'_',TABLE_NAME,'.sql') from information_schema.TABLES where TABLE_SCHEMA in ("${db}");" | sh--> dump for entire db with all the tables.
+
+##select from table using between##
+limit=5;a=1;end=162; for b in $(seq $limit $limit $end); do mysql -uroot -pwin7doz -vv -e "select * from Mohan_DB.mohan_svn_upload_list where sl_no between $a and $b;";a=$(echo $a+$limit | bc); sleep 1s; done
+
+limit=5;a=1;end=162; for b in $(seq $limit $limit $end); do mysql -uroot -pwin7doz -vv -e "select * from Mohan_DB.mohan_svn_upload_list where sl_no between $a and $b;";a=$(echo $a+$limit | bc); sleep 1s; done 
+
+
+
+limit=5;a=1;end=162; for b in $(seq $limit $limit $end); do mysql -uuser -ppassword -N -s -e "select * from DB_Name.Table_Name where Field between $a and $b;";a=$(echo $a+$limit | bc); sleep 1s; done
+
+
+mkdir /data/`date +"%d%b%Y"`; find . -type f -mtime +30 -exec echo "zip -r {}.zip {};mv {}.zip /data/`date +"%d%b%Y"`/"  \; | sh 
+
+
+find . -iname "indiaproperty.com-access_log*" -mtime +30 -exec echo "zip -r {}.zip {};mv {}.zip /data/`date +"%d%b%Y"`/"  \;
+
+
+for i in {0..30}; do touch -d "`date -d "${i} days ago" +"%b %d %H:%M"`" http_access_log_`date -d "${i} days ago" +"%Y-%m-%d"`.csv; done
+for file in `ls -1 /var/www/html/cps/application/logs/Query-log-* | grep -vE ".gz|$(date -d "0 days ago" +"%Y-%m-%d")"`; do gzip $file ; done
+
+find /var/www/html/cps/application/logs/ -iname "Query-log-*" -mtime +30 -exec echo "rsync -azvPr --remove-source-files  {} user@192.168.x.x:/tmp/tmp/tmp/"  \; | sh
+
+
+ssh-copy-id "-p 8000 Mohan@192.168.4.206"
+
+
+rsync -avzrP -e "sshpass -p kavi9524688165 ssh" kavitha@192.168.4.108:/tmp/* /tmp/tmp/tmp/
+
+for code in 500 504 503 400 403 404 ; do echo -en "--- ${code} ---\n`cat */*/*.log  | awk -vc=${code} '{if ($8 == c) print $1" "$8" "$9}' | sed 's/\T[]*=[ ]*[^*]*Z//' | sort | uniq -c | awk '{$1=$1}1'`\n"; done
+
+
+
+[root@STGSLAVE01 ~]# simpana status
+--------------------------------- Instance001 ---------------------------------
+[ General ]
+ Version = 10(BUILD116) SP15
+ CommServe = 192.168.4.54
+ Home Directory = /opt/simpana/Base
+ Log Directory = /var/log/simpana/Log_Files
+ Core Directory = /opt/simpana
+ Temp Directory = /opt/simpana/Base/Temp
+ Platform Type = 4
+ Cvd Port Number = 8400
+ EvMgrC Port Number = 8402
+[ Package ]
+ 1002/CVGxBase 10(BUILD116) = File System Core
+ 1101/CVGxIDA 10(BUILD116) = File System
+ 1112/CVGxDC 10(BUILD116) = Data Classification Enabler
+  - Cache Root Directory = /opt/simpana/iDataAgent/jobResults/cvdccache
+ 1113/CVGxFSF 10(BUILD116) = File System Filter Driver
+[ Physical Machine/Cluster Groups ]
+ Display Name = STGSLAVE01
+  - Client Hostname = STGSLAVE01
+  - Job Results Directory = /opt/simpana/iDataAgent/jobResults
+ Display Name = STGSLAVE02
+  - Client Hostname = STGSLAVE02
+  - Job Results Directory = /opt/simpana/iDataAgent/jobResults
+[root@STGSLAVE01 ~]# simpana stop
+Stopping Simpana services for Instance001 ... 
+[root@STGSLAVE01 ~]# 
+[root@STGSLAVE01 ~]# 
+[root@STGSLAVE01 ~]# simpana start
+Cleaning up /opt/simpana/Base/Temp ... 
+Starting Simpana services for Instance001 ... 
+[root@STGSLAVE01 ~]# 
+[root@STGSLAVE01 ~]# 
+[root@STGSLAVE01 ~]# simpana status
+--------------------------------- Instance001 ---------------------------------
+[ General ]
+ Version = 10(BUILD116) SP15
+ CommServe = 192.168.4.54
+ Home Directory = /opt/simpana/Base
+ Log Directory = /var/log/simpana/Log_Files
+ Core Directory = /opt/simpana
+ Temp Directory = /opt/simpana/Base/Temp
+ Platform Type = 4
+ Cvd Port Number = 8400
+ EvMgrC Port Number = 8402
+[ Package ]
+ 1002/CVGxBase 10(BUILD116) = File System Core
+ 1101/CVGxIDA 10(BUILD116) = File System
+ 1112/CVGxDC 10(BUILD116) = Data Classification Enabler
+  - Cache Root Directory = /opt/simpana/iDataAgent/jobResults/cvdccache
+ 1113/CVGxFSF 10(BUILD116) = File System Filter Driver
+[ Physical Machine/Cluster Groups ]
+ Display Name = STGSLAVE01
+  - Client Hostname = STGSLAVE01
+  - Job Results Directory = /opt/simpana/iDataAgent/jobResults
+ Display Name = STGSLAVE02
+  - Client Hostname = STGSLAVE02
+  - Job Results Directory = /opt/simpana/iDataAgent/jobResults
+[root@STGSLAVE01 ~]# 
+
+
+---commvault service stop start--
+
+
+echo -en "Username : "; read user; echo -en "Password : "; read -s password; echo -en "\nDB Name : "; read db_raw;echo -en ""; db=$(echo $db_raw | sed "s/^/\'/g;s/$/\'/g;s/,/\',\'/g");mysql -u${user} -p${password} -N -s -e "select CONCAT('mysqldump -u${user} -p${password} ',TABLE_SCHEMA,' ',TABLE_NAME,' > /tmp/',TABLE_SCHEMA,'_',TABLE_NAME,'.sql') from information_schema.TABLES where TABLE_SCHEMA in ('${db}');" | sh
+
+
+rajesh printer : HP deskjet f4200
+
+
+select concat('show grants for ',User,'@',Host,';') from mysql.user where Host like '192.168.%' limit 60; --> mysql grants
+
+
+PS1="$ " ; export PS1
+X=5; expr $X+5 | bc
+10
+
+
+mysql> purge binary logs to 'mohan-bin.000049';
+Query OK, 0 rows affected (1.00 sec)
+
+mysql> show binary logs;
++------------------+-----------+
+| Log_name         | File_size |
++------------------+-----------+
+| mohan-bin.000049 |  29618855 |
+| mohan-bin.000050 |     11571 |
+| mohan-bin.000051 |     14423 |
+| mohan-bin.000052 |     57220 |
+| mohan-bin.000053 |     23266 |
+| mohan-bin.000054 |       281 |
+| mohan-bin.000055 |       262 |
+| mohan-bin.000056 |       281 |
+| mohan-bin.000057 |      5348 |
++------------------+-----------+
+9 rows in set (0.00 sec)
+
+mysql> 
+
+show grants for crmuser01@192.168.%.%;
+show grants for sella02012017@192.168.%.%;
+show grants for vignesh26112016@192.168.%.%;
+show grants for dslaveuser@192.168.1.22;
+show grants for matriservices@192.168.1.33;
+show grants for stguser@192.168.1.41;
+show grants for dwhip_designer@192.168.1.8;
+show grants for dwhipuser@192.168.1.8;
+show grants for rep_user@192.168.13.9;
+show grants for dwhip_designer@192.168.2.27;
+show grants for stguserip@192.168.2.27;
+show grants for stguser@192.168.2.35;
+show grants for stguserip@192.168.2.35;
+show grants for stguser@192.168.2.39;
+show grants for gmonitor@192.168.3.30;
+show grants for rep_user@192.168.3.46;
+show grants for rep_user@192.168.3.47;
+show grants for rep_user@192.168.3.48;
+show grants for stguserip@192.168.4.58;
+show grants for dwhipuser@192.168.4.68;
+show grants for ouser@192.168.4.68;
+show grants for rep_user@192.168.4.68;
+show grants for rep_usernewsetup@192.168.4.68;
+show grants for repuser@192.168.4.68;
+show grants for stguser@192.168.4.69;
+show grants for stguserip@192.168.4.69;
+show grants for dwhipuser@192.168.4.70;
+show grants for matriservices@192.168.4.70;
+show grants for rep_user@192.168.4.76;
+show grants for User4ip@192.168.4.80;
+show grants for testuser@192.168.4.80;
+show grants for stguserip@192.168.4.90;
+
+
+echo -en "Username : "; read user; echo -en "Password : "; read -s password;mysql -u${user} -p${password} -N -s -e "select concat('mysql -u${user} -p${password} -v -N -s -e',' \"show grants for ',User,'@',Host,';\"') from mysql.user where Host like '192.168.%';" | sh 2>/dev/null
+
+
+mutt -e ’set from=fromaddress@test.com realname=”Test User”’ -s ’subject’ -a file.pdf toaddress@test.com < body.txt
+
+[root@DWH-Onboarding ~]# mutt -e 'set from=sedbm@indiaproperty.com realname="Sedbm Team"' -s 'Test Mail from Mohan' sedbm@indiaproperty.com </dev/null
+
+
+a=1;b=2; until [ ${b} == 5 ]; do for domain in `cat /tmp/${a}`; do wget -o /dev/null https://www.whois.com/whois/${domain} ; cat /tmp/domain_output/${domain}* | grep "Domain Name:" -A30 | egrep  "^Registrar URL|^Registry Expiry Date:|^Registrar:|^Registrant " > /dev/null && echo -en "--------------$domain--------------\n`cat /tmp/domain_output/${domain}* | grep "Domain Name:" -A30 | egrep  "^Registrar URL|^Registry Expiry Date:|^Registrar:|^Registrant " `\n\n" >> /tmp/domains_details.txt || echo $domain >> /tmp/${b}; done; let a++; let b++;done
+
+
+
+
+i=1; for month in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec; do mysql -uroot -pwin7doz -N -s -e "select concat('mysql -uroot -pwin7doz -N -s -e \"','update Mohan_DB.kavitha_svn_upload_list set upload_time=','\'',upload_time,'\'',' where sl_no=',sl_no,'; \"') from Mohan_DB.kavitha_svn_upload_list where upload_time like '${month}%' " | sed "s/${month}/${i}/g" ; sleep 1s;let i++; done 2>/dev/null | sh
+
+mysql -uroot -pwin7doz -N -s -e "select sl_no,upload_time from Mohan_DB.kavitha_svn_upload_list;" | awk '{print "update Mohan_DB.kavitha_svn_upload_list set upload_time=\""$4"-"$2"-"$3" "$5"\" where sl_no="$1";"}' | sed 's#,##g' > update_query.sql
+
+mysql -uroot -pwin7doz Mohan_DB < update_query.sql
+
+
+alter table kavitha_svn_upload_list modify upload_time datetime;
+
+
+
+To:
+    MediaAgility India Pvt. Ltd.
+    43, Old Judicial Complex, Gurgaon,
+    Haryana - 122001
+    Tel: 011-30018086
+
+From:
+    Mohan Kumar
+    IndiaProperty Onlin Pvt. Ltd.
+    No. 10, Bristol IT Park, 7th Floor,
+    Guindy, Chennai - 600032
+    Ph - 9884994883
+
+
+
+
+
+gopi american express 3798 6829 1421 009
+
+7/23 
+
+1920
+
+[root@mohan ~]# echo -en "'mohan',\n'kavitha',\n'gopi',\n"
+'mohan',
+'kavitha',
+'gopi',
+[root@mohan ~]# echo -en "'mohan',\n'kavitha',\n'gopi',\n" | tr '\n' ' '
+'mohan', 'kavitha', 'gopi', [root@mohan ~]# 
+[root@mohan ~]# 
+[root@mohan ~]# echo -en "'mohan',\n'kavitha',\n'gopi',\n" 
+'mohan',
+'kavitha',
+'gopi',
+
+
+
+{
+  "Id": "Policy1542107678965",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1542107674262",
+      "Action": "s3:*",
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::test-indiaproperty/*",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::049664238862:user/sedbm"
+        ]
+      }
+    }
+  ]
+}
+
+
+
+mysql ((none)) > create user 'dev_team'@'192.168.4.%' identified by 'testing';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql ((none)) > grant all on tn_ec.* to 'root'@'192.168.4.%';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql ((none)) > show grants for 'root'@'192.168.4.%';
++-----------------------------------------------------------+
+| Grants for root@192.168.4.%                               |
++-----------------------------------------------------------+
+| GRANT USAGE ON *.* TO 'root'@'192.168.4.%'                |
+| GRANT ALL PRIVILEGES ON `tn_ec`.* TO 'root'@'192.168.4.%' |
++-----------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+mysql ((none)) > 
+
+mysql (tn_ec) > grant execute on PROCEDURE proc_dup_insrt to dev_team@'192.168.4.%';
+
+for endpoint in `cat /tmp/endpoint.txt`; do name=$(echo $endpoint | cut -d '-' -f1); ip=`dig $endpoint +short | xargs | sed 's# #\|#g'`;for domain in `cat /tmp/domains_list.txt`; do dig $domain +short | grep -E "$ip" > /dev/null  && echo $domain >> /tmp/domains_points/${name}.txt; done; done
+
+
+mount -t cifs --verbose  -o username=sysadmin,password=win7doz -o vers=1.0   //192.168.6.248/mail_backup/ /nas
+
+
+
+sar to analyse the load
+for sa in `ls -1 /var/log/sa/sa[0-9][0-9]`; do sar -f $sa -q | sort -k6 -nr | grep -v "ldavg-1"| awk '{if($5 > 2) print $0}' | grep "^[0-9]"  && sar -f $sa | head -1 ; done
+
+
+sphinx queries count
+[root@MUMLIPSPX3V log]# cd /usr/local/sphinx26/var/log
+[root@MUMLIPSPX3V log]# zcat query.log.2.gz | cut -d '[' -f4 | cut -d ']' -f1 | sort | uniq -c 
+     35 ipenquirylogexpiredindex ipenquirylogexpiredindexincr
+    681 ipenquirylogindex ipenquirylogindexincr
+   2229 iplistingalert
+    108 iplistingfacetindex_basic iplistingfacetindex_basicincr
+     26 iplistingindex
+  50164 iplistingindex_basic iplistingindex_basicincr
+  16482 iplistingindex iplistingindexincr
+    374 ipmemberinfoindex
+
+
+awk '{$8=$9=""; print $0}' --> exclude the awk column
+
+[lamatri@MUMLIPMAIL1V ~]$ for ip in `cat /tmp/liveservers_list.txt` ; do for i in 2 3 ; do ssh $ip "echo \`hostname\` - `df -h | grep "Used" | awk -vd=${i} '{print \$d}' | head -1` - \`df -P | grep -v "Used" | awk -vd=${i} '{print \$d}' | xargs | sed 's# #+#g' | bc | xargs echo \".00000095367431640625*\" | bc -l | cut -d '.' -f1 \`"; done; done
+MUMLIPSPX1V - Size - 399
+MUMLIPSPX1V - Used - 272
+MUMLIPSSOLR1V - Size - 109
+MUMLIPSSOLR1V - Used - 38
+MUMLIPWEB1V - Size - 143
+MUMLIPWEB1V - Used - 92
+MUMLIPMAIL1V - Size - 347
+MUMLIPMAIL1V - Used - 269
+MUMLIPWEB5V - Size - 284
+MUMLIPWEB5V - Used - 220
+MUMLIPWEB9V - Size - 174
+MUMLIPWEB9V - Used - 119
+MUMLIPWEB8V - Size - 174
+MUMLIPWEB8V - Used - 122
+MUMLIPWEB4V - Size - 223
+MUMLIPWEB4V - Used - 141
+MUMLIPSDB1V - Size - 465
+MUMLIPSDB1V - Used - 215
+MUMLIPSDB3V - Size - 392
+MUMLIPSDB3V - Used - 235
+MUMLIPFILE2V - Size - 540
+MUMLIPFILE2V - Used - 130
+MUMLIPNEW01V - Size - 690
+MUMLIPNEW01V - Used - 258
+MUMLIPMSOLRV - Size - 109
+MUMLIPMSOLRV - Used - 22
+MUMLIPWEB3V - Size - 123
+MUMLIPWEB3V - Used - 72
+MUMLIPWEB7V - Size - 172
+MUMLIPWEB7V - Used - 105
+MUMLIPDWH01V - Size - 147
+MUMLIPDWH01V - Used - 71
+MUMLIPSPX4V - Size - 362
+MUMLIPSPX4V - Used - 161
+MUMLIPNEW02V - Size - 690
+MUMLIPNEW02V - Used - 194
+MUMLIPSDB2V - Size - 236
+MUMLIPSDB2V - Used - 123
+MUMLIPSPX3V - Size - 362
+MUMLIPSPX3V - Used - 54
+MUMLIPMAIL4V - Size - 95
+MUMLIPMAIL4V - Used - 23
+MUMLIPMAIL2V - Size - 95
+MUMLIPMAIL2V - Used - 32
+MUMLIPMAIL5V - Size - 95
+MUMLIPMAIL5V - Used - 23
+MUMLIPSSOLR2V - Size - 109
+MUMLIPSSOLR2V - Used - 20
+MUMLIPSSOLR3V - Size - 109
+MUMLIPSSOLR3V - Used - 19
+MUMLIPFILE1V - Size - 544
+MUMLIPFILE1V - Used - 168
+PROPFINDER-WEB1 - Size - 171
+PROPFINDER-WEB1 - Used - 48
+PROPFINDER-WEB2 - Size - 171
+PROPFINDER-WEB2 - Used - 48
+MUMLIPMDB1V - Size - 203
+MUMLIPMDB1V - Used - 133
+MUMLIPMFEEDV - Size - 225
+MUMLIPMFEEDV - Used - 20
+MUMLIPSFEED1V - Size - 127
+MUMLIPSFEED1V - Used - 23
+
+
+
+[lamatri@MUMLIPMAIL1V ~]$ for ip in `cat /tmp/liveservers_list.txt` ; do ssh ${ip} "echo -e \"\`hostname\` - \`free -m | grep \"Mem:\" | awk '{print \"Total Mem - \"\$2\" Used Mem - \"\$3}'\`\"";  done
+MUMLIPSPX1V - Total Mem - 30570 Used Mem - 29332
+MUMLIPSSOLR1V - Total Mem - 15933 Used Mem - 15503
+MUMLIPWEB1V - Total Mem - 7360 Used Mem - 6018
+MUMLIPMAIL1V - Total Mem - 15933 Used Mem - 15639
+MUMLIPWEB5V - Total Mem - 30570 Used Mem - 24089
+MUMLIPWEB9V - Total Mem - 7360 Used Mem - 5757
+MUMLIPWEB8V - Total Mem - 7360 Used Mem - 5789
+MUMLIPWEB4V - Total Mem - 7360 Used Mem - 6339
+MUMLIPSDB1V - Total Mem - 15151 Used Mem - 14914
+MUMLIPSDB3V - Total Mem - 15933 Used Mem - 14732
+MUMLIPFILE2V - Total Mem - 7865 Used Mem - 7494
+MUMLIPNEW01V - Total Mem - 15933 Used Mem - 9499
+MUMLIPMSOLRV - Total Mem - 15933 Used Mem - 13140
+MUMLIPWEB3V - Total Mem - 3646 Used Mem - 3104
+MUMLIPWEB7V - Total Mem - 3646 Used Mem - 2803
+MUMLIPDWH01V - Total Mem - 7360 Used Mem - 7196
+MUMLIPSPX4V - Total Mem - 30570 Used Mem - 30410
+MUMLIPNEW02V - Total Mem - 15933 Used Mem - 8709
+MUMLIPSDB2V - Total Mem - 30570 Used Mem - 30381
+MUMLIPSPX3V - Total Mem - 30570 Used Mem - 28492
+MUMLIPMAIL4V - Total Mem - 3646 Used Mem - 3189
+MUMLIPMAIL2V - Total Mem - 3646 Used Mem - 3184
+MUMLIPMAIL5V - Total Mem - 3646 Used Mem - 3213
+MUMLIPSSOLR2V - Total Mem - 15933 Used Mem - 6652
+MUMLIPSSOLR3V - Total Mem - 15933 Used Mem - 6603
+MUMLIPFILE1V - Total Mem - 15933 Used Mem - 15268
+PROPFINDER-WEB1 - Total Mem - 1882 Used Mem - 1840
+PROPFINDER-WEB2 - Total Mem - 1882 Used Mem - 1436
+MUMLIPMDB1V - Total Mem - 30570 Used Mem - 30366
+MUMLIPMFEEDV - Total Mem - 7865 Used Mem - 7776
+MUMLIPSFEED1V - Total Mem - 7865 Used Mem - 1724
+
+
+
+to find the total cpu count
+[root@mohan sa]# grep -c processor /proc/cpuinfo
+4
+[root@mohan sa]# getconf _NPROCESSORS_ONLN
+4
+
+[lamatri@MUMLIPMAIL1V ~]$ for ip in `cat /tmp/liveservers_list.txt` ; do ssh $ip "echo -e \"\`hostname\` - \`grep -c processor /proc/cpuinfo\`\""; done
+MUMLIPSPX1V - 4
+MUMLIPSSOLR1V - 4
+MUMLIPWEB1V - 4
+MUMLIPMAIL1V - 4
+MUMLIPWEB5V - 4
+MUMLIPWEB9V - 4
+MUMLIPWEB8V - 4
+MUMLIPWEB4V - 4
+MUMLIPSDB1V - 2
+MUMLIPSDB3V - 4
+MUMLIPFILE2V - 2
+MUMLIPNEW01V - 4
+MUMLIPMSOLRV - 4
+MUMLIPWEB3V - 2
+MUMLIPWEB7V - 2
+MUMLIPDWH01V - 4
+MUMLIPSPX4V - 4
+MUMLIPNEW02V - 4
+MUMLIPSDB2V - 4
+MUMLIPSPX3V - 4
+MUMLIPMAIL4V - 2
+MUMLIPMAIL2V - 2
+MUMLIPMAIL5V - 2
+MUMLIPSSOLR2V - 4
+MUMLIPSSOLR3V - 4
+MUMLIPFILE1V - 4
+PROPFINDER-WEB1 - 1
+PROPFINDER-WEB2 - 1
+MUMLIPMDB1V - 4
+MUMLIPMFEEDV - 2
+MUMLIPSFEED1V - 2
+
+
+
+for ip in `cat /tmp/liveservers_list.txt` ; do ssh ${ip} "for sa in \`ls -1 /var/log/sa/sa[0-9][0-9]\`; do echo -e \"\`hostname\` - \`sar -f \$sa -q | sort -k6 -nr | grep -v \"ldavg-1\"| awk '{if(\$5 > 2) print \$0}' | grep \"^[0-9]\" | sort -k5 -n | tail -1 | awk '{\$3=\$4=\"\"; print \$0}'\` - \$sa\" ; done | grep \" AM \| PM \"| sort -k5 -n" ; done
+
+
+hostnamectl set-hostname your-new-hostname
+
+
+mongo -uraghu -p'Qu!kr@2019' sdb1-mysql-to-quikr-232821081064dd2c.elb.ap-south-1.amazonaws.com:27021/indiaproperty --authenticationDatabase admin
+mysql -uraghu -p'Qu!kr@2019' -hsdb1-mysql-to-quikr-232821081064dd2c.elb.ap-south-1.amazonaws.com
+
+create user 'raghu'@'182.71.193.3' identified by 'Qu!kr@2019';
+
+mysql -uraghu  -p'Qu!kr@2019' -h125.22.81.14
+
+
+create user 'raghu'@'182.71.193.1' identified by 'Qu!kr@2019';
+create user 'raghu'@'182.71.193.2' identified by 'Qu!kr@2019';
+create user 'raghu'@'115.110.236.40' identified by 'Qu!kr@2019';
+create user 'raghu'@'localhost' identified by 'Qu!kr@2019';
+grant all on *.* to 'raghu'@'115.110.236.42';
+grant all on *.* to 'raghu'@'115.110.236.40';
+grant all on *.* to 'raghu'@'182.71.193.2';
+grant all on *.* to 'raghu'@'182.71.193.1';
+
+
+'raghu'@'115.110.236.42';
+'raghu'@'115.110.236.40';
+'raghu'@'182.71.193.2';
+'raghu'@'182.71.193.1';
+
+
+create user 'raghu'@'localhost' identified by 'Qu!kr@2019';
+grant all on *.* to 'raghu'@'localhost' WITH GRANT OPTION;
+
+
+##find size of mysql tables##
+SELECT table_schema as `Database`, table_name AS `Table`, round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB`,TABLE_ROWS  FROM information_schema.TABLES where TABLE_SCHEMA='ipsearch_algo'; 
+
+##table count in mysql tables##
+select TABLE_SCHEMA,TABLE_NAME,TABLE_ROWS from TABLES WHERE TABLE_SCHEMA='support';
+
+##table count and table size in mysql##
+SELECT table_schema as `Database`, table_name AS `Table`, round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB`,TABLE_ROWS  FROM information_schema.TABLES where TABLE_SCHEMA='support';
+
+Atomicity, Consistency, Isolation, and Durability -- ACID properties
+
+
+mysql> show global variables like 'sql_mode'; 
++---------------+-------------------------------------------------------------------------------------------------------------------------------------------+
+| Variable_name | Value                                                                                                                                     |
++---------------+-------------------------------------------------------------------------------------------------------------------------------------------+
+| sql_mode      | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION |
++---------------+-------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.01 sec)
+
+mysql> 
+mysql> 
+mysql> 
+mysql> set global sql_mode="NO_UNSIGNED_SUBTRACTION,NO_ENGINE_SUBSTITUTION";
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+
+mysql> show global variables like 'sql_mode';
++---------------+------------------------------------------------+
+| Variable_name | Value                                          |
++---------------+------------------------------------------------+
+| sql_mode      | NO_UNSIGNED_SUBTRACTION,NO_ENGINE_SUBSTITUTION |
++---------------+------------------------------------------------+
+1 row in set (0.00 sec)
+
+
+select TRIGGER_SCHEMA,TRIGGER_NAME,EVENT_MANIPULATION,EVENT_OBJECT_TABLE,ACTION_STATEMENT from information_schema.TRIGGERS limit 10;
+select SPECIFIC_NAME,ROUTINE_SCHEMA,ROUTINE_NAME,ROUTINE_TYPE from information_schema.ROUTINES limit 10;
+
+mysqldump --routines --triggers --no-create-info --no-data --no-create-db --skip-opt dbname
+
+mongo -umongodba -pmongodba@123 --port 27017 --host 192.168.124.61 --authenticationDatabase admin
+
+##postfix version ##
+postconf -d mail_version
+
+
+##to remove the iptables prerouting and nat##
+iptables -t nat -D PREROUTING 1
+
+##smtp port change from 25 to 26##
+vi /etc/postfix/master.cf
+smtp      inet  n       -       n       -       -       smtpd
+26      inet  n       -       n       -       -       smtpd
+
+##postfix issue main.cf##
+restorecon -v /etc/postfix/main.cf
+
+
+[root@PROPFINDER-WEB2 ~]# cat /etc/sysconfig/network-scripts/routescript-eth1
+ip route add 10.72.178.0/24 dev eth1 proto kernel scope link src 10.72.178.84 table 1
+ip route add default via 10.72.178.1 dev eth1 table 1
+ip rule add from 10.72.178.84 lookup 1
+
+
+https://passbook.epfindia.gov.in/MemClaimStatusUAN/
+https://unifiedportal-mem.epfindia.gov.in/memberinterface/
+https://passbook.epfindia.gov.in/MemberPassBook/Login.jsp
+
+
+ip.com      -- TNMAS0085377000 -- 100797911119 -- 31700 -- ???? (23rd nov 2018)
+micropoint  -- MHBAN00462750000000376 -- 100568075242 -- 25985 (05-dec-2018) -- 10495 (28th-nov-2018)
+
+
+for lb in `cat /tmp/lb_list.txt`; do lb_ip=`dig $lb +short | xargs | sed 's# #|#g'`; for domains in `cat /tmp/subdomains_list.txt`; do dig $domains +short | egrep "$lb_ip" > /dev/null && echo $domains >> /tmp/domains_feb272019/$lb; done; done
+
+
+
+1. mail/drive backup
+2. tcl setup kt from kavitha
+3. mysql/mongo kt from kavitha - master/slave, dumps, queries, etc...
+4. installation kt from kavitha (api/web servers setup and its parameter)
+5. cache servers like solr,redis,sphinx, and others if any kt from kavitha
+6. tcl to aws migration kt from kavitha
+7. indimail/postfix basic things kt from kavitha
+8. gapps migration kt from kavitha
+9. any alerts scripts need to be take backups
+10. aws basic concepts with kavitha
+
+
+
+075301000058625
+075301000058625
+
+IFSC IOBA0000753
+Avudaiyarkoil branch
+16,700
+110
+
+
+rsync -azvPr -e "ssh -p 8000" *.sh Mohan@192.168.4.206:/home/Mohan/Documents/SEDBM_Team_Docs/live_scripts/web1/
+
+mongodump -uipsedbm -pipsedbm@123 --host 10.72.178.17 --port 27021 --authenticationDatabase admin --db indiaproperty --gzip --out /data/MongoDB_bkp/
+mongorestore -uipsedbm -pipsedbm@123 --host 10.72.178.17 --port 27021 --authenticationDatabase admin --db indiaproperty --gzip /data/MongoDB_bkp/
+cat meena-09oct2018.txt| mongo -usuperdba -pAzs@12345 10.72.178.25:27021/indiaproperty --authenticationDatabase admin > meena-09oct2018_output_afterupdate.txt
+
+intime="19:00"; outime=`date -d "${intime}:00 30600 secs" +"%H:%M"`; echo -en "intime - $intime\noutime - $outime\n"
+
+ ALTER USER 'ssn'@'192.168.0.102' IDENTIFIED WITH mysql_native_password BY 'ssn@123';
+
+
+mysql> create user anandn@192.168.0.133 identified with mysql_native_password by '1234';
+
+[bargavi@google ~]$ #rsync -azvPr  --exclude-from "/tmp/exclude" lamatri@118.185.82.36:/home/cmcrm2/ /tmp/tmp/tmp/
+[bargavi@google ~]$ 
+[bargavi@google ~]$ cat /tmp/exclude
+.cache
+.mozilla
+.local
+attachments
+attachments-07Jun2018
+bin
+*.sql*
+*.sh
+*.jpg
+*.jpeg
+
+
+[sakthi@ssnlocal ~]$ cat /tmp/7 | grep "INSERT" | sed '1s/^/<first line opening>/;$s/^/<last line opening>/'
+<first line opening>INSERT INTO
+INSERT INTO
+INSERT INTO
+<last line opening>INSERT INTO
+[sakthi@ssnlocal ~]$ cat /tmp/7 | grep "INSERT" | sed '1 i\qwerqlwe'
+qwerqlwe
+INSERT INTO
+INSERT INTO
+INSERT INTO
+INSERT INTO
+
+
+
+
+[anand@anand ~]$ echo -en "1 2   3 4 5   6 7     8 9 0\n11 12 13 14 15 16 17 18 19 20" | sed -re 's,\s+, ,g'|cut -d ' ' -f 7-
+7 8 9 0
+17 18 19 20
+
+[anand@anand ~]$ echo " 1 2 3 4 5 6 7 8 9 0" | awk '{ s = ""; for (i = 7; i <= NF; i++) s = s $i " "; print s }'
+7 8 9 0 
+[anand@anand ~]$ 
+
+
+mohanl@Mohan:~/Documents/Mohan_docs/SEDBM_Team_Docs/script$ echo "mohan-kumar-l-anand-narayanan" | cut -d '-' -f 2-
+kumar-l-anand-narayanan
+
+
+
+echo $@ | grep -o "[[:graph:]]*@[[:graph:]]*"
+
+
+dd if=/home/anand/Downloads/CentOS-7.5-x86_64-DVD-1804.iso of=/dev/sdc1 bs=4M
+
+
+Clear PageCache only. # sync; echo 1 > /proc/sys/vm/drop_caches.
+    Clear dentries and inodes. # sync; echo 2 > /proc/sys/vm/drop_caches.
+    Clear PageCache, dentries and inodes. # sync; echo 3 > /proc/sys/vm/drop_caches. ...
+    sync will flush the file system buffer.
+
+
+
+for i in `cat /tmp/servers_list.txt`; do ip=`echo $i | cut -d ":" -f1`; port=`echo $i | cut -d ":" -f2`;exclude=`echo $i | cut -d ":" -f3| sed 's#/#|^/#g;s#|^#\$|^#g;s#^\$|##g;s#^#\"#g;s#$#\"#g'`; echo  $exclude ; done
+
+
+
+echo -e "##################################################################" ;for ip in 95 102 ; do ssh 192.168.0.${ip} "hostname"; ssh 192.168.0.${ip} "df -hP | grep -v 'Avail' | sed 's/%//g' |awk -vd='\`' -vq='\"' '{if (\$5>20) {print \"echo \"q\"In \"d\"hostname\"d \" disk space used is \"\$5\"% on \" \$6\" --> Available Space : \"\$4q }}'  | sh" ; echo -e "##############################################################"; done
+##################################################################
+anand
+In anand disk space used is 38% on / --> Available Space : 16G
+In anand disk space used is 54% on /media --> Available Space : 33G
+In anand disk space used is 55% on /boot --> Available Space : 206M
+In anand disk space used is 37% on /home --> Available Space : 24G
+##############################################################
+localhost.localdomain
+In localhost.localdomain disk space used is 24% on /boot --> Available Space : 533M
+In localhost.localdomain disk space used is 24% on /data --> Available Space : 75G
+In localhost.localdomain disk space used is 28% on /home --> Available Space : 55G
+##############################################################
+
+echo -e "##################################################################" ;for i in `cat /tmp/servers_list.txt`; do ip=`echo $i | cut -d ":" -f1`; port=`echo $i | cut -d ":" -f2`;exclude=`echo $i | cut -d ":" -f3| sed 's#/#|^/#g;s#|^#\$|#g;s#^\$|##g;s#$#\$#g'`; ssh -p ${port} ${ip} "hostname"; ssh -p ${port} ${ip} "df -hP | grep -v Avail | egrep -v \"$exclude\" | sed \"s#%##g\" |awk -vd='\`' -vq='\"' '{if (\$5>20) {print \"echo \"q\"In \"d\"hostname\"d \" disk space used is \"\$5\"% on \" \$6\" --> Available Space : \"\$4q }}'  | sh" ; echo -e "##############################################################"; done
+
+disk space alert with thresold limit, server port, ip, and partition
+
+echo -e "##################################################################" ;for i in `cat /tmp/servers_list.txt`; do ip=`echo $i | cut -d ":" -f1`; port=`echo $i | cut -d ":" -f2`;exclude=`echo $i | cut -d ":" -f3| sed 's#/#|^/#g;s#|^#\$|#g;s#^\$|##g;s#$#\$#g'`;limit=`echo $i | cut -d ":" -f4`; ssh -p ${port} ${ip} "hostname"; ssh -p ${port} ${ip} "df -hP | grep -v Avail | egrep -v \"$exclude\" | sed \"s#%##g\" |awk -vd='\`' -vq='\"' -vl=${limit} '{if (\$5>l) {print \"echo \"q\"In \"d\"hostname\"d \" disk space used is \"\$5\"% on \" \$6\" --> Available Space : \"\$4q }}'  | sh" ; echo -e "##############################################################"; done
+
+
+[root@localhost test]# echo -e "one\ntwo\nthree\nfour\nfive" | awk 'NR==3'
+three
+
+
+mysql> SELECT count(LEFT(ScriptName , 1)),LEFT(ScriptName , 1) FROM tbl_datamove_conf group by LEFT(ScriptName , 1);
++-----------------------------+----------------------+
+| count(LEFT(ScriptName , 1)) | LEFT(ScriptName , 1) |
++-----------------------------+----------------------+
+|                           3 | D                    |
+|                          10 | C                    |
+|                           2 | N                    |
+|                           5 | P                    |
+|                           5 | B                    |
+|                           1 | K                    |
+|                           1 | H                    |
+|                           3 | R                    |
+|                           1 | O                    |
+|                           5 | M                    |
+|                           1 | a                    |
+|                           1 | I                    |
+|                           1 | G                    |
+|                           3 | T                    |
+|                           1 | E                    |
++-----------------------------+----------------------+
+15 rows in set (0.02 sec)
+
+
+[sakthi@ssnlocal ~]$ echo -e "_moha5n. kumar\nmari muthu" | grep -E "_[[:alnum:]]{6}\."
+_moha5n. kumar
+
+
+sshpass -p" " ssh -o StrictHostKeyChecking=no mohanl@192.168.0.88
+2>&1 std err to std output
+Using 2>&1 will redirect stderr to whatever value is set to stdout (and 1>&2 will do the opposite).
+
+##ping alert for every sec##
+
+#!/bin/bash
+
+while true ; do nc -w1 -z 172.16.0.107 22 > /dev/null ; if [ ! $? -eq 0 ] ; then if [ ! -s /tmp/ping_response.txt ] ; then start=`date +"%s"`;echo -e "Server not pining From Time - `date`\n" > /tmp/ping_response.txt; mutt -s "Critical - Testing IP-Sec down between MHS to COLO - `hostname`" mohankumar.loganathan@matrimony.com < /tmp/ping_response.txt; fi; elif [ -s /tmp/ping_response.txt ] ; then end=`date +"%s"`;echo -e "Server not pining End Time - `date`\n" >> /tmp/ping_response.txt; mv /tmp/ping_response.txt /tmp/ping_response.out ;fi
+
+if [ -s /tmp/ping_response.out ] ; then echo "Total Duration is `date -u -d "0 $end sec - $start sec" +"%H:%M:%S"`" >> /tmp/ping_response.out; mutt -s "Testing IP-Sec up between MHS to COLO - `hostname`" mohankumar.loganathan@matrimony.com < /tmp/ping_response.out; rm -f /tmp/ping_response.out; fi
+sleep 1s;
+done
+
+
+curdate()-interval 1 day
+
+mysql -uroot -proot@123 -N -s -e "select concat('update unica_dashbrd.unica_v9_wf_details set total_time_taken=(','SELECT TIMEDIFF(\'',endtime,'\',','\'',starttime,'\'))',' where workflow_name=\'',workflow_name,'\';') from unica_dashbrd.unica_v9_wf_details where date(starttime)=curdate()-1;" > /tmp/update_time.sql
+
+
+mysql -uroot -proot@123 -N -s -e "select concat('mysql -uroot -proot@123 -N -s -e \"','update unica_dashbrd.unica_v9_wf_details set total_time_taken=(','SELECT TIMEDIFF(\'',endtime,'\',','\'',starttime,'\'))',' where workflow_name=\'',workflow_name,'\';\"') from unica_dashbrd.unica_v9_wf_details where date(starttime)=curdate()-1 and total_time_taken is null limit 1;"
+
+echo @(*.jpg|*.mpg) | xargs mv -t test/
+echo !(*.jpg|*.mpg) | xargs mv -t test/
+
+for ssh slow login 
+vi /etc/ssh/sshd_config
+
+GSSAPIAuthentication no
+
+
+ubuntu dhcp issue in aws for secondary ip
+  27  ifconfig 
+   28  cp -ap /etc/netplan/50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml_bak
+   29  vi /etc/netplan/50-cloud-init.yaml
+   30  ifconfig -a
+   31  vi /etc/netplan/50-cloud-init.yaml
+   32  ifconfig 
+   33  netplan apply 
+   34  ifconfig 
+   35  history | tail
+root@ip-172-40-1-214:~# cat /etc/netplan/50-cloud-init.yaml
+# This file is generated from information provided by
+# the datasource.  Changes to it will not persist across an instance.
+# To disable cloud-init's network configuration capabilities, write a file
+# /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg with the following:
+# network: {config: disabled}
+network:
+    version: 2
+    ethernets:
+        ens3:
+            dhcp4: true
+            match:
+                macaddress: 0e:d3:b4:f0:b0:40
+            set-name: ens3
+        ens4:
+            dhcp4: true
+            match:
+                macaddress: 0e:40:e1:9b:83:b8
+            set-name: ens4
+
+
+[anand@anand ~]$ a=8; b=10; total=`expr $a+$b`; echo total-$total
+total-8+10
+[anand@anand ~]$ a=8; b=10; total=`expr $a + $b`; echo total-$total
+total-18
+[anand@anand ~]$ 
+
+
+DWH 2.0 status:
+--------------------------
+Batch ID : (1,2,4,5,10,11,12,13,14,15,16,17,21,22,23)
+Completed = 15
+Pending = 0
+
+
+[root@DWH2 ~]# mysqld_multi report
+Reporting MySQL servers
+MySQL server from group: mysqld1 is running
+MySQL server from group: mysqld2 is running
+MySQL server from group: mysqld3 is running
+
+top -b -n1 -c | head -17
+
+[manibharathi@localhost ~]$ sed -i '$s#$#\n30 01 * * * /bin/bash /root/bin/colo-daily-backup.sh 1>/tmp/rsync_colo.suc 2>/tmp/rsync_colo.err#' /tmp/6464
+[manibharathi@localhost ~]$ cat /tmp/6464
+asdf
+asdf
+asdf
+asd
+
+
+30 01 * * * /bin/bash /root/bin/colo-daily-backup.sh 1>/tmp/rsync_colo.suc 2>/tmp/rsync_colo.err30 01 * * * /bin/bash /root/bin/colo-daily-backup.sh 1>/tmp/rsync_colo.suc 2>/tmp/rsync_colo.err
+30 01 * * * /bin/bash /root/bin/colo-daily-backup.sh 1>/tmp/rsync_colo.suc 2>/tmp/rsync_colo.err
+30 01 * * * /bin/bash /root/bin/colo-daily-backup.sh 1>/tmp/rsync_colo.suc 2>/tmp/rsync_colo.err
+30 01 * * * /bin/bash /root/bin/colo-daily-backup.sh 1>/tmp/rsync_colo.suc 2>/tmp/rsync_colo.err
+
+
+
+for ip in 172.16.0.52; do ssh $ip "mt=\`df -hP | grep '/ColoBackup' | wc -l\`; if [ ! \$mt -eq 1 ] ; then if [ ! -d /ColoBackup ] ; then sudo mkdir /ColoBackup; fi ; sudo mount -t nfs 172.16.0.87:/data/ColoBackup /ColoBackup ;fi; sudo rsync -av /ColoBackup/colo-daily-backup.sh /root/bin/"; done
+
+
+for ip in sakthi@192.168.0.60;do ssh $ip "size=\`sudo du -s /var/spool/cron/root | awk '{print \$1}'\`; if [ \$size -gt 0 ]; then sudo cp -ap /var/spool/cron/root /var/spool/cron/root_bkp; sudo sudo sed -i '\$s,\$,\n#colo_daily_backup#\n30 01 * * * /bin/bash /root/bin/colo-daily-backup.sh 1>/tmp/rsync_colo.suc 2>/tmp/rsync_colo.err,' /var/spool/cron/root; else sudo sh -c 'echo \" \" >>  /var/spool/cron/root' ;sudo sudo sed -i '\$s,\$,\n#colo_daily_backup#\n30 01 * * * /bin/bash /root/bin/colo-daily-backup.sh 1>/tmp/rsync_colo.suc 2>/tmp/rsync_colo.err,' /var/spool/cron/root ; fi" ; done
+
+
+
+[manibharathi@localhost ~]$ cat /tmp/test.txt
+asdfas
+asdfasdfasdlfasdf
+asdfjqj
+lkasjg
+ajfljasdlfjalmohan
+shiva
+sjasljl;ads
+ajfljasdlfjalmohan
+
+[manibharathi@localhost ~]$ sed -i '/mohan/!d' /tmp/test.txt
+
+[manibharathi@localhost ~]$ cat /tmp/test.txt
+ajfljasdlfjalmohan
+ajfljasdlfjalmohan
+
+s=2; for i in {1..9}; do a=`date -d "$i day ago" +"%b %d"`;  b=`date -d "$s day ago" +"%b %d"`; let s++; sed -i "s#$a#$b#g" /tmp/unica_v11_uat_1am_wf_details; done
+
+
+[root@ssnlocal ~]# cat /tmp/1466 | sed -n -e '/<VirtualHost/,/<\/VirtualHost>/ p' 
+<VirtualHost *:80>
+ServerName sakthilocal.com
+DocumentRoot "/home/sakthi/httpd/"
+
+test
+
+</VirtualHost>
+
+
+RCol='\e[0m'    # Text Reset
+
+# Regular           Bold                Underline           High Intensity      BoldHigh Intens     Background          High Intensity Backgrounds
+Bla='\e[0;30m';     BBla='\e[1;30m';    UBla='\e[4;30m';    IBla='\e[0;90m';    BIBla='\e[1;90m';   On_Bla='\e[40m';    On_IBla='\e[0;100m';
+Red='\e[0;31m';     BRed='\e[1;31m';    URed='\e[4;31m';    IRed='\e[0;91m';    BIRed='\e[1;91m';   On_Red='\e[41m';    On_IRed='\e[0;101m';
+Gre='\e[0;32m';     BGre='\e[1;32m';    UGre='\e[4;32m';    IGre='\e[0;92m';    BIGre='\e[1;92m';   On_Gre='\e[42m';    On_IGre='\e[0;102m';
+Yel='\e[0;33m';     BYel='\e[1;33m';    UYel='\e[4;33m';    IYel='\e[0;93m';    BIYel='\e[1;93m';   On_Yel='\e[43m';    On_IYel='\e[0;103m';
+Blu='\e[0;34m';     BBlu='\e[1;34m';    UBlu='\e[4;34m';    IBlu='\e[0;94m';    BIBlu='\e[1;94m';   On_Blu='\e[44m';    On_IBlu='\e[0;104m';
+Pur='\e[0;35m';     BPur='\e[1;35m';    UPur='\e[4;35m';    IPur='\e[0;95m';    BIPur='\e[1;95m';   On_Pur='\e[45m';    On_IPur='\e[0;105m';
+Cya='\e[0;36m';     BCya='\e[1;36m';    UCya='\e[4;36m';    ICya='\e[0;96m';    BICya='\e[1;96m';   On_Cya='\e[46m';    On_ICya='\e[0;106m';
+Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    BIWhi='\e[1;97m';   On_Whi='\e[47m';    On_IWhi='\e[0;107m';
+
+
+https://superuser.com/questions/695170/changing-default-from-e-mail-address-for-system-accounts-when-using-sendmail
+
+files=`httpd -S 2>/dev/null | grep '(' | cut -d '(' -f2 | cut -d ':' -f1 | sort | uniq | xargs echo cat` ; IFS=$'\n'; for servername in `echo $files | sh | egrep -v "^$|#" | grep "ServerName"` ; do htpass=`echo $files | sh | egrep -v "^$|#" |grep -w -A5000 $servername | egrep '</VirtualHost>|/.htpasswd' | head -1`; echo $htpass | grep '</VirtualHost>' >/dev/null; nohtpass=$? ;if [ ! $nohtpass -eq 0 ]; then echo $servername $htpass; else echo no htpass for $servername; fi ;done
+
+for ip in 172.29.23.212; do ssh $ip "files=\`/sbin/httpd -S 2>/dev/null | grep '(' | cut -d '(' -f2 | cut -d ':' -f1 | sort | uniq | xargs echo cat\` ; IFS=\$'\n'; for servername in \`echo \$files | sh | egrep -v '^$|#' | grep 'ServerName'\` ; do htpass=\`echo \$files | sh | egrep -v '^$|#' |grep -w -A5000 \$servername | egrep '</VirtualHost>|/.htpasswd' | grep -v '#' | head -1\`; echo \$htpass | grep '</VirtualHost>' >/dev/null; nohtpass=\$? ;if [ ! \$nohtpass -eq 0 ]; then echo \$servername \$htpass; else echo no htpass for \$servername; fi ;done" ; done
+
+
+[root@localhost ~]# cat /tmp/sedtest.txt | sed '$ a TraceEnable off'
+one
+two
+three
+four
+
+asdf
+asdtr
+wh
+
+
+asdf
+TraceEnable off
+
+
+##awk will redirect to file##
+cat ../test | awk '{print $1 >> $2}  {print NR}'
+
+
+[dhinesh@dhineshlocal dhineshtest]$ cat log1 | awk -v f=1 -v t=6 '{if($6 ~ "/") for(i=f;i<=t;i++) printf("%s%s",$i,(i==t)?"\n":OFS); else print "test"}'
+one / two / three /
+test
+[dhinesh@dhineshlocal dhineshtest]$ cat log1
+one / two / three / four / five / six / seven / eight
+one / two / three four / five / six / seven / eight
+
+
+The tar command offers gzip support (via the -z flag) purely for your convenience. The gzip command/lib is completely separate. The command above is effectively the same as
+
+tar -cv directory | gzip > archive.tar.gz
+tar -czf 20Aug19.tar.gz 20Aug19/
+
+To decompress and unpack the archive into the current directory you would use
+
+tar -zxvf archive.tar.gz
+
+
+
+touch -d "2019-09-04 15:37:58" mani_test_file.txt
+find . -type f -newermt '2019-09-04' ! -newermt '2019-09-05' -exec ls -ltrhd {} \;
+
+[anand@anand Desktop]$ ll -trh mani_test_file.txt*
+-rw-rw-r--. 1 anand anand 0 Sep  2 15:37 mani_test_file.txt
+-rw-rw-r--. 1 anand anand 0 Sep  3 15:37 mani_test_file.txt1
+-rw-rw-r--. 1 anand anand 0 Sep  4 15:37 mani_test_file.txt2
+-rw-rw-r--. 1 anand anand 0 Sep  5 15:37 mani_test_file.txt3
+[anand@anand Desktop]$ find . -type f -newermt '2019-09-04' ! -newermt '2019-09-05' -daystart -exec ls -ltrhd {} \;
+-rw-rw-r--. 1 anand anand 0 Sep  4 15:37 ./mani_test_file.txt2
+
+
+#icinca_key=`cat ~/.ssh/id_rsa.pub`; /usr/bin/sshpass -p "V@nakk@Ma2z" ssh -o StrictHostKeyChecking=no 192.168.30.104 "if [ ! -f /home/lamatri/.ssh/authorized_keys ];then exit 1; else exit 0; fi" && /usr/bin/sshpass -p "V@nakk@Ma2z" ssh -o StrictHostKeyChecking=no 192.168.30.104 "grep \"$icinca_key\" /home/lamatri/.ssh/authorized_keys || echo \"$icinca_key\" >> /home/lamatri/.ssh/authorized_keys" || /usr/bin/sshpass -p "V@nakk@Ma2z" ssh-copy-id 192.168.30.104
+
+
+##new with for loop for ssh copy id##
+icinca_key=`cat ~/.ssh/id_rsa.pub`; for ip in `cat /tmp/servers.txt_org | cut -d '-' -f1`; do /usr/bin/sshpass -p "V@nakk@Ma2z" ssh -o StrictHostKeyChecking=no ${ip} "if [ ! -f /home/lamatri/.ssh/authorized_keys ];then exit 1; else exit 0; fi" && /usr/bin/sshpass -p "V@nakk@Ma2z" ssh -o StrictHostKeyChecking=no ${ip} "grep \"$icinca_key\" /home/lamatri/.ssh/authorized_keys >/dev/null || echo \"$icinca_key\" >> /home/lamatri/.ssh/authorized_keys" || /usr/bin/sshpass -p "V@nakk@Ma2z" ssh-copy-id ${ip} ; done
+
+##to get the active linux ips in the segment##
+for segments in 20 30 40; do fping -g 192.168.${segments}.0/24 -c 1 2>/dev/null | awk '{print $1}' > /tmp/${segments}_segment.txt ; for ip in `cat /tmp/${segments}_segment.txt`; do nc -w1 -z $ip 22 && echo $ip; done > /tmp/${segments}_segment_linux.txt ; done ; ls -ltrh /tmp/*_segment_linux.txt
+
+##add plus in words before or after
+[anand@anand ~]$ echo "mohan sakthi kumar" | sed -r  's/[ $]+/&+/g'
+mohan +sakthi +kumar
+[anand@anand ~]$ echo "mohan sakthi kumar" | sed -r  's/[ $]+/+&+/g'
+mohan+ +sakthi+ +kumar
+
+
+
+(echo >/dev/tcp/192.168.0.114/28) >/dev/null 2>&1 && echo "port open" || echo "port not opening"
+
+for ip in `cat /etc/servers.txt | egrep -i "CBSWEB|CBSIMG|CBSMAILER|CY2B|MAILER[2,3,5]" | grep -v "#" | cut -d '-' -f2`; do hname=`ssh ${ip} "hostname"` ; echo $hname ; ssh ${ip} "sudo cat /var/spool/cron/community | egrep -v '^$|^#'" > /tmp/223008/${hname} ; done
