@@ -3917,3 +3917,6 @@ mohan+ +sakthi+ +kumar
 (echo >/dev/tcp/192.168.0.114/28) >/dev/null 2>&1 && echo "port open" || echo "port not opening"
 
 for ip in `cat /etc/servers.txt | egrep -i "CBSWEB|CBSIMG|CBSMAILER|CY2B|MAILER[2,3,5]" | grep -v "#" | cut -d '-' -f2`; do hname=`ssh ${ip} "hostname"` ; echo $hname ; ssh ${ip} "sudo cat /var/spool/cron/community | egrep -v '^$|^#'" > /tmp/223008/${hname} ; done
+
+
+hi
