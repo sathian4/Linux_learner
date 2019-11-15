@@ -1,7 +1,22 @@
+
+Git local Setup with ssh passwordless push:
+=============================================
+git clone git@github.com:sathian4/Linux_learner.git  ##login ur repository in github page and copy the clone url
+generate ssh key and add your local machine key in the github setting ssh and gpg keys
+test your connection with ssh -T git@github.com
+ssh -T git@github.com
+Hi sathian4! You've successfully authenticated, but GitHub does not provide shell access.
+git config --global user.name "sathian4"
+git config --global user.email "sathian4@gmail.com"
+git config --list
+
+
+General git commands:
+====================
 git add ; 
 git commit -m message; 
 git push origin <branch>; 
 git checkout <branch> ;
 git checkout -b <new_branch_name>; 
 git push -u origin <newly created branch name> ;
-git -T <ssh id> ; git pull ;
+ssh -T <ssh id> ; git pull ;
