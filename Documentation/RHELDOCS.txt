@@ -1,0 +1,34 @@
+###LINUX USERS AND GROUPS###
+/etc/passwd 
+/etc/shadow
+/etc/group
+/var/log/secure used to parse log about logins
+/etc/logins.defs -->defauts will be changed here. Current users values will not be affected.
+
+UID 0 root
+UID 1--200 system users
+UID 201 --999 system users dont access with filesystem
+UID 1000+ regular users
+
+USERMOD:
+=======
+-c --->comment
+sudo usermod ssn -c "SSN"
+getent passwd | grep -i ssn
+ssn:x:1001:1001:SSN:/home/ssn:/bin/bash
+-g --> group id
+-G --> groups
+-a --> append.. will be used with -aG to append supplementary groups
+#dd if=sample.txt of=sample.txt bs=500M count=4
+-s --> shell
+-L --> lock a user account
+-U --> unlock user account`
+-m --> move_home
+-d --> home_directory
+
+How to change users login name, group and home directory of a particular user?
+change login name: usermod -l sakthinew ssn
+change group name: groupmod -n sakthinew ssn
+move home directory files: usermod -m -d /home/sakthinew ssn
+
+
