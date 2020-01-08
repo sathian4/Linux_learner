@@ -1,0 +1,5 @@
+#!/bin/bash
+
+> /tmp/morning_ppt.txt
+curl -s http://192.168.20.220/dashboard/dwh2dashboard.php -o /tmp/morning_ppt.txt
+>/tmp/batchid.txt ;> /tmp/pending.txt; a=0;b=0;for bid in  1 2 4 5 10 11 12 13 14 15 16 17 21 22 23 25 26 32 33 61 ; do actcnt=`cat  /tmp/morning_ppt.txt  | sed -n -e "/etlprocess.php?Scriptid=${bid}\//,/<\/tr>/ p" | awk -F '<td class="' '{print $2}' | cut -d '"' -f1 | grep -v "^$" | wc -l`; curcnt=`cat  /tmp/morning_ppt.txt  | sed -n -e "/etlprocess.php?Scriptid=${bid}\//,/<\/tr>/ p" | awk -F '<td class="' '{print $2}' | cut -d '"' -f1 | grep -v "^$" | grep "Finished" | wc -l` ; if [ $actcnt -eq $curcnt ]; then let a++; else let b++; echo $bid >> /tmp/pending.txt; fi; echo $bid >> /tmp/batchid.txt ; done ; echo -e "`date`\n\nDWH 2.0 status:\n----------------------------"; cat /tmp/batchid.txt | xargs | sed "s# #,#g;s#^#Batch ID : (#g;s#\$#)#g"; echo  "Completed = $a"; if [ -s /tmp/pending.txt ]; then cat /tmp/pending.txt | xargs | sed "s# #,#g;s#^#Pending = $b (#g;s#\$#)#g";else echo "Pending = 0" ;fi 

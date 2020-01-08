@@ -181,13 +181,13 @@ done
 for workflow_name in `MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "select workflow_name from ${table}_details where status in ('completed','running','long_running','run_failed','inactive') and period='$period' and date(executedate)=curdate();"`; do
 
 suc_trigger="`MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "select successfull_trigger from workflow_trigger_dtls where workflow_name='$workflow_name' and period='$period' and active=1 and type='$types'"`"
-#echo $suc_trigger suc_trigger
+echo $suc_trigger suc_trigger
 suc_trigger_cnt=`MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "select count(1) from ${table}_details where workflow_name='$suc_trigger' and status not in ('completed','inactive') and date(executedate)=curdate() and period='$period'"`
-#echo suc_trigger_cnt $suc_trigger_cnt
+echo suc_trigger_cnt $suc_trigger_cnt
 active_suc_trigger_cnt=`MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "select count(1) from ${table}_details where workflow_name='$suc_trigger' and date(executedate)=curdate() and period='$period'"`
-#echo active_suc_trigger_cnt $active_suc_trigger_cnt
+echo active_suc_trigger_cnt $active_suc_trigger_cnt
 if [ $suc_trigger_cnt -eq 1 ] && [ $active_suc_trigger_cnt -eq 1 ] ; then 
-MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "update ${table}_details set status='trigger_not_completed',success_trigger='$suc_trigger' where workflow_name='$workflow_name' and date(executedate)=curdate() and period='$period'"
+MYSQL_PWD=root@123 mysql -uroot -vvvv -N -s unica_dashbrd -e "update ${table}_details set status='trigger_not_completed',success_trigger='$suc_trigger' where workflow_name='$workflow_name' and date(executedate)=curdate() and period='$period'"
 
 fi
 
@@ -266,11 +266,10 @@ done
 ##trigger_not_completed##
 for workflow_name in `MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "select workflow_name from ${table}_details where status in ('trigger_not_completed') and date(executedate)=curdate() and period='$period'"`; do
 
-suc_trigger="`MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "select success_trigger from ${table}_details where status in ('trigger_not_completed') and date(executedate)=curdate() and period='$period' and workflow_name='$workflow_name'"`"
 
 trigger_not_completed_status_cnt=`MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "select count(1) from unica_alert where date(executedate)=curdate() and workflow_name='$workflow_name' and period='$period' and status=4 and unica_type='$types' and version='$version' and alert_now=1"`
 
-if [ $trigger_not_completed_status_cnt -eq 0 ]; then MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "insert into unica_alert (workflow_name,period,severity,starttime,endtime,status,executedate,unica_type,version,alert_now,remarks) values ('$workflow_name','$period',1,now(),now(),4,curdate(),'$types','$version',1,'$suc_trigger');"
+if [ $trigger_not_completed_status_cnt -eq 0 ]; then MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "insert into unica_alert (workflow_name,period,severity,starttime,endtime,status,executedate,unica_type,version,alert_now) values ('$workflow_name','$period',1,now(),now(),4,curdate(),'$types','$version',1);"
 
 else
 
@@ -278,7 +277,7 @@ trigger_not_completed_severity="`MYSQL_PWD=root@123 mysql -uroot -N -s unica_das
 
 trigger_not_completed_severity=$((${trigger_not_completed_severity}+1))
 
-MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "update unica_alert set severity=$trigger_not_completed_severity,endtime=now(),remarks='$suc_trigger' where date(executedate)=curdate() and workflow_name='$workflow_name' and period='$period' and status=4 and version='$version' and unica_type='$types' and alert_now=1"
+MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "update unica_alert set severity=$trigger_not_completed_severity,endtime=now() where date(executedate)=curdate() and workflow_name='$workflow_name' and period='$period' and status=4 and version='$version' and unica_type='$types' and alert_now=1"
 
 fi
 
@@ -286,13 +285,16 @@ done
 
 
 
-##status update for (long_running, not_yet_started, run_failed and trigger_not_completed) to completed##
+##status update for (long_running, not_yet_started and run_failed) to completed##
 
-where_cond=`MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "select workflow_name from ${table}_details where status not in ('long_running','run_failed','not_yet_started','trigger_not_completed') and date(executedate)=curdate() and period='$period'" | xargs`
+where_cond=`MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "select workflow_name from ${table}_details where status not in ('long_running','run_failed','not_yet_started') and date(executedate)=curdate() and period='$period'" | xargs`
 
 where_clause=`echo $where_cond | sed "s# #','#g;s#^#('#g" | sed "s/\$/')/g"`
 
-MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "update unica_alert set alert_now=0 where date(executedate)=curdate() and workflow_name in $where_clause and status in (1,2,3,4) and version='$version' and unica_type='$types' and alert_now=1"
+MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "update unica_alert set alert_now=0 where date(executedate)=curdate() and workflow_name in $where_clause and status in (1,2,3) and version='$version' and unica_type='$types' and alert_now=1"
+
+
+
 
 
 
@@ -301,8 +303,7 @@ count=`MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "SELECT COUNT(1) F
 cntupdate=`MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "SELECT COUNT(1) FROM last_updated_time where period='$period' AND unica_type='$types' and version='$version' and date(last_update_time)=curdate() and status='completed'"`
 if [ $count -ge 1 ] ; then
 if [ $cntupdate -eq 0 ]; then
-unica_start_time="`MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "select min(starttime) from ${table}_details where date(executedate)=curdate() and period='$period'"`"
-MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "update last_updated_time set last_update_time=now(),unica_start_time='$unica_start_time' where period='$period' AND unica_type='$types' and version='$version' and date(informatica_time)=curdate() and informatica_status='completed'"; fi
+MYSQL_PWD=root@123 mysql -uroot -N -s unica_dashbrd -e "update last_updated_time set last_update_time=now() where period='$period' AND unica_type='$types' and version='$version' and date(informatica_time)=curdate() and informatica_status='completed'"; fi
 fi 
 if [ $secondval -eq 1 ] && [ $count -ge 1 ] ; then 
 if [ $cntupdate -eq 0 ] ; then 

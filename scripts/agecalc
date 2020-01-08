@@ -8,10 +8,8 @@ if [[ ! ${pd} =~ [0-9]+-[0-9]+-[0-9]+ ]]; then echo -e "\e[41m Please Enter the 
 
 birthyr=$(echo ${pd} | cut -d '-' -f1)
 birthmon=$(echo ${pd} | cut -d '-' -f2)
-birthdate=$(echo ${pd} | cut -d '-' -f3)
 curyr=$(echo ${td} | cut -d '-' -f1)
 curmon=$(echo ${td} | cut -d '-' -f2)
-curdate=$(echo ${td} | cut -d '-' -f3)
 
 #LEAP YEAR CALCULATION:
 for yr in `seq ${birthyr} ${curyr}`;
@@ -31,29 +29,16 @@ numdays=$(((${f1} - ${f2}) / 86400 ))
 numhrs=$(( ${numdays} * 24 ))
 nummins=$(( ${numhrs} * 60 ))
 numsecs=$(( ${nummins} * 60 ))
-numweeks=$(( ${numdays} / 7 ))
-numweeks_days=$(( ${numdays}%7 ))
-
 
 #AGE CALCULATION:
 if [ ${birthmon} -gt ${curmon} ];
 then
 	f3=$(( (${curyr}-1) - ${birthyr} ))
-day=0; i=0;for i in {0..31}; do x=`date --date="-${i} day" +%m`; if [ $x -eq ${curmon} ]; then let day--; fi; done
-y=$(echo $day | cut -d - -f2)
-day=$( expr ${birthdate} - ${curdate} )
-#nummonth=$( expr $f3 * 12 )
-	echo -e "Your Age is : ${f3} Years :: ${curmon} Months $day days :: ${numdays} Days :: ${leapdays} leapdays :: ${numweeks}weeks ${numweeks_days}days :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
+	echo -e "Your Age is : ${f3} Years :: ${curmon} Months :: ${numdays} Days :: ${leapdays} leapdays :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
 else
 f4=$(( ${curyr} - ${birthyr} ))
-<<<<<<< HEAD
-f5=$((echo $pd | cut -d '-' -f2,3))
-f6=$((echo $curyr-f5))
-echo -e "Your Age is : ${f4} Years :: `expr ${curmon} - ${birthmon}` Months $(date +%d) days :: ${numdays} Days :: ${leapdays} leapdays :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
-=======
 
-echo -e "Your Age is : ${f4} Years :: `expr ${curmon} - ${birthmon}` Months $(date +%d) days :: ${numdays} Days :: ${leapdays} leapdays :: ${numweeks}weeks ${numweeks_days}days :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
->>>>>>> 86981bbe60f0141d66a897dac6bf48e504afbb3f
+echo -e "Your Age is : ${f4} Years :: `expr ${curmon} - ${birthmon}` Months $(date +%d) days :: ${numdays} Days :: ${leapdays} leapdays :: ${numhrs} Hours :: ${nummins} Minutes :: ${numsecs} Seconds"
 fi
 
 
