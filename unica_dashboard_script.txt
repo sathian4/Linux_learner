@@ -1,0 +1,72 @@
+http://192.168.0.60/dashboard.php
+ABove url refers step4 script
+
+
+
+
+csv export,
+FC,macro add/remove
+password change
+pager,sms alert disable
+morning ppt add/remove
+
+
+
+step1:
+======
+customize run (t value) after the cron deadline 
+data pull from unica server to logfile
+it will execute step2.
+pageralert trigger, sms trigger, enable user disabled Flow charts.
+informatica completion status
+
+step2:
+=====
+logfile export to mysql
+data comparing like not yet started, long running, error all were calculated in this step.
+also along error attributes(not yet started, long running, error, not started) were collected using this script.
+
+Step 3:
+=======
+all selects were processed here. 
+https://matriunicadash.ml/v11uat_7pm.php
+
+step 4:
+=======
+cumulative dashboard script
+http://192.168.0.60/dashboard.php
+
+step 5:
+=======
+it will export history data from workflowdetails and convert it into csv
+http://192.168.0.60/csv_report_export.php
+
+step 6_1:
+=======
+Data: By use of step2 data(longrunning, error, not yet started) tablename:unica_alert 
+
+pagerduty script --- it will prepare the argument to be done for pager alert api
+
+step 6:
+=========
+SMS alert triggered with arguments for axiom url.
+
+
+Note: where_is variable used to extract disabled alerts.
+
+Step 7:
+=======
+Data: By use of step2 data(longrunning, error, not yet started) tablename:unica_alert 
+
+http://192.168.0.60/stats.php
+
+step 8:
+======
+
+
+
+
+
+
+
+
