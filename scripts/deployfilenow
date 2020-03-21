@@ -1,0 +1,459 @@
+#!/bin/bash
+# calling this program:
+# deployfilenow.sh <attachment_file> <number_of_file> <cm_number> <empid>
+# For Ex: deployfilenow.sh test1.txt 3 103 457
+# 
+# Format of input file:
+# <repository_name>:<filename_with_full_path>:<revision_number>:<new_if_it_is_new>
+#
+# Sample content of test1.txt
+# apps1:/home/apps/mike1/mike1.php:7539:
+# apps1:/home/apps/mike2/mike2.php:7539:
+# apps1:/home/apps/mike3/mike3.php:7539:new
+#
+# Table created and maintained in ODB8 dba database
+# create table file_deployment (AutoID bigint not null primary key auto_increment, 
+# Repository varchar(50) not null default '',
+# Engineer varchar(50) not null default '',
+# LogDate datetime not null default '0000-00-00 00:00:00',
+# StartTime time not null default '00:00:00',
+# EndTime time not null default '00:00:00',
+# CMNumber varchar(20) not null default '',
+# FilesCount int not null default 0,
+# KEY index1 (LogDate));
+#
+# validating the number arguments passed
+if test $# -ne 4 ; then
+	echo "Usage: $0 <attachment_file> <number_of_file> <cm_number> <emp_id>"
+	exit 1
+fi
+
+# repository details
+###BM
+apps1="172.29.22.90:apps:/home/apps:apps1://192.168.20.44/apps1:copyto18"
+bharatmatrimony_ui="172.29.23.192:bharatmatrimony:/home/bharatmatrimony:bharatmatrimony_ui://192.168.20.44/bharatmatrimony_ui:copytoweb2bharatonly"
+profiletamil_ui="172.29.22.90:profiletamil:/home/profiletamil:profiletamil_ui://192.168.20.44//profiletamil_ui:copytoall2"
+profilebharat_ui="172.29.22.90:profilebharat:/home/profilebharat:profilebharat_ui://192.168.20.44/profilebharat_ui:copyto18"
+tamilmatrimony_ui="172.29.23.192:tamilmatrimony:/home/tamilmatrimony:tamilmatrimony_ui://192.168.20.44/tamilmatrimony_ui:copytoall2"
+imgtamil_ui="172.29.23.112:tamil:/home/tamil:imgtamil_ui://192.168.20.44/imgtamil_ui:copytoall"
+imgbharat_ui="172.29.23.112:bharat:/home/bharat:imgbharat_ui://192.168.20.44/imgbharat_ui:copytovalidwapbharat"
+wapmatrimony="172.29.23.144:wapmatrimony:/home/wapmatrimony:wapmatrimony://192.168.20.44/wapmatrimony:copytovalidwapbharat"
+matrimonycom="172.29.23.192:matrimonynew:/home/matrimonynew:matrimonycom://192.168.20.44/matrimonycom:copytoallmatrimonynew"
+nodevp="172.29.2.121:node:/home/node:nodevp://192.168.20.44/nodevp:copytoallvpnode"
+elite="172.29.23.192:elitematrimony:/home/elitematrimony:elite://192.168.20.44/elite/elitematrimony:copytoallelitematrimony"
+img_assisted="172.23.0.55:assistedmatrimony:/home/assistedmatrimony:img_assisted://192.168.20.44/img_assisted:copytoassisted"
+node_search="172.29.3.169:matchnode:/home/matchnode:node_search://192.168.20.44/node_search:copytoall"
+bm_pwa="172.22.0.142:mobile:/home/mobile:bm_pwa://192.168.20.44/bm_pwa:copytoall"
+matrimonyweb="172.22.1.60:matrimony:/home/matrimony:matrimonyweb://192.168.20.94/prod_svn/matrimonyweb:copy2web2"
+node_appcron3="172.29.2.124:node:/home/node:node_appcron3://192.168.20.44/node_appcron3:no"
+bmchat="172.29.2.193:node:/home/node:bmchat://192.168.1.7/bmchat:copytoallnode"
+bminapp="172.29.23.51:node:/home/node:bminapp://192.168.1.7/bminapp:copytoall"
+pwa_matches="172.29.22.142:matches:/data/matches:pwa_matches://192.168.20.44/pwa_matches:copytoall"
+parsi_img="172.29.23.112:parsi:/home/parsi:parsi_img://192.168.20.44/parsi_img:no"
+profileparsi="172.29.22.90:profileparsi:/home/profileparsi:profileparsi://192.168.20.44/profileparsi:copyto18"
+webparsi="172.29.23.192:parsimatrimony:/home/parsimatrimony:webparsi://192.168.20.44/webparsi:copytoweb2parsionly"
+
+##CBS
+communitymatrimony="172.29.22.21:community:/home/product/community:communitymatrimony://192.168.1.7/communitymatrimony/new/newcommunity:copytoall"
+cbs_pwa="172.22.2.214:community:/home/product/community:cbs_pwa://192.168.1.7/cbs_pwa:copytoall"
+cbs_wapapp="172.29.22.21:wapapp:/home/product/wapapp:cbs_wapapp://192.168.1.7/cbs_wapapp:copytoall"
+cbs_img="172.29.23.145:community:/home/product/community:cbs_img://192.168.1.7/cbs_img:no"
+cbs_survey="172.22.1.25:node:/home/node:cbs_survey://192.168.1.7/cbs_survey:copytoallnode"
+#communitymatrimony="172.23.0.145:community:/home/product/community:communitymatrimony://192.168.1.7/communitymatrimony/new/newcommunity:no"
+#cbs_wapapp="172.29.22.21:community:/home/product/wapapp:cbs_wapapp://192.168.1.7/cbs_wapapp:copytoall"
+cbs_community2="172.29.22.21:community2:/home/product/community2:cbs_community2://192.168.20.94/prod_svn/cbs_community2:copytoall"
+cbs_imgcommunity2="172.29.23.145:community2:/home/product/community2:cbs_imgcommunity2://192.168.20.94/prod_svn/cbs_imgcommunity2:no"
+cbs_wapapp2="172.29.22.21:wapapp2:/home/product/wapapp2:cbs_wapapp2://192.168.20.94/prod_svn/cbs_wapapp2:copytoall"
+
+##MAILER##
+bmmailmgr="172.29.1.89:mailmanager:/home/mailmanager:bmmailmgr://192.168.1.7/bmmailmgr/mailmanager:no"
+cbsmailmgr="172.29.1.84:community:/home/product/community:cbsmailmgr://192.168.20.45/cbsmailmgr:no"
+bmmailerdc="172.29.23.37:bmmatchwatch:/home/bmmatchwatch:bmmailerdc://192.168.20.94/prod_svn/bmmailerdc:copytoall"
+bmmailerms="172.29.23.47:bmmatchwatch:/home/bmmatchwatch:bmmailerms://192.168.20.94/prod_svn/bmmailerms:copytoall"
+mlfmdc="172.29.23.37:mlfm:/home/mlfm:mlfmdc://192.168.20.94/prod_svn/mlfmdc:copytoall"
+mlfmms="172.29.23.47:mlfm:/home/mlfm:mlfmms://192.168.20.94/prod_svn/mlfmms:copytoall"
+cbsmailerdc="172.22.2.213:community:/home/product/community:cbsmailerdc://192.168.20.94/prod_svn/cbsmailerdc/community:copytoall"
+cbsmailerms="172.22.2.215:community:/home/product/community:cbsmailerms://192.168.20.94/prod_svn/cbsmailerms/community:copytoall"
+mailer1="172.29.22.181:lamatri:/home/lamatri:mailer1://192.168.20.94/mailer1:no"
+mailer1_mgr="172.29.22.181:mailmanager:/home/mailmanager:mailer1_mgr://192.168.20.94/mailer1_mgr:no"
+mailer1_mw="172.29.22.181:matchwatch:/home/matchwatch:mailer1_mw://192.168.20.94/mailer1_mw:no"
+mlfm="172.29.23.176:lamatri:/home/lamatri:mlfm://192.168.20.94/mlfm:no"
+mlfm_mgr="172.29.23.176:mailmanager:/home/mailmanager://192.168.20.94/mlfm_mgr:no"
+mlfm_mw="172.29.23.176:matchwatch:/home/matchwatch://192.168.20.94/mlfm_mw:no"
+file2_mgr="172.29.23.183:mailmanager:/home/mailmanager:file2_mgr://192.168.20.94/file2_mgr:no"
+file2_mw="172.29.23.183:matchwatch:/home/matchwatch:file_mw://192.168.20.94/file2_mw:no"
+
+###NON-PORTAL
+profileelite_new="172.29.22.90:profileelite:/home/profileelite:profileelite_new://192.168.20.46/PROD-SVN/profileelite_new:copyto18"
+assistedcamp="172.29.22.80:profilebharat:/home/profilebharat:assistedcamp://192.168.20.46/PROD-SVN/assistedcamp:copytoall"
+support="172.29.22.103:support:/home/office/support:support://192.168.20.46/PROD-SVN/support:copytoall"
+support_only="172.29.22.101:support:/home/office/support:support://192.168.20.46/PROD-SVN/support:no"
+##moved to msweb1##servicemb="172.22.0.137:servicemb:/home/servicemb:servicemb://192.168.1.7/servicemb:no"
+servicemb="172.22.2.143:servicemb:/home/servicemb:servicemb://192.168.1.7/servicemb:copytoall"
+##servicemb="172.22.2.144:servicemb:/home/servicemb:servicemb://192.168.1.7/servicemb:no"
+servicemm="172.22.2.143:servicemm:/home/servicemm:servicemm://192.168.1.7/servicemm:copytoall"
+inboundcalls="172.16.0.128:inboundcalls:/home/office/inboundcalls:inboundcalls://192.168.20.46/PROD-SVN/inboundcalls:no"
+dialer="172.29.22.103:dialer:/home/dialer/:dialer://192.168.20.46/PROD-SVN/dialer:copytoall"
+dialer_only="172.29.22.101:dialer:/home/dialer/:dialer://192.168.20.46/PROD-SVN/dialer:no"
+wcc_new="172.29.22.103:wcc:/home/office/wcc/:wcc_new://192.168.20.46/PROD-SVN/wcc_new:copytoall"
+wcc_new_only="172.29.22.101:wcc:/home/office/wcc/:wcc_new://192.168.20.46/PROD-SVN/wcc_new:no"
+office_new="172.29.22.103:office:/home/office/:office_new://192.168.20.46/PROD-SVN/office_new:copytoall"
+office_new_only="172.29.22.101:office:/home/office/:office_new://192.168.20.46/PROD-SVN/office_new:no"
+telemarketing="172.29.22.103:telemarketing:/home/office/telemarketing/:telemarketing://192.168.20.46/PROD-SVN/telemarketing:copytoall"
+telemarketing_only="172.29.22.101:telemarketing:/home/office/telemarketing/:telemarketing://192.168.20.46/PROD-SVN/telemarketing:no"
+paymentassistance="172.29.22.103:payassist:/home/office/payassist/:paymentassistance://192.168.20.46/PROD-SVN/paymentassistance:copytoall"
+paymentassistance_only="172.29.22.101:payassist:/home/office/payassist/:paymentassistance://192.168.20.46/PROD-SVN/paymentassistance:no"
+mbazaar="172.29.22.70:mbazaar:/home/mbazaar:mbazaar://192.168.1.7/mbazaar:copytoall"
+mbazaarblog="172.29.22.70:mbazaar:/home/mbazaar:mbazaarblog://192.168.1.7/mbazaarblog:copytoall"
+##Rajesh##matrimonymandaps="172.22.0.137:mmandaps:/home/mmandaps:matrimonymandaps://192.168.1.7/matrimonymandaps:no"
+matrimonymandaps="172.29.22.70:mmandaps:/home/mmandaps:matrimonymandaps://192.168.1.7/matrimonymandaps:copytoall"
+nritelesales="172.29.22.103:nritelesales:/home/nritelesales:nritelesales://192.168.20.46/PROD-SVN/nritelesales:copytoall"
+nritelesales_only="172.29.22.101:nritelesales:/home/nritelesales:nritelesales://192.168.20.46/PROD-SVN/nritelesales:no"
+telesales="172.29.22.103:telesales:/home/telesales/:telesales://192.168.20.46/PROD-SVN/telesales:copytoall"
+telesales_only="172.29.22.101:telesales:/home/telesales/:telesales://192.168.20.46/PROD-SVN/telesales:no"
+telesalescommunitymatrimony="172.29.22.103:cbstelesales:/home/product/telesales:telesalescommunitymatrimony://192.168.20.46/PROD-SVN/telesalescommunitymatrimony:copytoall"
+qms="172.22.0.168:qms:/home/qms/:qms://192.168.20.46/PROD-SVN/qms:no"
+telesalescommunitymatrimony_only="172.29.22.101:cbstelesales:/home/product/telesales:telesalescommunitymatrimony://192.168.20.46/PROD-SVN/telesalescommunitymatrimony:no"
+retailtm="172.29.22.103:retail:/home/office/retail/:retailtm://192.168.20.46/PROD-SVN/retailtm:copytoall"
+retailtm_only="172.29.22.101:retail:/home/office/retail/:retailtm://192.168.20.46/PROD-SVN/retailtm:no"
+cbs_supportweb="172.29.22.103:community:/home/product/community:cbs_supportweb://192.168.20.46/PROD-SVN/cbs_supportweb:copytoall"
+cbs_supportweb_only="172.29.22.101:community:/home/product/community:cbs_supportweb://192.168.20.46/PROD-SVN/cbs_supportweb:no"
+cbs_supportimg="172.29.23.145:community:/home/product/community:cbs_supportimg://192.168.1.7/cbs_supportimg:no"
+fssewap="172.22.0.103:fsse:/home/office/fsse:fssewap://192.168.20.46/PROD-SVN/fssewap:copytoall"
+fssewap_only="172.22.0.101:fsse:/home/office/fsse:fssewap://192.168.20.46/PROD-SVN/fssewap:no"
+collection="172.29.22.103:collection:/home/office/collection:collection://192.168.20.46/PROD-SVN/collection:copytoall"
+collection_only="172.29.22.101:collection:/home/office/collection:collection://192.168.20.46/PROD-SVN/collection:no"
+support_ability="172.29.22.103:ability:/home/product/community/ability:support_ability://192.168.20.46/PROD-SVN/support_ability:copytoall"
+support_ability_only="172.29.22.101:ability:/home/product/community/ability:support_ability://192.168.20.46/PROD-SVN/support_ability:no"
+matrimonydirectorynew="172.22.0.75:matrimonydirectory:/home/matrimonydirectory:matrimonydirectorynew://192.168.1.7/matrimonydirectorynew:no"
+profileelite_camp="172.22.2.80:profileelite:/home/profileelite:profileelite_camp://192.168.1.7/profileelite_camp:copytoall"
+cbsoffline="172.22.0.108:offlinecbspayment:/home/office/offlinecbspayment:cbsoffline://192.168.20.46/PROD-SVN/cbsoffline:no"
+offlinepayment="172.22.0.108:offlinepayment:/home/office/offlinepayment:offlinepayment://192.168.20.46/PROD-SVN/offlinepayment:no"
+cbs_monit="172.29.1.105:node:/home/node:cbs_monit://192.168.1.7/cbs_monit:copytoall"
+frontoffice="172.29.22.103:frontoffice:/home/office/frontoffice/:frontoffice://192.168.20.46/PROD-SVN/frontoffice:copytoall"
+frontoffice_only="172.29.22.101:frontoffice:/home/office/frontoffice/:frontoffice://192.168.20.46/PROD-SVN/frontoffice:no"
+cbsfrontoffice="172.29.22.103:cbsfrontoffice:/home/product/frontoffice/:cbsfrontoffice://192.168.20.46/PROD-SVN/cbsfrontoffice:copytoall"
+cbsfrontoffice_only="172.29.22.101:cbsfrontoffice:/home/product/frontoffice/:cbsfrontoffice://192.168.20.46/PROD-SVN/cbsfrontoffice:no"
+assistedmatrimony="172.29.22.90:assistedmatrimony:/home/assistedmatrimony/:assistedmatrimony://192.168.20.44/assistedmatrimony:copyto18"
+bmengmat="172.29.23.75:engineering:/home/engineering:bmengmat://192.168.20.94/dev_svn/bmengmat:no"
+bmgraphql="172.29.3.33:node:/home/node:bmgraphql://192.168.1.7/bmgraphql:copytoall"
+rmapp="172.29.3.43:assistedmatrimony:/home/assistedmatrimony/:assistedmatrimony://192.168.20.46/PROD-SVN/rmapp:copytoall"
+
+development_helpdesk="172.29.22.168:consimhelpdesk:/home/consimhelpdesk:development_helpdesk://192.168.20.46/PROD-SVN/development_helpdesk:no"
+Survey="172.29.22.168:matrimonysurvey:/home/matrimonysurvey:Survey://192.168.20.46/PROD-SVN/Survey:no"
+csatsurvey="172.29.22.168:csatsurvey:/home/csatsurvey:csatsurvey://192.168.20.46/PROD-SVN/csatsurvey:no"
+mrrs="172.29.22.168:mrrs:/home/mrrs:mrrs://192.168.20.46/PROD-SVN/mrrs:no"
+documentsystem="192.168.3.30:docsystem:/home/docsystem:documentsystem://192.168.20.46/PROD-SVN/documentsystem:no"
+billsysnew="192.168.3.30:billsystemnew:/home/billsystemnew:billsysnew://192.168.20.46/PROD-SVN/billsysnew:no"
+billsysnew_apps4bm="172.29.22.168:billsystemnew:/home/billsystemnew:billsysnew_apps4bm://192.168.20.46/PROD-SVN/billsysnew_apps4bm:no"
+salesreports="172.22.0.75:salesreports:/home/salesreports:salesreports://192.168.20.46/PROD-SVN/salesreports:no"
+matrimony_pms="192.168.3.30:quality:/home/quality:matrimony_pms://192.168.20.46/PROD-SVN/matrimony_pms:no"
+
+##Files deployment for NPcron####
+##fssewap_npcron="172.29.1.85:fsse:/home/office/fsse:fssewap://192.168.20.46/PROD-SVN/fssewap:copytoall"
+fsse_npcron="172.22.1.62:fsse:/home/office/fsse:fsse_npcron://192.168.20.46/PROD-SVN/fsse_npcron:copytoall"
+
+###SRCND####
+node_srcnd="172.29.3.169:srchnode:/home/srchnode:node_srcnd://192.168.20.44/node_srcnd:copytoall"
+
+##PHOTOGRAPHY
+###MV TO MSWEB1/2###eventpg="172.29.22.103:eventpg:/home/eventpg:eventpg://192.168.1.7/eventpg:no"
+eventpg="172.22.2.143:eventpg:/home/eventpg:eventpg://192.168.20.46/PROD-SVN/eventpg:copytoall"
+apipg="172.22.2.143:apipg:/home/apipg:apipg://192.168.20.46/PROD-SVN/apipg:copytoall"
+#customersmp="172.29.22.40:customersmp:/home/customersmp:customersmp://192.168.1.7/customersmp:no"
+customersmp="172.22.2.143:customersmp:/home/customersmp:customersmp://192.168.20.46/PROD-SVN/customersmp:copytoall"
+##MV to BZWEB1/2photography="172.22.0.103:matrimonyphotography:/home/matrimonyphotography:matrimonyphotography://192.168.1.7/photography:no"
+portalphotography="172.29.22.70:matrimonyphotography:/home/matrimonyphotography:matrimonyphotography://192.168.20.46/PROD-SVN/portalphotography:copytoall"
+tas_live="172.22.0.168:tasapp:/home/tasapp:tasapp://192.168.20.46/PROD-SVN/tas_live:no"
+candidate="172.22.0.168:tascandidate:/home/tascandidate:tascandidate://192.168.20.44/candidate:no"
+
+########CBSINAPP#####################
+cbsinapp="172.29.3.139:cbsinapp:/home/cbsinapp:cbsinapp://192.168.1.7/cbsinapp:copytoall"
+##GLOBAL##
+country="172.23.0.50:country:/home/product/country/:country://192.168.1.7/country:copytoall"
+globalofflinepayment="172.23.0.50:globalofflinepayment:/home/product/globalofflinepayment/:globalofflinepayment://192.168.1.7/globalofflinepayment:copytoall"
+banglamatrimony="172.23.0.50:bangla:/home/product/bangla/:banglamatrimony://192.168.1.7/banglamatrimony:copytoall"
+
+#########SAMUDAY#####################
+samweb="172.29.3.10:samuday:/home/product/community:samweb://192.168.1.7/samweb:copytoall"
+samcamp="172.29.3.28:samuday:/home/product/community:samcamp://192.168.1.7/samcamp:copytoall"
+samnd="172.29.3.15:samunode:/home/samunode:samnd://192.168.1.7/samnd:copytoall"
+samimg="172.29.3.13:samuday:/home/product/community:samimg://192.168.1.7/samimg:no"
+samms="172.29.3.33:samuday:/home/samuday:samms://192.168.1.7/samms:copytoall"
+samdc="172.29.3.31:samuday:/home/samuday:samdc://192.168.1.7/samdc:copytoall"
+samwapapp="172.29.3.10:wapsamuday:/home/product/wapapp:samwapapp://192.168.1.7/samwapapp:copytoall"
+sam_pwa="172.29.3.64:mobile:/home/mobile:sam_pwa://192.168.1.7/sam_pwa:copytoall"
+
+#############GMM#################
+gmmweb_autosync="172.29.3.45:gmmweb:/home/gmmweb:gmmweb_autosync://192.168.20.94/live_svn/gmmweb_autosync:copytoall"
+gmmimg_autosync="172.29.3.56:gmmimg:/home/gmmimg:gmmimg_autosync://192.168.20.94/live_svn/gmmimg_autosync:no"
+gmmcamp_autosync="172.29.3.62:support:/home/support:gmmcamp_autosync://192.168.20.94/live_svn/gmmcamp_autosync:copytoall"
+gmmvpnd_autosync="172.29.3.116:gmmnode:/home/gmmnode:gmmvpnd_autosync://192.168.20.94/live_svn/gmmvpnd_autosync:copytoall"
+gmmnode_autosync="172.29.3.49:gmmnode:/home/gmmnode:gmmnode_autosync://192.168.20.94/live_svn/gmmnode_autosync:copytoall"
+gmmpwa_autosync="172.29.3.118:mobile:/home/mobile:gmmpwa_autosync://192.168.20.94/live_svn/gmmpwa_autosync:copytoall"
+gmmsupimg_autosync="172.29.3.56:support:/home/support:gmmsupimg_autosync://192.168.20.94/live_svn/gmmsupimg_autosync:no"
+
+#########Secondshaadi#############
+secondshaadi="205.147.111.63:secondshaadi:/home/secondshaadi:secondshaadi://192.168.1.7/secondshaadi:no"
+
+############APPS4BM#####################
+matriinnovation="172.29.22.168:matriinnovation:/home/matriinnovation:matriinnovation://192.168.20.46/PROD-SVN/matriinnovation:no"
+
+############CSWEB#####################
+csapi_wcc="172.29.4.84:wcc:/home/office/wcc:wcc://192.168.20.46/PROD-SVN/csapi_wcc:copytoall"
+
+###GMM - Nepalimatrimony ####
+gmm_live="172.29.3.45:community:/home/product/community:gmm_live://192.168.20.46/PROD-SVN/gmm_live:copytoall"
+gmmwap_live="172.29.3.45:wapapp:/home/product/wapapp:gmmwap_live://192.168.20.46/PROD-SVN/gmmwap_live:copytoall"
+gmmimg_live="172.29.3.56:community:/home/product/community:gmmimg_live://192.168.20.46/PROD-SVN/gmmimg_live:no"
+gmmsupport_live="172.29.3.62:globalweb:/home/globalweb:gmmsupport_live://192.168.20.46/PROD-SVN/gmmsupport_live:copytoall"
+gmmsupportimg_live="172.29.3.56:globalimage:/home/globalimage:gmmsupportimg_live://192.168.20.46/PROD-SVN/gmmsupportimg_live:no"
+gmmpwa_live="172.29.3.118:community:/home/product/community:gmmpwa_live://192.168.20.46/PROD-SVN/gmmpwa_live:copytoall"
+gmmcountrynode_live="172.29.3.49:countrynode:/home/countrynode:gmmcountrynode_live://192.168.20.46/PROD-SVN/gmmcountrynode_live:copytoall"
+
+
+###CBSCHATND###
+cbsnode="172.29.2.60:cbsnode:/home/cbsnode:cbsnode://192.168.20.45/PROD-SVN/cbsnode:copytoall"
+
+cmdate=`date +%F`
+cmtime=`date +%H%M`
+sttime=`date +%H:%M:%S`
+
+###GMM - MuslimMatch ####
+##mmvpnd="172.29.3.116:mmnode:/home/mmnode:mmvpnd://192.168.20.94/mmvpnd:copytoall"
+mmweb="172.29.3.45:mmweb:/home/mmweb:mmweb://192.168.20.94/mmweb:copytoall"
+mmimg="172.29.3.56:mmimg:/home/mmimg:mmimg://192.168.20.94/mmimg:no"
+mmnode="172.29.3.49:mmnode:/home/mmnode:mmnode://192.168.20.94/mmnode:copytoall"
+mmvpnd="172.29.3.116:mmapinode:/home/mmapinode:mmvpnd://192.168.20.94/mmvpnd:copytoall"
+mmnotifinode="172.29.3.116:mmnotifinode:/home/mmnotifinode:mmnotifinode://192.168.20.94/mmnotifinode:copytoall"
+mmsupport="172.29.3.62:mmsupport:/home/mmsupport:mmsupport://192.168.20.94/mmsupport:copytoall"
+
+# start dry run
+
+#Validating second argument
+if ! [[ $2 =~ ^[[:digit:]]+$ ]];
+then
+echo "Please give file count as interger only"
+exit 1
+fi
+
+# validate the number of files
+no_file=`cat $1 |wc -l`
+if test $no_file -ne $2 ; then
+	echo "number of files are not equal"
+	exit 1
+fi
+
+# create CM Folder
+cmnum=$3.$cmtime
+mkdir -p /data/svnbackup/$cmdate/$cmnum
+if test $? -ne 0 ; then
+	echo "Not able to create the folder: /data/svnbackup/$cmdate/$cmnum"
+	exit 1
+fi
+
+echo "Starting the deployment for $cmnum" >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+echo $0 $1 $2 $3 $4 >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+
+# validate the cluster name and svn repository name
+repos_count=`cat $1 | awk -F ':' '{print $1}' | sort | uniq | wc -l`
+for rname in `cat $1 | awk -F ':' '{print $1}' | sort | uniq`
+do
+	cat $1 | grep "^$rname:" | sort > /data/svnbackup/$cmdate/$cmnum/attached-list-$rname
+done
+fcount=`ls -1 /data/svnbackup/$cmdate/$cmnum/attached-list-* | wc -l`
+if test $repos_count -ne $fcount ; then
+	echo "some issues in the file split up: $repos_count vs $fcount"
+	exit 1
+fi
+
+echo "Splitted the repositories separately. Number of repositories: $fcount" >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+
+# validating the revision numbers and filenames 
+for fname in `ls -1 /data/svnbackup/$cmdate/$cmnum/attached-list-*`
+do
+missing=0
+reposit=`echo $fname | awk -F '-' '{print $NF}'`
+reposit_url=`echo ${!reposit} | awk -F ':' '{print $5}'`
+echo "Starting the validation of revision numbers and filenames in the repository: $reposit" >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+for line in `cat $fname`		
+do
+	reposit=`echo "$line" | awk -F ':' '{print $1}'`
+	rfname=`echo "$line" | awk -F ':' '{print $2}'`
+	rver=`echo "$line" | awk -F ':' '{print $3}'`
+	rnew=`echo "$line" | awk -F ':' '{print "a"$4}'`
+#	rfname2=`echo $rfname | awk -F '/' '{for(i=4;i<=NF;i++){printf("/%s",$i)}printf("\n")}'`
+#	mypath=`echo $rfname | awk -F '/' '{printf("%s/%s",$2,$3)}'`
+	mypath=`echo ${!reposit} | awk -F ':' '{print $3}'`
+	rfname2=${rfname/$mypath/}
+	svn --username luser --password luser info http:$reposit_url/$rfname2@$rver >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+	if test $? -ne 0 ; then
+		echo "svn revision number has not found for $rfname2:$rver" >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+		let missing=missing+1
+	fi
+	if [ "$rnew" != "anew" ] ; then
+		echo $rfname2 >>/data/svnbackup/$cmdate/$cmnum/backup-list-$cmnum-$reposit
+	fi
+done
+if test $missing -ne 0 ; then
+	echo "$missing files are missing; Hence exiting"
+	echo "Kindly validate the /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log file for more information"
+	exit 1
+fi
+echo "Validation of repository: $reposit completed"  >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+done
+
+echo "Starting backup process"  >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+
+# taking backup
+for fname in `ls -1 /data/svnbackup/$cmdate/$cmnum/backup-list-$cmnum-* 2>/dev/null`
+do
+	reposit=`echo $fname | awk -F '-' '{print $NF}'`
+	ripadd=`echo ${!reposit} | awk -F ':' '{print $1}'`
+	username=`echo ${!reposit} | awk -F ':' '{print $2}'`
+	mypath=`echo ${!reposit} | awk -F ':' '{print $3}'`
+	echo "Taking backup for repository: $reposit"  >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+	mkdir -p /data/svnbackup/$cmdate/$cmnum/backup/$reposit
+	if test $? -ne 0 ; then
+		echo "Not able to create the folder: /data/svnbackup/$cmdate/$cmnum/backup/$reposit"
+		echo "Not able to create the folder: /data/svnbackup/$cmdate/$cmnum/backup/$reposit" >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+		exit 1
+	fi
+	cd /data/svnbackup/$cmdate/$cmnum/backup/$reposit
+	rsync -avz --files-from=/data/svnbackup/$cmdate/$cmnum/backup-list-$cmnum-$reposit $username@$ripadd:$mypath . >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log 2>/tmp/rsync_error_$cmnum.txt
+	if test -s /tmp/rsync_error_$cmnum.txt ; then
+		echo "backup is not completed properly"
+		cat /tmp/rsync_error_$cmnum.txt >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+		echo "Kindly validate the /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log file for more information"
+		exit 1
+	else
+		echo "backup has completed successfully" >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+	fi
+done
+
+echo "Exporting required files from SVN"  >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+
+# export files from svn
+for fname in `ls -1 /data/svnbackup/$cmdate/$cmnum/attached-list-*`
+do
+	missing=0
+	reposit=`echo $fname | awk -F '-' '{print $NF}'`
+	reposit_url=`echo ${!reposit} | awk -F ':' '{print $5}'`
+	echo "Exporting repository: $reposit"  >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+	mkdir -p /data/svnbackup/$cmdate/$cmnum/deploy/$reposit
+	if test $? -ne 0 ; then
+		echo "Not able to create the folder: /data/svnbackup/$cmdate/$cmnum/backup/$reposit"
+		echo "Not able to create the folder: /data/svnbackup/$cmdate/$cmnum/backup/$reposit" >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+		exit 1
+	fi
+
+	for line in `cat $fname`		
+	do
+		reposit=`echo "$line" | awk -F ':' '{print $1}'`
+		rfname=`echo "$line" | awk -F ':' '{print $2}'`
+		rver=`echo "$line" | awk -F ':' '{print $3}'`
+#		rfname2=`echo $rfname | awk -F '/' '{for(i=4;i<=NF;i++){printf("/%s",$i)}printf("\n")}'`
+#		mypath=`echo $rfname | awk -F '/' '{printf("%s/%s",$2,$3)}'`
+		mypath=`echo ${!reposit} | awk -F ':' '{print $3}'`
+		rfname2=${rfname/$mypath/}
+		rdir=`dirname $rfname`
+		mkdir -p /data/svnbackup/$cmdate/$cmnum/deploy/$reposit/$rdir/
+		if test $? -ne 0 ; then
+			echo "Not able to create the folder: /data/svnbackup/$cmdate/$cmnum/deploy/$reposit/$rdir/"
+			echo "Not able to create the folder: /data/svnbackup/$cmdate/$cmnum/deploy/$reposit/$rdir/" >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+			exit 1
+		fi
+		svn --username luser --password luser export -r $rver http:$reposit_url/$rfname2 /data/svnbackup/$cmdate/$cmnum/deploy/$reposit/$rdir/  >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+		if test $? -ne 0 ; then
+			echo "svn revision number has not found for $rfname:$rver" >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+			let missing=missing+1
+		else
+			echo "svn revison exported for $rfname:$rver" >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+		fi
+		touch /data/svnbackup/$cmdate/$cmnum/deploy/$reposit/$rdir/*
+		###26/FEB/2019###dos2unix -q /data/svnbackup/$cmdate/$cmnum/deploy/$reposit/$rdir/*
+		find /data/svnbackup/$cmdate/$cmnum/deploy/$reposit/$rdir/ -type f -print0 | xargs -0 dos2unix -k -q
+	done
+	if test $missing -ne 0 ; then
+		echo "$missing files are missing; Hence exiting"
+		echo "Kindly validate the /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log file for more information"
+		exit 1
+	fi
+
+	echo "Deploying the files from repository: $reposit"  >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+
+# deploy the files
+	cd /data/svnbackup/$cmdate/$cmnum/deploy/$reposit
+	rusername=`echo ${!reposit} | awk -F ':' '{print $2}'`
+	ripadd=`echo ${!reposit} | awk -F ':' '{print $1}'`
+	mypath=`echo ${!reposit} | awk -F ':' '{print $3}'`
+	rsync -rlptvz .$mypath/* $rusername@$ripadd:~/ >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log 2>/tmp/rsync_deploy_$cmnum_$reposit.err
+	if test -s /tmp/rsync_deploy_$cmnum_$reposit.err ; then
+		echo "deployment is not completed properly"
+		cat /tmp/rsync_deploy_$cmnum_$reposit.err >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+		echo "Kindly validate the /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log file for more information"
+		exit 1
+	else
+		echo "deployment has completed successfully for $reposit" >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+	fi
+
+	echo "Copytoall for the repository: $reposit"  >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+
+# copy to all
+	cd /data/svnbackup/$cmdate/$cmnum/deploy/$reposit/
+	copycmd=`echo ${!reposit} | awk -F ':' '{print $6}'`
+	if [ "$copycmd" = "no" ] ; then
+		echo "For $rusername@$ripadd - copytoall is not required" >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+	else
+		find -type f -print | sed -e "s/^./$copycmd /" > /data/svnbackup/$cmdate/$cmnum/copytoall_list_$cmnum.$reposit
+		rsync -az /data/svnbackup/$cmdate/$cmnum/copytoall_list_$cmnum.$reposit $rusername@$ripadd:/tmp >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log 2>/tmp/rsync_deploy_$cmnum_$reposit.err
+		if test -s /tmp/rsync_error_$cmnum.txt ; then
+			echo "copytoall list is not completed properly"
+			cat /tmp/rsync_deploy_$cmnum_$reposit.err >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+			echo "Kindly validate the /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log file for more information"
+			exit 1
+		else
+			echo "copytoall list has completed successfully for $reposit" >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+		fi
+		ssh $rusername@$ripadd "/bin/bash /tmp/copytoall_list_$cmnum.$reposit" >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log 2>/tmp/deploytoall_$cmnum_$reposit.err
+		if test -s /tmp/deploytoall_$cmnum_$reposit.err ; then
+			echo "deploytoall is not completed properly"
+			cat /tmp/deploytoall_$cmnum_$reposit.err >>/data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+			echo "Kindly validate the /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log file for more information"
+			exit 1
+		else
+			echo "deploytoall has completed successfully for $reposit" >> /data/svnbackup/$cmdate/$cmnum/deploy_$cmnum.log
+		fi
+	fi
+done
+
+# logging for report purpose
+endtime=`date +%H:%M:%S`
+for fname in `ls -1 /data/svnbackup/$cmdate/$cmnum/attached-list-*`
+do
+	reposit=`echo $fname | awk -F '-' '{print $NF}'`
+	fcount=`cat $fname |wc -l`
+	echo "insert into file_deployment (Repository,Engineer,LogDate,StartTime,EndTime,CMNumber,FilesCount) values ('$reposit','$4',now(),'$sttime','$endtime','$cmnum',$fcount);" | mysql -umatriservices -pservices -h 172.29.23.13 dba
+done
+
+##For Email Alert##
+<<disabledtemporarily
+cd /data/svnbackup/$cmdate/$cmnum/deploy
+find -type f |xargs ls -ltrh | awk '{print $9}' >/data/svnbackup/$cmdate/$cmnum/filedetails.${cmnum}.txt
+
+ (
+                                echo "From: sedbm@matrimony.com"
+                                echo "To: tier1_support@matrimony.com"
+                            ##  echo "To: sathianarayanan.sankar@matrimony.com"
+                                echo "Subject: Deployed CM $3 File details"
+                                echo -e  "Dear Team,\n"
+                                echo -e "CM ticket number $3 is successfully deployed in the server. Kindly find the file details below.\n"
+                                echo -e "Deployed files : \n"
+                                cat /data/svnbackup/$cmdate/$cmnum/filedetails.${cmnum}.txt
+                                echo ""
+                                echo -e "Total number of files : $2 \n"
+                                echo -e "CM Ticket Number      : $3 \n"
+                                echo -e "Deployed Engineer ID  : $4 \n"
+                                echo -e  "\nRegards,\nSEDBM Team"
+                        ) | /usr/sbin/sendmail -t
+disabledtemporarily
