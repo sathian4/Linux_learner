@@ -1,0 +1,192 @@
+Puppet is ruby based
+puppet will be used in heterogeneous environment
+
+Deployment model:
+Standalone
+Master-Agent
+Master client is primary puppet deployment model
+Puppet is portable
+Puppet Master Port number: 8140
+
+Programming paradigms:
+======================
+Paradigms - A set of ideas.
+Puppet Paradigm: Imperative and Declarative
+
+Imperative - Specifying what to do, and how to do in programming style
+Declarative - without any directions, specifying the final output(destination)
+Puppet is using Domain Specific Language(DSL)
+Puppet is declarative
+
+Puppet working:
+==============
+Master Agent working:(production usage)
+========================
+Puppet Master -- Puppet master installed server which has configuration in puppet codes.
+Puppet Agent --- Our target machine, in which puppet agent has been installed.
+Puppet agent checks every 1800 secs(default)which is 30mins with Master for code changes.
+If any changes found, it will pull and apply the configuration in agent node. This is 
+known as pull based mechanism.
+
+Puppet master must be a Linux machine
+Agents can be windows, solaris or linux or even Mac
+Communication between Puppet master and agent is established through secure certificates.
+Standalone setup(Proof of concept or developement)
+=================================================
+Standalone is that both puppet master and agent installed in single node
+
+Deployment model:
+=================
+Push and pull
+Push --- A master server pushes the configurations to the individual agent node servers.
+example: Ansible, Salt stack
+Pull -- Configuration changes is initiated by agent nodes at regular intervals.
+Example: Puppet and Chef.
+
+Puppet Data Flow:
+=================
+Communication between Puppet master and agent is established through secure certificates.
+
+Execution flow is of three steps:
+=================================
+step1: Facts: once the agent connected with master, agent send its state(IP,hostname,kernel details,Mac address etc) to puppet master server. This is called Facts.
+step2: Catalog Puppet uses the Facts and compiles a list with config to applied on agent. The list of config(may be package installation, upgrades or removals) to be performed on agent is called Catalog. 
+Step 3: Reports: If any change in config, agent will apply the same and sends back the reports to Master. This reports can be integrated into third party tools using Puppet API.
+
+Understanding Puppet:
+=====================
+No need to worry abt underlying OS or OS commands. Puppet will take care itself.
+Configuring and managing your infrastructure with code based is called Infrastructure as Code.
+
+
+Puppet config file: RHEL based: /etc/puppetlabs/puppet/puppet.conf(both master and agent)
+Ubuntu: /etc/puppet/puppet.conf
+
+Puppet.conf is INI type configuration.
+In that Both Certname and server field must have FQDN of Master/Client.
+Using the server field, puppet clients will know which is the master puppet server.
+
+To test connectivity between master and agent, use
+#puppet agent --test
+
+Connection between Master and puppet secured with https protocol.
+In Master agent, Master is CA(certificate authority)
+
+Initially, before communication agent will check whether it has signed certificate from master.
+If not, it will request for signed certificate from master and will stores it for future communication.
+Certificates will be stored under directory /etc/puppetlabs/puppet/ssl
+run #puppet cert list   -->to list all agent certificates.
+Manual certificate signing:
+
+#puppet cert sign <client FQDN>
+
+Automated certificate signing:
+create file name called autosign.conf under /etc/puppetlabs/puppet/
+enter the FQDN with wildcard or the exact Node FQDN.
+
+Comman Commands:
+=================
+puppet cert list --->to list certificate request
+puppet cert list --all -->to list all signed and pending request.
+puppet cert sign <client FQDN> --->to sign the puppet agent certificate
+puppet cert clean --> to remove the existing certificates.
+puppet cert generate --> to generate the certificate(under some circumstances)
+puppt cert clean -->to remove the cert
+
+To verify puppet certificate sign, 
+puppet agent -tv
+
+
+Puppet architechture:
+
+Puppet using facts to send its present state. Its uses facter command internally for this step
+
+
+.pp --> puppet program
+
+Building blocks:
+================
+Resource
+class
+Manifest
+Modules
+
+Resources:
+==========
+operations on agent performed with the help of puppet resources
+It has core/inbuilt resources, Defined resources or custome resources(it requires ruby coding knowledge)
+
+Domain specific language(DSL):
+DSL has resource type, title and set of attributes associated in it
+Puppet declaration consists of six steps
+resource declaration starts with resource type which is keyword without no quotes
+
+resource declaration
+
+resource type { resource name:
+attributes => values,
+.....
+}
+
+Defining class:
+===============
+
+class declaration
+include <class name>
+
+
+resource ---->class-->Manifests
+
+puppet config print ---->to define all parameters
+
+for any modifications change it in puppet.conf and restart the services.
+site.pp is the main entry point for entire puppet
+site.pp is primary puppet file under the directory /etc/puppetlabs/code/environments/manifests
+
+Manifests:
+puppet parser validate <pp>
+puppet agent -tv --noop puppet agent -tv
+
+node definitions:
+=================
+
+node <node name>, {
+include <class>
+}
+
+other important topics:
+variables in puppet
+facts
+puppet modules
+puppet roles and profiles
+data separation using hiera
+mcollective
+puppet forge
+
+
+Variable declaration in puppet
+
+class motd {
+$variable = "variable value"
+file { ntp.conf:
+ensure = "present",
+content = "$variable"
+}
+}
+
+
+node definitions:
+# <ENVIRONMENTS DIRECTORY>/<ENVIRONMENT>/manifests/site.pp
+node 'www1.example.com' {
+  include common
+  include apache
+  include squid
+}
+node 'db1.example.com' {
+  include common
+  include mysql
+}
+
+Keepalived uses VRRP daemon,service pollers and LVS
+config file /etc/keepalived/keepalived.conf	
+

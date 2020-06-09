@@ -1,0 +1,20 @@
+##Changing system time and date
+
+timedatectl set-time HH:MM:SS
+timedatectl set-time YYYY:MM:DD
+
+##two types of clocks
+RTC or CMOS or BIOS or hardware clock( which runs even at shutdown)
+OS or kernel clock
+
+To list RTC clock time,
+hwclock
+
+To sync hwclock with system time,
+use hwclock --systohc
+
+To sync system clock with hwclock,
+use hwclock --hctosys
+
+NTP or chronyd:
+================
