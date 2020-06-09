@@ -18,7 +18,7 @@ MBR will have four primary partitions, or one extended partition to create 16 lo
 GPT will have 128 primary paritions, dont have to create extended parition
 
 446 bytes------bootstrap code
-64 bytes-------partition table
+64 bytes-------partition tablea
 2 bytes--------magic number(used to check valid mbr)
 
 3.GRUB2(GRAND UNIFIED BOOTLOADER 2)
@@ -319,7 +319,9 @@ use restorecon -vR /virtual to apply the changes in fcontext
 
 semanage fcontext used to display and modify the context.
 
-semanage fcontext -a -t httpd_sys_content_t '/virtual(/.*)?'
+To revert the any fault changes, use
+semanage fcontext -a -t httpd_sys_content_t '/virtual(/.*)?'  adding selinux contexts
+semanage fcontext -d -t httpd_sys_content_t '/virtual(/.*)?'  removing selinux contexts
 
 Restorecon -RFv /virtual to force modify the context in the directory
 
@@ -352,7 +354,7 @@ Logging:
 Links:
 ======
 hardlink
-========
+========uired host group created and applied packages/configs for AU 
 it will create link between two files with different inodes for same file in difference locations. if one link deleted, we will able to use another link.
 ln <existing_available_file> <link to be created location>
 
@@ -496,7 +498,7 @@ Partition type:
    p   primary (0 primary, 0 extended, 4 free)
    e   extended
 Select (default p): 
-Using default response p
+Using default response initp
 Partition number (1-4, default 1): 
 First sector (2048-42814559, default 2048): 
 Using default value 2048
@@ -545,7 +547,8 @@ dmidecode --type 17
 
 <<<<<<< HEAD
 
-$* ---> expands to positional parameters as single string
+$* ---> expands to positional parameters astype=USER_START msg=audit(1573553101.204:264): pid=4630 uid=0 auid=1000 ses=1 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=PAM:session_open grantors=pam_keyinit,pam_limits acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/0 res=success'
+ single string
 $@----> expands to all poisitional parameters with space as delimited
 $$ --->current process id
 $!---->recently closed process id
@@ -567,8 +570,277 @@ type 1 ---> baremetal hypervisor---> bare metal--->vmware esxi/hyper-v--->guest 
 type 2 ---> hosted hypervisor----> Host os--->vmware workstation--->guest os
 
 
-full virtualization and paravirtualization:
-===========================================
+Yum server configuration:
+========================
+mount the iso using
+mount iso /mnt -o loop
+copy the packages into local folder
+use command createrepo to create the repodata, which has repomd.xml file(metadata about the rpm's)
+<VirtualHost *:80>
+DocumentRoot "/home/sakthi/http/"
+ServerName ssnlocal.com
+CustomLog /var/www/ssnlocal.com/access.log combined
+ErrorLog /var/www/ssnlocal.com/error.log
+<Directory "/home/sakthi/http">
+    AllowOverride None
+    # Allow open access:
+    Require all granted
+ Options Indexes FollowSymLinks
+</Directory>
+
+</VirtualHost>
+
+Sample to create apache repo.
 
 
->>>>>>> 689004c2f6e14d2d26a270a9088ba76b184fbb7f
+cron_flags=“-m ‘’” at bottom of rc.conf and then restart cron service
+to disable logging of var/spool/mail
+
+
+
+sudo logs were logged in /var/log/secure
+set u i d = 4; setg id=2; sticky=1
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+From /proc/cpuinfo, system has four logical CPUs, so divide by 4 :
+load average : 2 . 92, 4 . 48, 5 . 20
+divide by number of logical CPUs : 4
+4
+4
+per -CPU load average : 0 . 73 1 . 12 1 . 30
+This system ' s load average appears to be decreasing .
+With a load average of 2 . 92 on four CPUs, all CPUs were in use -73% of the time .
+During the last 5 minutes, the system was overloaded by -12%.
+During the last 15 minutes, the system was overloaded by -30%.
+
+core 1
+thread1
+thread2
+core 2
+thread1
+thread2
+
+Core calculation:
+
+numb or cores * number of socket
+logical processor or CPU:
+number of cores * number of threads
+
+per user:
+bashrc ---> non login--- it will execute on every new terminal
+bashrc_profile ---> login time works
+
+systemd wide config:
+/etc/bashrc ---->non login---everytime on new terminal
+/etc/profile or /etc/profile.d/*---->executes on login only
+
+Logs:
+logs services are handled by two daemons rsyslog and systemd-journald
+
+
+systemd-journald collects all logs between boot time to end. but its not persistent
+rsyslog is persistent.
+
+Default required network script
+NAME=eth0
+HWADDR=08:00:27:50:A7:06
+ONBOOT=yes
+IPADDR=192.168.1.20
+PREFIX=24
+DEFROUTE=yes
+BOOTPROTO=dhcp
+TYPE=Ethernet
+GATEWAY=192.168.1.1
+
+PROXY_METHOD=none
+BROWSER_ONLY=no
+IPV4_FAILURE_FATAL=no
+IPV6INIT=no
+UUID=5fb06bd0-0bb0-7ffb-45f1-d6edd65f3e03
+DNS1=8.8.8.8
+
+See UUID -->nmcli con show
+See HWaddr -->nmcli dev show
+see Device name-->nmcli dev show
+
+kickstart starts with % and end with %end
+
+%package section is for installing packages without any version
+packgroup group name starts with @
+
+Use system-config-kickstart to make kickstart file
+
+#platform=x86, AMD64, or Intel EM64T
+#version=DEVEL
+# Install OS instead of upgrade
+install
+# Keyboard layouts
+keyboard 'us'
+# Root password
+rootpw --iscrypted $1$/QUE3X3R$LNYNJsnM4wrj2M03ROl/O0
+# System language
+lang en_IN
+# System authorization information
+auth  --useshadow  --passalgo=sha512
+# Use CDROM installation media
+cdrom
+# Use graphical install
+graphical
+firstboot --disable
+# SELinux configuration
+selinux --disabled
+
+# Firewall configuration
+firewall --enabled --http --ftp --ssh
+# Network information
+network  --bootproto=dhcp --device=eth0
+# Reboot after installation
+reboot
+# System timezone
+timezone Asia/Kolkata
+# System bootloader configuration
+bootloader --location=mbr --boot-drive=sda
+# Clear the Master Boot Record
+zerombr
+# Partition clearing information
+clearpart --all --initlabel
+# Disk partitioning information
+part / --fstype="xfs" --size=10000
+part /boot --fstype="xfs" --size=500
+
+%packages
+@base
+@compat-libraries
+@core
+@development
+@fonts
+@input-methods
+@security-tools
+@system-admin-tools
+@x11
+chrony
+
+%end
+
+IPtable has 3 main things
+tables chain rules.
+Tables:
+there are 5 tables
+filter -- default table
+NAT -- NAT table
+Mangle -- used to modify IP headers
+Raw --connection tracking
+security --- selinux tagging
+
+Chains:
+to apply rules
+there are 5 chains
+Prerouting
+postrouting
+input
+output
+forward
+
+Mangle, PREROUTING, INPUT, Forward, output, postrouting
+NAT(DNAT) Prerouting output
+filter input forward outpu
+nat (SNAT) Input postrouting
+
+Traversal order:
+Incoming packets: Prerouting --->INput
+forwarding packets: prerouting--->forward--->postrouting
+locall generated outgoing packets: output--->postrouting
+
+Rules:
+======
+it is based on two components.
+-s x.x.x.x -j Drop
+terminating target and non terminating.
+Terminating:
+============
+Accept
+drop
+queue
+reject
+return
+user-defined
+
+syntax will be
+
+iptables -t table -options [chain] [matching component] [action component]
+
+-t -->nat,filter, mangle
+chain -->pre,post,input,output
+
+chain options
+A append D delete I insert R replace Z zero counters L list
+P policy Rename F flush New user defined chaing X delete chain
+Matching component:
+===================
+Generic 
+=========
+p - protocol
+s - source ip
+d - destination ip
+i- IN interface
+o - out interface
+implicit
+=======
+--sport
+--dport
+
+-j option
+=========
+accept 
+drop
+reject
+returnG
+
+NIC Bonding:
+=============
+0 Round Robin
+1 Active Backup
+2 XOR
+
+Tomcat 9 installation:
+========================
+install directory /usr/local/
+startup:
+/usr/local/tomcat/bin/startup.sh
+/usr/local/tomcat/bin/shutdown.sh
+
+for GUI access:
+/usr/local/tomcat9/conf/tomcat-users.xml
+
+/usr/local/tomcat9/conf/server.xml
+to listen at localhost
+    <Connector address="127.0.0.1" port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+
+to stop tcp6 connections:
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+
+
+DNS HIERARCHY:
+==============
+type www.google.com >
+it looks for local /etc/hosts or any. if not then it forwards to resolving servers in /etc/resolv.conf.(which may the nameserver provided by ISP or google)
+2. the request will be sent to 8.8.8.8(if 8.8.8.8 having cache then it will redirect to the particular host, if not)
+3. the request will be forwarded to root servers, from root servers, it will redirect to .com TLD servers. 
+4. Again the requestor send request to TLD servers for matrimony.com, there TLD will tell about
+the domain level name server detaisl.
+5. Again the reqeustor send request to exact matrimony.com, after that matrimony.com will serve its file.
+
+dns resolver-->root servers--->TLD servers--->domain level name server-->authoritative name server
+
+
